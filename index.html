@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Optiflow Studio — Crazy enough to build perfect things</title>
+  <meta name="description" content="Optiflow is an AI product studio. We hunt down real problems everyone complains about and nobody fixes — then ship the products that make them disappear.">
+  <meta property="og:title" content="Optiflow Studio — Crazy enough to build perfect things">
+  <meta property="og:description" content="An AI product studio. Real problems in, shipped products out.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2304060B'/%3E%3Ctext x='32' y='44' font-size='36' font-family='monospace' fill='%2300E5FF' text-anchor='middle'%3E%E2%9C%B1%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Film grain overlay -->
+  <div class="noise" aria-hidden="true"></div>
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="preloader-inner">
+      <span class="preloader-logo mono">optiflow<span class="blink">_</span></span>
+      <span class="preloader-count mono" id="preCount">000</span>
+    </div>
+    <div class="preloader-bar"><span id="preBar"></span></div>
+  </div>
+
+  <!-- Custom cursor (fine pointers only) -->
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <header class="nav" id="nav">
+    <a class="nav-logo mono" href="#top" aria-label="Optiflow Studio — home">
+      <span class="logo-mark" aria-hidden="true">✱</span>optiflow<span class="blink">_</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#work" data-hover>Work</a>
+      <a href="#capabilities" data-hover>Capabilities</a>
+      <a href="#process" data-hover>Process</a>
+      <a href="#contact" data-hover>Contact</a>
+    </nav>
+    <a href="#contact" class="nav-cta mono magnetic" data-hover>START A PROJECT</a>
+    <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="#work" class="mobile-link">Work</a>
+      <a href="#capabilities" class="mobile-link">Capabilities</a>
+      <a href="#process" class="mobile-link">Process</a>
+      <a href="#contact" class="mobile-link">Contact</a>
+    </nav>
+    <p class="mono mobile-menu-foot">HELLO@OPTIFLOW.STUDIO</p>
+  </div>
+
+  <main id="top">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <canvas id="field" aria-hidden="true"></canvas>
+      <div class="hero-glow" aria-hidden="true"></div>
+
+      <div class="hero-content container">
+        <p class="eyebrow mono" data-reveal>[ AI PRODUCT STUDIO — REAL PROBLEMS ONLY ]</p>
+        <h1 class="hero-title">
+          <span class="line" data-reveal style="--d:.05s"><span class="glitch outline" data-text="CRAZY">CRAZY</span></span>
+          <span class="line" data-reveal style="--d:.15s">ENOUGH TO BUILD</span>
+          <span class="line" data-reveal style="--d:.25s"><span class="grad">PERFECT</span> THINGS<span class="accent">.</span></span>
+        </h1>
+        <div class="hero-sub" data-reveal style="--d:.4s">
+          <p>Optiflow is an AI studio. We hunt down the problems everyone complains
+          about and nobody fixes — then build the product that makes them disappear.</p>
+          <div class="hero-ctas">
+            <a href="#contact" class="btn btn-primary magnetic" data-hover>Start a project
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="#work" class="btn btn-ghost magnetic" data-hover>See the proof</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-foot container mono" data-reveal style="--d:.6s">
+        <span id="utcClock">00:00:00 UTC</span>
+        <span class="hero-foot-mid">SCROLL TO DESCEND <span class="scroll-arrow" aria-hidden="true">↓</span></span>
+        <span>EST. 2026 // HUMANS × MACHINES</span>
+      </div>
+    </section>
+
+    <!-- ============ MARQUEE ============ -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>AI PRODUCTS <i>✦</i> REAL PROBLEMS <i>✦</i> ZERO SLIDEWARE <i>✦</i> SHIPPED, NOT PITCHED <i>✦</i> AGENTS ON DUTY <i>✦</i> PERFECT OR NOTHING <i>✦</i>&nbsp;</span>
+        <span>AI PRODUCTS <i>✦</i> REAL PROBLEMS <i>✦</i> ZERO SLIDEWARE <i>✦</i> SHIPPED, NOT PITCHED <i>✦</i> AGENTS ON DUTY <i>✦</i> PERFECT OR NOTHING <i>✦</i>&nbsp;</span>
+      </div>
+    </div>
+
+    <!-- ============ MANIFESTO ============ -->
+    <section class="manifesto" id="manifesto">
+      <div class="manifesto-sticky">
+        <div class="container">
+          <p class="eyebrow mono">[ 00 — THE MANIFESTO ]</p>
+          <p class="manifesto-text" id="manifestoText">
+            Everyone has an AI strategy. A deck. A roadmap. A committee.
+            We have a different habit — we <em>ship</em>. Real problems don't get
+            solved by slideware. They get solved by people <em>crazy</em> enough
+            to promise perfect, and stubborn enough to <em>deliver</em> it.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CAPABILITIES ============ -->
+    <section class="section" id="capabilities">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow mono">[ 01 — CAPABILITIES ]</p>
+          <h2>WHAT WE'RE <span class="grad">DANGEROUS</span> AT</h2>
+        </div>
+
+        <div class="bento">
+          <article class="card tilt span-7" data-reveal>
+            <span class="card-num mono">/01</span>
+            <div class="card-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/></svg>
+            </div>
+            <h3>AI Product Engineering</h3>
+            <p>LLM-native applications, autonomous agents, retrieval systems.
+            Built to survive production traffic, not just the demo call.</p>
+            <div class="tags mono"><span>AGENTS</span><span>RAG</span><span>EVALS</span></div>
+          </article>
+
+          <article class="card tilt span-5 card-terminal" data-reveal style="--d:.1s">
+            <span class="card-num mono">/02</span>
+            <h3>0 → 1 in Weeks</h3>
+            <p>Idea to working product before your competitors finish their kickoff meeting.</p>
+            <div class="terminal mono" aria-hidden="true">
+              <div class="terminal-bar"><i></i><i></i><i></i></div>
+              <pre id="termOut">$ <span class="term-cursor">▊</span></pre>
+            </div>
+          </article>
+
+          <article class="card tilt span-5" data-reveal>
+            <span class="card-num mono">/03</span>
+            <div class="card-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="4"/><path d="M16 8l3-3M5 19l3-3M8 8L5 5M19 19l-3-3"/></svg>
+            </div>
+            <h3>Agentic Automation</h3>
+            <p>Workflows that run themselves at 3 a.m. — triage, dispatch, follow-up —
+            while your team sleeps like people who automated their busywork.</p>
+            <div class="tags mono"><span>WORKFLOWS</span><span>OPS</span></div>
+          </article>
+
+          <article class="card tilt span-7" data-reveal style="--d:.1s">
+            <span class="card-num mono">/04</span>
+            <div class="card-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+            </div>
+            <h3>Design That Converts</h3>
+            <p>Interfaces people actually feel. We obsess over the last 4% of polish
+            because that's the part users remember — and pay for.</p>
+            <div class="tags mono"><span>UI/UX</span><span>MOTION</span><span>BRAND</span></div>
+          </article>
+
+          <article class="card tilt span-4" data-reveal>
+            <span class="card-num mono">/05</span>
+            <div class="card-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            </div>
+            <h3>Data &amp; Model Ops</h3>
+            <p>Pipelines, fine-tuning, evals. The unglamorous machinery that makes the magic reliable.</p>
+          </article>
+
+          <article class="card tilt span-4" data-reveal style="--d:.1s">
+            <span class="card-num mono">/06</span>
+            <div class="card-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-6 4 3 5-8"/></svg>
+            </div>
+            <h3>Growth Engineering</h3>
+            <p>Ship. Measure. Sharpen. Repeat until the graph does the thing graphs are supposed to do.</p>
+          </article>
+
+          <article class="card tilt span-4 card-cta" data-reveal style="--d:.2s">
+            <span class="card-num mono">/∞</span>
+            <h3>Something weirder?</h3>
+            <p>The best briefs start with "this is probably impossible, but…"</p>
+            <a href="#contact" class="card-link mono" data-hover>TRY US →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ WORK ============ -->
+    <section class="section" id="work">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow mono">[ 02 — SELECTED WORK ]</p>
+          <h2>PROOF, NOT <span class="grad">PROMISES</span></h2>
+        </div>
+
+        <!-- Sample case studies — replace with real projects -->
+        <div class="work-grid">
+          <a href="#contact" class="work-card" data-reveal data-hover>
+            <div class="work-thumb thumb-cyan" aria-hidden="true"><span class="orb"></span></div>
+            <div class="work-meta mono"><span>001</span><span>LLM AGENTS · OPS</span></div>
+            <h3>Dispatch</h3>
+            <p>An ops copilot that reads the chaos of a logistics floor and turns it into a queue of done.</p>
+            <p class="work-stat mono"><strong>−74%</strong> MANUAL DISPATCH TIME</p>
+          </a>
+
+          <a href="#contact" class="work-card" data-reveal style="--d:.1s" data-hover>
+            <div class="work-thumb thumb-violet" aria-hidden="true"><span class="orb"></span></div>
+            <div class="work-meta mono"><span>002</span><span>DOC INTELLIGENCE · FINANCE</span></div>
+            <h3>Ledgerlens</h3>
+            <p>Financial document intelligence that reads faster than an army of analysts — and never gets bored.</p>
+            <p class="work-stat mono"><strong>12K</strong> DOCS PARSED / DAY</p>
+          </a>
+
+          <a href="#contact" class="work-card" data-reveal style="--d:.2s" data-hover>
+            <div class="work-thumb thumb-magenta" aria-hidden="true"><span class="orb"></span></div>
+            <div class="work-meta mono"><span>003</span><span>SUPPORT AUTOPILOT · SAAS</span></div>
+            <h3>Nightshift</h3>
+            <p>A support autopilot that resolves tickets while the founders sleep. Customers never noticed. That's the point.</p>
+            <p class="work-stat mono"><strong>68%</strong> RESOLVED AUTONOMOUSLY</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STATS ============ -->
+    <section class="section stats-section">
+      <div class="container">
+        <div class="stats" data-reveal>
+          <div class="stat">
+            <span class="stat-num mono"><span data-count="14"></span>d</span>
+            <span class="stat-label">idea → first prototype</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num mono"><span data-count="100"></span>%</span>
+            <span class="stat-label">of builds reach production</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num mono"><span data-count="24"></span>/7</span>
+            <span class="stat-label">agents on duty</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num mono"><span data-count="0"></span></span>
+            <span class="stat-label">slide decks produced</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROCESS ============ -->
+    <section class="section" id="process">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow mono">[ 03 — PROCESS ]</p>
+          <h2>FROM PAIN TO <span class="grad">PRODUCT</span></h2>
+        </div>
+
+        <ol class="process">
+          <li class="step" data-reveal>
+            <span class="step-num outline mono">01</span>
+            <h3>Find the pain</h3>
+            <p>We interrogate the problem until it confesses. No solutions allowed in the room yet.</p>
+          </li>
+          <li class="step" data-reveal style="--d:.1s">
+            <span class="step-num outline mono">02</span>
+            <h3>Prototype in days</h3>
+            <p>A working thing in your hands within days — ugly is fine, real is mandatory.</p>
+          </li>
+          <li class="step" data-reveal style="--d:.2s">
+            <span class="step-num outline mono">03</span>
+            <h3>Ship it</h3>
+            <p>Production, real users, real stakes. This is where most agencies wave goodbye. We move in.</p>
+          </li>
+          <li class="step" data-reveal style="--d:.3s">
+            <span class="step-num outline mono">04</span>
+            <h3>Sharpen forever</h3>
+            <p>Measure, refine, automate. Perfect isn't a launch state — it's a habit.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="section cta-section" id="contact">
+      <div class="cta-glow" aria-hidden="true"></div>
+      <div class="container cta-inner">
+        <p class="eyebrow mono" data-reveal>[ 04 — TRANSMISSION OPEN ]</p>
+        <h2 class="cta-title" data-reveal style="--d:.1s">GOT A REAL<br><span class="hollow" data-text="PROBLEM?">PROBLEM?</span></h2>
+        <p class="cta-sub" data-reveal style="--d:.2s">Bring us the thing everyone says can't be fixed.<br>We'll bring the crazy.</p>
+        <div data-reveal style="--d:.3s">
+          <a href="mailto:hello@optiflow.studio" class="btn btn-primary btn-big magnetic" data-hover>
+            LET'S GET CRAZY
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <p class="cta-mail mono" data-reveal style="--d:.4s">HELLO@OPTIFLOW.STUDIO</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="nav-logo mono" href="#top" data-hover><span class="logo-mark" aria-hidden="true">✱</span>optiflow<span class="blink">_</span></a>
+        <p>An AI studio building products<br>that solve real problems.</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="#work" data-hover>Work</a>
+        <a href="#capabilities" data-hover>Capabilities</a>
+        <a href="#process" data-hover>Process</a>
+        <a href="#contact" data-hover>Contact</a>
+      </nav>
+      <div class="footer-social">
+        <a href="#" aria-label="X (Twitter)" data-hover><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="#" aria-label="GitHub" data-hover><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.34.95.1-.74.4-1.25.72-1.53-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.35.77 1.05.77 2.12v3.14c0 .3.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg></a>
+        <a href="#" aria-label="LinkedIn" data-hover><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.72C24 .77 23.2 0 22.22 0z"/></svg></a>
+      </div>
+    </div>
+    <div class="container footer-bottom mono">
+      <span>© 2026 OPTIFLOW STUDIO</span>
+      <span>BUILT BY HUMANS × MACHINES</span>
+      <a href="#top" data-hover>BACK TO TOP ↑</a>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
