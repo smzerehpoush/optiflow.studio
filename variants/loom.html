@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Optiflow Studio — Loom</title>
-<meta name="description" content="Optiflow is an AI product studio. Real problems in, shipped products out — shipped while you sleep.">
+<meta name="description" content="Optiflow — an AI product studio. Shipped while you sleep.">
 <meta name="theme-color" content="#2B2420">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%232B2420'/%3E%3Cpath d='M28 12h8v8h8v8h8v8h-8v8h-8v8h-8v-8h-8v-8h-8v-8h8v-8h8z' fill='%23B5A783'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,14 +15,13 @@
   --sand:#B5A783;
   --sand-hi:#C3B591;
   --umber:#2B2420;
-  --umber-2:#352C26;
   --ink:#241D17;
   --line-d:rgba(36,29,23,.35);
   --line-l:rgba(181,167,131,.3);
   --ease:cubic-bezier(.16,1,.3,1);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:auto}
 body{
   background:var(--umber);
   color:var(--sand);
@@ -38,8 +37,8 @@ a{color:inherit}
 .on-sand :focus-visible{outline-color:var(--umber)}
 .px{font-family:'Silkscreen',monospace;font-weight:700}
 .serif{font-family:'Cormorant Garamond',serif}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
 
-/* ---------- grain ---------- */
 .grain{
   position:fixed;inset:-50%;width:200%;height:200%;
   pointer-events:none;z-index:9990;opacity:.07;
@@ -54,6 +53,7 @@ a{color:inherit}
 }
 .corner a{text-decoration:none}
 .corner a:hover{background:var(--sand);color:var(--umber)}
+.on-sand .corner a:hover{background:var(--umber);color:var(--sand)}
 .c-tl{top:22px;left:26px}
 .c-tr{top:22px;right:26px;text-align:right}
 .c-bl{bottom:22px;left:26px}
@@ -63,7 +63,10 @@ a{color:inherit}
 .blinker{animation:blink 1.2s steps(2) infinite}
 @keyframes blink{50%{opacity:0}}
 
-/* ---------- full-width woven wordmark ---------- */
+/* tiny barcode decoration */
+.bcode{position:absolute;bottom:24px;left:26px;z-index:6;opacity:.75}
+
+/* ---------- full-width woven wordmark (loader) ---------- */
 .wordmark{
   position:absolute;left:50%;bottom:-.12em;transform:translateX(-50%);
   z-index:5;white-space:nowrap;
@@ -92,7 +95,7 @@ a{color:inherit}
 body.loaded .pre-screen{transform:translateY(-101%);visibility:hidden}
 #mascot{position:absolute;left:50%;top:41%;transform:translate(-50%,-50%)}
 
-/* ---------- fixed nav (post-load) ---------- */
+/* ---------- fixed nav (appears after scene A) ---------- */
 .nav{
   position:fixed;top:0;left:0;right:0;z-index:1000;
   display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
@@ -100,11 +103,10 @@ body.loaded .pre-screen{transform:translateY(-101%);visibility:hidden}
   font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
   color:var(--sand);
   opacity:0;transform:translateY(-10px);
-  transition:opacity .5s .3s,transform .5s .3s;
+  transition:opacity .45s,transform .45s;
   pointer-events:none;
-  mix-blend-mode:normal;
 }
-body.loaded .nav{opacity:1;transform:none;pointer-events:auto}
+body.nav-on .nav{opacity:1;transform:none;pointer-events:auto}
 .nav-left{display:flex;align-items:center;gap:22px}
 .nav-burger{
   display:flex;align-items:center;gap:10px;
@@ -124,7 +126,7 @@ body.loaded .nav{opacity:1;transform:none;pointer-events:auto}
   padding:10px 20px;text-decoration:none;
   font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;
   background:var(--sand);color:var(--umber);
-  transition:background .2s,color .2s;
+  transition:background .2s,color .2s;cursor:pointer;font-family:inherit;
 }
 .pill:hover{background:transparent;color:var(--sand)}
 .pill.ghost{background:transparent;color:var(--sand)}
@@ -132,22 +134,20 @@ body.loaded .nav{opacity:1;transform:none;pointer-events:auto}
 .on-sand .pill{background:var(--umber);color:var(--sand);border-color:var(--umber)}
 .on-sand .pill:hover{background:transparent;color:var(--ink)}
 
-/* ---------- scenes ---------- */
-.scene{position:relative;overflow:hidden}
-.on-sand{background:var(--sand);color:var(--ink)}
-.on-sand ::selection{background:var(--umber);color:var(--sand)}
-
-/* scene 1: sand landscape hero */
-.hero{min-height:100svh;background:var(--sand);color:var(--ink)}
+/* ---------- SCENE A: pinned sand scene with scroll wipe ---------- */
+.pinA{height:280vh;position:relative}
+.pinA .stage{
+  position:sticky;top:0;height:100svh;overflow:hidden;
+  background:var(--sand);color:var(--ink);
+}
 .hero-photo{
   position:absolute;left:0;right:0;margin-inline:auto;
   top:40%;transform:translateY(-50%);
   z-index:1;width:min(500px,70vw);
 }
-#mts{position:absolute;left:0;right:0;bottom:0;width:100%;z-index:2;display:block}
-.hero .wordmark{color:var(--umber)}
+#wipe{position:absolute;inset:0;width:100%;height:100%;z-index:2;display:block}
 
-/* dissolving-edge photo (signature treatment) */
+/* dissolve-edge photo */
 .weave-photo{position:relative}
 .weave-photo img{
   display:block;width:100%;height:auto;
@@ -170,66 +170,78 @@ body.loaded .nav{opacity:1;transform:none;pointer-events:auto}
   font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;
 }
 
-.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
-/* scene 2: full-bleed product panorama */
-.panorama{min-height:100svh;display:flex;align-items:flex-end;padding-top:110px}
-.panorama .weave-photo{width:min(1500px,100vw);margin-inline:auto}
-.showreel{
-  position:absolute;top:86px;left:50%;transform:translateX(-50%);
+/* ---------- SCENE B: prologue ---------- */
+.prologue{
+  position:relative;min-height:100svh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:18vh 6vw;
+}
+.chapter-mark{
+  display:flex;align-items:center;justify-content:center;gap:18px;
+  font-size:.66rem;letter-spacing:.34em;text-transform:uppercase;
+  padding-bottom:clamp(26px,3.5vw,44px);
+}
+.chapter-mark i{font-style:normal;letter-spacing:.5em}
+.narrow{max-width:56ch;margin-inline:auto;text-align:center}
+.narrative{
+  font-size:clamp(.95rem,1.8vw,1.25rem);line-height:2.1;
+  text-transform:uppercase;letter-spacing:.07em;font-weight:500;
+}
+.narrative em{font-style:normal;background:var(--sand);color:var(--umber);padding:0 .2em}
+.on-sand .narrative em{background:var(--umber);color:var(--sand)}
+
+/* ---------- SCENE C: panorama with reel chip ---------- */
+.panorama{
+  position:relative;min-height:135svh;
+  display:flex;flex-direction:column;justify-content:flex-end;
+}
+.reel{
+  position:absolute;top:13svh;left:50%;transform:translateX(-50%);
   z-index:5;text-align:center;
 }
-.showreel .frame-box{
-  width:min(290px,60vw);aspect-ratio:16/9;
+.reel-box{
+  width:min(280px,58vw);aspect-ratio:16/9;
   border:1px solid var(--line-l);
-  outline:1px solid var(--line-l);outline-offset:3px;
+  outline:1px solid var(--line-l);outline-offset:4px;
   display:grid;place-items:center;
-  background:rgba(43,36,32,.5);
+  background:rgba(43,36,32,.45);
+  cursor:pointer;
 }
-.showreel .frame-box i{
+.reel-box i{
   border-style:solid;border-width:9px 0 9px 15px;
   border-color:transparent transparent transparent var(--sand);
 }
-.showreel small{
-  display:block;margin-top:8px;
+.reel small{
+  display:block;margin-top:10px;
   font-size:.56rem;letter-spacing:.3em;text-transform:uppercase;
 }
+.zoom{will-change:transform;transform-origin:50% 100%}
 
-/* scene 3: serif brand / about */
-.about{padding:clamp(90px,12vw,170px) 6vw}
+/* ---------- SCENE D: serif brand / about ---------- */
+.about{position:relative;padding:clamp(90px,12vw,170px) 6vw}
 .about-grid{max-width:1150px;margin-inline:auto}
 .brand-serif{
   font-size:clamp(3.6rem,10.5vw,9.5rem);
   font-weight:500;line-height:.92;letter-spacing:.01em;
-  text-transform:uppercase;
-  text-align:right;
+  text-transform:uppercase;text-align:right;
 }
-.byline{
-  text-align:right;
-  font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;
-  margin-top:18px;
-}
+.byline{text-align:right;font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;margin-top:18px}
 .about-body{max-width:520px;margin-top:clamp(48px,7vw,96px)}
 .about-body h2{
   font-family:'Cormorant Garamond',serif;font-weight:500;
   font-size:clamp(2.2rem,4.6vw,3.6rem);
-  text-transform:uppercase;letter-spacing:.02em;
-  margin-bottom:22px;
+  text-transform:uppercase;letter-spacing:.02em;margin-bottom:22px;
 }
-.about-body p{
-  font-size:.78rem;letter-spacing:.14em;line-height:2.1;text-transform:uppercase;
-}
+.about-body p{font-size:.78rem;letter-spacing:.14em;line-height:2.1;text-transform:uppercase}
 .about-body .pill{margin-top:28px}
 
-/* scene 4: territory map */
-.territory{padding:clamp(70px,9vw,130px) 0 0}
+/* ---------- SCENE E: territory + infra ---------- */
+.territory{position:relative;padding:clamp(70px,9vw,130px) 0 0}
 .terr-grid{display:grid;grid-template-columns:1.4fr 1fr;max-width:1500px;margin-inline:auto}
-.terr-map{position:relative;min-height:560px}
+.terr-map{position:relative;min-height:520px}
 .terr-map svg{width:100%;height:auto;display:block}
 .terr-side{padding:0 clamp(24px,4vw,64px)}
-.terr-side .lead{
-  font-size:clamp(.85rem,1.5vw,1.05rem);
-  letter-spacing:.16em;line-height:2.1;text-transform:uppercase;
-}
+.terr-side .lead{font-size:clamp(.85rem,1.5vw,1.05rem);letter-spacing:.16em;line-height:2.1;text-transform:uppercase}
 .terr-side .pill{margin-top:26px}
 .infra{
   margin-top:clamp(48px,6vw,84px);
@@ -242,60 +254,32 @@ body.loaded .nav{opacity:1;transform:none;pointer-events:auto}
   border:1px solid rgba(36,29,23,.5);border-radius:50%;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
 }
-.stat-circle .serif{
-  font-size:clamp(4rem,7.5vw,6.5rem);font-weight:500;line-height:1;
-}
+.stat-circle .serif{font-size:clamp(4rem,7.5vw,6.5rem);font-weight:500;line-height:1}
 .stat-circle .serif small{font-size:.45em}
-.stat-under{
-  text-align:center;margin-top:22px;
-  font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;line-height:2;
-}
-.mini-stats{
-  display:flex;justify-content:center;gap:clamp(20px,4vw,48px);
-  margin-top:34px;text-align:center;
-}
+.stat-under{text-align:center;margin-top:22px;font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;line-height:2}
+.mini-stats{display:flex;justify-content:center;gap:clamp(20px,4vw,48px);margin-top:34px;text-align:center}
 .mini-stats .serif{font-size:clamp(1.9rem,3.4vw,2.8rem);font-weight:500;line-height:1}
 .mini-stats small{display:block;font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;margin-top:8px}
 
-/* chapters */
-.chapter-mark{
-  display:flex;align-items:center;justify-content:center;gap:18px;
-  font-size:.66rem;letter-spacing:.34em;text-transform:uppercase;
-  padding-bottom:clamp(26px,3.5vw,44px);
-}
-.chapter-mark i{font-style:normal;letter-spacing:.5em}
+/* ---------- shared chapter sections ---------- */
 .sec{position:relative;padding:clamp(80px,11vw,150px) 6vw}
+.on-sand{background:var(--sand);color:var(--ink)}
+.on-sand ::selection{background:var(--umber);color:var(--sand)}
 .sec-title{
   font-family:'Cormorant Garamond',serif;font-weight:500;
   font-size:clamp(2.4rem,5.4vw,4.4rem);
   text-transform:uppercase;letter-spacing:.02em;
   text-align:center;margin-bottom:clamp(36px,5vw,60px);
 }
-.narrow{max-width:56ch;margin-inline:auto;text-align:center}
-.narrative{
-  font-size:clamp(.95rem,1.8vw,1.25rem);line-height:2.1;
-  text-transform:uppercase;letter-spacing:.07em;font-weight:500;
-}
-.narrative em{font-style:normal;background:var(--sand);color:var(--umber);padding:0 .2em}
-.on-sand .narrative em{background:var(--umber);color:var(--sand)}
-
-/* craft */
-.craft{max-width:860px;margin-inline:auto;border-top:1px solid var(--line-d)}
-.on-umber-list{border-color:var(--line-l)}
-.craft-row{
-  display:grid;grid-template-columns:80px 1fr;gap:20px;
-  border-bottom:1px solid var(--line-d);
-  padding:24px 6px;
-}
-.craft .craft-row{border-color:inherit}
-.craft-row .num{font-size:1.4rem;line-height:1.5}
+.craft{max-width:860px;margin-inline:auto;border-top:1px solid var(--line-l)}
+.craft-row{display:grid;grid-template-columns:80px 1fr;gap:20px;border-bottom:1px solid var(--line-l);padding:24px 6px}
+.craft-row .num{font-size:1.4rem;line-height:1.5;font-family:'Silkscreen',monospace}
 .craft-row h3{font-size:.92rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
 .craft-row p{font-size:.8rem;line-height:1.95;max-width:58ch}
 .craft-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .craft-tags span{font-size:.56rem;letter-spacing:.18em;border:1px solid var(--line-l);padding:3px 8px}
 .craft-link{font-size:.7rem;font-weight:700;letter-spacing:.18em;text-decoration:underline;text-underline-offset:5px}
 
-/* ascents */
 .ascent{max-width:680px;margin-inline:auto;padding-bottom:clamp(60px,8vw,104px);text-align:center}
 .ascent:last-child{padding-bottom:0}
 .ascent h3{
@@ -305,20 +289,14 @@ body.loaded .nav{opacity:1;transform:none;pointer-events:auto}
 }
 .ascent p{font-size:.8rem;line-height:2.05;max-width:52ch;margin-inline:auto;text-transform:uppercase;letter-spacing:.05em}
 .ascent .stat{margin-top:18px;font-size:clamp(2rem,4.6vw,3.2rem);line-height:1}
-.ascent .stat small{
-  display:block;font-family:'IBM Plex Mono',monospace;font-weight:500;
-  font-size:.6rem;letter-spacing:.26em;margin-top:10px;
-}
+.ascent .stat small{display:block;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:.6rem;letter-spacing:.26em;margin-top:10px}
 
-/* route + logbook */
-.route{max-width:1060px;margin-inline:auto;display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid var(--line-d)}
-.route li{list-style:none;border-right:1px solid var(--line-d);padding:6px 20px 0}
-.route .num{font-size:1.6rem;display:block;margin-bottom:12px}
+.route{max-width:1060px;margin-inline:auto;display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid var(--line-l)}
+.route li{list-style:none;border-right:1px solid var(--line-l);padding:6px 20px 0}
+.route .num{font-size:1.6rem;display:block;margin-bottom:12px;font-family:'Silkscreen',monospace}
 .route h3{font-size:.85rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
 .route p{font-size:.76rem;line-height:1.95}
-.route .num,.craft-row .num{font-family:'Silkscreen',monospace}
 
-/* epilogue */
 .epilogue{text-align:center}
 .epi-title{
   font-size:clamp(2rem,8.2vw,6.8rem);line-height:1.06;
@@ -328,14 +306,12 @@ body.loaded .nav{opacity:1;transform:none;pointer-events:auto}
 }
 .mail{display:inline-block;margin-top:22px;font-size:.66rem;letter-spacing:.26em;text-decoration:underline;text-underline-offset:5px}
 
-/* marquee */
 .marquee{background:var(--sand);color:var(--umber);overflow:hidden;padding-block:11px}
 .marquee-track{display:flex;width:max-content;animation:mq 36s linear infinite}
 .marquee-track span{white-space:nowrap;font-size:.7rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase}
 .marquee-track em{font-style:normal;margin-inline:18px}
 @keyframes mq{to{transform:translateX(-50%)}}
 
-/* menu overlay */
 .menu{
   position:fixed;inset:0;z-index:1100;background:var(--umber);color:var(--sand);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
@@ -355,7 +331,6 @@ body.menu-open .menu{opacity:1;visibility:visible}
   font:inherit;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;
 }
 
-/* footer */
 .footer{border-top:1px solid var(--line-l);padding:clamp(44px,6vw,72px) 6vw 0}
 .foot-grid{max-width:1080px;margin-inline:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:36px;padding-bottom:40px}
 .foot-col .k{display:block;font-size:.56rem;letter-spacing:.3em;text-transform:uppercase;opacity:.55;margin-bottom:12px}
@@ -371,37 +346,32 @@ body.menu-open .menu{opacity:1;visibility:visible}
 .foot-bottom a{text-decoration:none}
 .foot-bottom a:hover{background:var(--sand);color:var(--umber)}
 
-/* reveals */
 [data-reveal]{opacity:0;transform:translateY(24px);transition:opacity .9s var(--ease) var(--d,0s),transform .9s var(--ease) var(--d,0s)}
 [data-reveal].in{opacity:1;transform:none}
 
-/* responsive */
 @media(max-width:960px){
   .terr-grid{grid-template-columns:1fr}
   .terr-map{min-height:0}
-  .route{grid-template-columns:1fr 1fr;border-top:1px solid var(--line-d)}
+  .route{grid-template-columns:1fr 1fr;border-top:1px solid var(--line-l)}
   .route li{padding-block:16px}
   .foot-grid{grid-template-columns:1fr 1fr}
 }
 @media(max-width:640px){
   .corner{font-size:.54rem;letter-spacing:.16em}
-  .c-bl{display:none}
-  .nav-left .nav-link,.nav-right .nav-en{display:none}
-  .nav-center small{display:none}
   .craft-row{grid-template-columns:48px 1fr}
   .route{grid-template-columns:1fr}
   .foot-grid{grid-template-columns:1fr}
-  .brand-serif{text-align:left}
-  .byline{text-align:left}
+  .brand-serif,.byline{text-align:left}
+  .nav-left .nav-link,.nav-right .nav-en{display:none}
+  .nav-center small{display:none}
 }
 
-/* reduced motion */
 @media(prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
   [data-reveal]{opacity:1;transform:none}
   .marquee-track{animation:none}
   .wordmark i{animation:none}
+  .pinA{height:100svh}
 }
 </style>
 </head>
@@ -442,11 +412,10 @@ body.menu-open .menu{opacity:1;visibility:visible}
   </div>
 </header>
 
-<nav class="menu" id="menu" aria-label="Chapters" aria-hidden="true">
+<nav class="menu" id="menu" aria-label="Sections" aria-hidden="true">
   <button class="menu-close" id="menuClose">[ Close ]</button>
   <a href="#about">About us</a>
   <a href="#territory">The Territory</a>
-  <a href="#habit">The Habit</a>
   <a href="#craft">The Craft</a>
   <a href="#ascents">The Ascents</a>
   <a href="#route">The Route</a>
@@ -456,36 +425,55 @@ body.menu-open .menu{opacity:1;visibility:visible}
 
 <main>
 
-  <!-- ===== SCENE 1 — SAND LANDSCAPE ===== -->
-  <section class="scene hero" id="top">
-    <div class="hero-photo">
-      <div class="weave-photo">
-        <img class="under" src="https://picsum.photos/id/1036/900/620" alt="" aria-hidden="true" width="900" height="620">
-        <img class="over" src="https://picsum.photos/id/1036/900/620" alt="A mountain ridge above base camp — placeholder imagery" width="900" height="620">
+  <!-- ===== SCENE A: pinned sand scene — mountains wipe over on scroll ===== -->
+  <section class="pinA" id="top">
+    <div class="stage">
+      <div class="hero-photo">
+        <div class="weave-photo">
+          <img class="under" src="https://picsum.photos/id/1036/900/620" alt="" aria-hidden="true" width="900" height="620">
+          <img class="over" src="https://picsum.photos/id/1036/900/620" alt="Mountain range above base camp — placeholder imagery" width="900" height="620">
+        </div>
+        <div class="photo-cap"><span>FIG. 001 — THE RANGE</span><span>REAL PROBLEMS ONLY</span></div>
       </div>
-      <div class="photo-cap on-sand"><span>FIG. 001 — THE RANGE</span><span>REAL PROBLEMS ONLY</span></div>
-    </div>
-    <canvas id="mts" aria-hidden="true"></canvas>
-    <div class="corner c-tl" style="color:var(--ink)">
-      <span class="logo-row">
-        <svg width="26" height="26" viewBox="0 0 7 7" aria-hidden="true" shape-rendering="crispEdges"><g fill="#241D17"><rect x="3" width="1" height="1"/><rect x="2" y="1" width="3" height="1"/><rect y="3" width="1" height="1"/><rect x="1" y="2" width="1" height="3"/><rect x="5" y="2" width="1" height="3"/><rect x="6" y="3" width="1" height="1"/><rect x="2" y="5" width="3" height="1"/><rect x="3" y="6" width="1" height="1"/><rect x="3" y="3" width="1" height="1"/></g></svg>
-      </span>
-      AI Product Studio<br>Est. 2026
-    </div>
-    <div class="corner c-tr" style="color:var(--ink)"><a href="#about">[ Learn more ↓ ]</a></div>
-    <h1 class="sr-only">Optiflow — AI Product Studio</h1>
-  </section>
-
-  <!-- ===== SCENE 2 — PRODUCT PANORAMA ===== -->
-  <section class="scene panorama">
-    <div class="weave-photo">
-      <img class="under" src="https://picsum.photos/id/1043/1600/900" alt="" aria-hidden="true" width="1600" height="900">
-      <img class="over" src="https://picsum.photos/id/1043/1600/900" alt="Granite walls above the valley — placeholder imagery" width="1600" height="900">
+      <canvas id="wipe" aria-hidden="true"></canvas>
+      <div class="corner c-tl" style="color:var(--ink)">
+        <span class="logo-row">
+          <svg width="26" height="26" viewBox="0 0 7 7" aria-hidden="true" shape-rendering="crispEdges"><g fill="#241D17"><rect x="3" width="1" height="1"/><rect x="2" y="1" width="3" height="1"/><rect y="3" width="1" height="1"/><rect x="1" y="2" width="1" height="3"/><rect x="5" y="2" width="1" height="3"/><rect x="6" y="3" width="1" height="1"/><rect x="2" y="5" width="3" height="1"/><rect x="3" y="6" width="1" height="1"/><rect x="3" y="3" width="1" height="1"/></g></svg>
+        </span>
+        AI Product Studio<br>Est. 2026
+      </div>
+      <div class="corner c-tr" style="color:var(--ink)"><a href="#about">[ Learn more ↓ ]</a></div>
+      <h1 class="sr-only">Optiflow — AI Product Studio</h1>
     </div>
   </section>
 
-  <!-- ===== SCENE 3 — SERIF BRAND / ABOUT ===== -->
-  <section class="scene about" id="about">
+  <!-- ===== SCENE B: prologue ===== -->
+  <section class="prologue" id="prologue">
+    <div class="chapter-mark" aria-hidden="true"><i>+ + +</i> Prologue <i>+ + +</i></div>
+    <div class="narrow">
+      <p class="narrative" data-reveal>Between every idea and every shipped product
+      lies a mountain range. We are the kind <em>crazy</em> enough to start climbing
+      at night — and stubborn enough to arrive with something <em>perfect</em>.</p>
+    </div>
+    <svg class="bcode" width="64" height="14" viewBox="0 0 64 14" aria-hidden="true"><g fill="#B5A783"><rect width="2" height="14"/><rect x="4" width="1" height="14"/><rect x="8" width="3" height="14"/><rect x="13" width="1" height="14"/><rect x="17" width="2" height="14"/><rect x="22" width="4" height="14"/><rect x="28" width="1" height="14"/><rect x="32" width="2" height="14"/><rect x="37" width="1" height="14"/><rect x="40" width="3" height="14"/><rect x="46" width="1" height="14"/><rect x="50" width="2" height="14"/><rect x="55" width="1" height="14"/><rect x="58" width="3" height="14"/></g></svg>
+  </section>
+
+  <!-- ===== SCENE C: panorama with reel chip ===== -->
+  <section class="panorama">
+    <div class="reel" data-reveal>
+      <div class="reel-box" role="img" aria-label="Showreel placeholder"><i aria-hidden="true"></i></div>
+      <small>Shipped while you sleep</small>
+    </div>
+    <div class="zoom" id="panoZoom">
+      <div class="weave-photo">
+        <img class="under" src="https://picsum.photos/id/1043/1600/900" alt="" aria-hidden="true" width="1600" height="900">
+        <img class="over" src="https://picsum.photos/id/1043/1600/900" alt="Granite walls above the valley — placeholder imagery" width="1600" height="900">
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SCENE D: serif brand / about ===== -->
+  <section class="about" id="about">
     <div class="about-grid">
       <h2 class="brand-serif serif" data-reveal>OPTI<br>FLOW</h2>
       <p class="byline" data-reveal>✱ &nbsp;By humans × machines</p>
@@ -493,15 +481,14 @@ body.menu-open .menu{opacity:1;visibility:visible}
         <h2 class="serif" data-reveal>About us</h2>
         <p data-reveal>Optiflow is an AI product studio. We hunt down the problems
         everyone complains about and nobody fixes — then build the product that
-        makes them disappear. Idea to working software in weeks, running in
-        production, sharpened forever.</p>
+        makes them disappear.</p>
         <a class="pill" href="mailto:hello@optiflow.studio" data-reveal>Consultation</a>
       </div>
     </div>
   </section>
 
-  <!-- ===== SCENE 4 — THE TERRITORY (map) ===== -->
-  <section class="scene territory" id="territory">
+  <!-- ===== SCENE E: territory map + infra ===== -->
+  <section class="territory" id="territory">
     <div class="terr-grid">
       <div class="terr-map" data-reveal>
         <svg viewBox="0 0 760 600" fill="none" aria-label="Map of the problem territory">
@@ -512,21 +499,15 @@ body.menu-open .menu{opacity:1;visibility:visible}
             <path d="M300 600 C330 520 320 460 380 420"/>
           </g>
           <g fill="#B5A783">
-            <circle cx="260" cy="340" r="4"/>
-            <circle cx="470" cy="240" r="4"/>
-            <circle cx="360" cy="450" r="4"/>
-            <circle cx="520" cy="300" r="4"/>
+            <circle cx="260" cy="340" r="4"/><circle cx="470" cy="240" r="4"/>
+            <circle cx="360" cy="450" r="4"/><circle cx="520" cy="300" r="4"/>
             <circle cx="230" cy="250" r="4"/>
           </g>
           <g fill="#B5A783" font-family="IBM Plex Mono,monospace" font-size="11" letter-spacing="2">
-            <text x="276" y="336">DISPATCH</text>
-            <text x="276" y="350" opacity=".6">−74% MANUAL TIME</text>
-            <text x="486" y="236">LEDGERLENS</text>
-            <text x="486" y="250" opacity=".6">12K DOCS / DAY</text>
-            <text x="376" y="446">NIGHTSHIFT</text>
-            <text x="376" y="460" opacity=".6">68% AUTONOMOUS</text>
-            <text x="246" y="246">FIELD NOTES</text>
-            <text x="536" y="296">YOUR PROBLEM →</text>
+            <text x="276" y="336">DISPATCH</text><text x="276" y="350" opacity=".6">−74% MANUAL TIME</text>
+            <text x="486" y="236">LEDGERLENS</text><text x="486" y="250" opacity=".6">12K DOCS / DAY</text>
+            <text x="376" y="446">NIGHTSHIFT</text><text x="376" y="460" opacity=".6">68% AUTONOMOUS</text>
+            <text x="246" y="246">FIELD NOTES</text><text x="536" y="296">YOUR PROBLEM →</text>
           </g>
           <text x="96" y="128" fill="#B5A783" font-family="Silkscreen,monospace" font-size="34" letter-spacing="4" opacity=".9">OF</text>
         </svg>
@@ -534,8 +515,7 @@ body.menu-open .menu{opacity:1;visibility:visible}
       </div>
       <div class="terr-side">
         <p class="lead" data-reveal>Optiflow operates at the foot of every real
-        problem — in the heart of operations, documents and 3 a.m. support
-        queues, where authentic pain lives and magic nature is optional.</p>
+        problem — in the heart of operations, documents and 3 a.m. support queues.</p>
         <a class="pill" href="mailto:hello@optiflow.studio" data-reveal>Consultation</a>
         <div class="infra on-sand" data-reveal>
           <span class="k">Infrastructure</span>
@@ -553,7 +533,7 @@ body.menu-open .menu{opacity:1;visibility:visible}
     </div>
   </section>
 
-  <!-- ===== MARQUEE ===== -->
+  <!-- ===== marquee ===== -->
   <div class="marquee" aria-hidden="true">
     <div class="marquee-track">
       <span>AI Products <em>+</em> Real Problems <em>+</em> Zero Slideware <em>+</em> Shipped, Not Pitched <em>+</em> Agents On Duty <em>+</em> Perfect Or Nothing <em>+</em>&nbsp;</span>
@@ -561,62 +541,33 @@ body.menu-open .menu{opacity:1;visibility:visible}
     </div>
   </div>
 
-  <!-- ===== CH I — THE HABIT ===== -->
-  <section class="sec on-sand" id="habit">
-    <div class="chapter-mark" aria-hidden="true"><i>+ + +</i> Chapter I <i>+ + +</i></div>
-    <h2 class="sec-title serif">The Habit</h2>
-    <div class="narrow">
-      <p class="narrative" data-reveal>Everyone has an AI strategy. A deck. A roadmap.
-      A committee. We have a different habit — we <em>ship</em>. Real problems don't
-      get solved by slideware. They get solved by people <em>crazy</em> enough to
-      promise perfect, and stubborn enough to <em>deliver</em> it.</p>
-    </div>
-  </section>
-
-  <!-- ===== CH II — THE CRAFT ===== -->
+  <!-- ===== chapters ===== -->
   <section class="sec" id="craft">
-    <div class="chapter-mark" aria-hidden="true"><i>+ + +</i> Chapter II <i>+ + +</i></div>
+    <div class="chapter-mark" aria-hidden="true"><i>+ + +</i> Chapter I <i>+ + +</i></div>
     <h2 class="sec-title serif">The Craft</h2>
-    <div class="craft on-umber-list" style="border-color:var(--line-l)">
-      <div class="craft-row" style="border-color:var(--line-l)" data-reveal>
-        <span class="num">01</span>
-        <div><h3>AI Product Engineering</h3>
-        <p>LLM-native applications, autonomous agents, retrieval systems. Built to survive production traffic, not just the demo call.</p>
-        <div class="craft-tags"><span>AGENTS</span><span>RAG</span><span>EVALS</span></div></div>
-      </div>
-      <div class="craft-row" style="border-color:var(--line-l)" data-reveal>
-        <span class="num">02</span>
-        <div><h3>0 → 1 in Weeks</h3><p>Idea to working product before your competitors finish their kickoff meeting.</p></div>
-      </div>
-      <div class="craft-row" style="border-color:var(--line-l)" data-reveal>
-        <span class="num">03</span>
-        <div><h3>Agentic Automation</h3><p>Workflows that run themselves at 3 a.m. — triage, dispatch, follow-up — while your team sleeps like people who automated their busywork.</p></div>
-      </div>
-      <div class="craft-row" style="border-color:var(--line-l)" data-reveal>
-        <span class="num">04</span>
-        <div><h3>Design That Converts</h3><p>Interfaces people actually feel. We obsess over the last 4% of polish because that's the part users remember — and pay for.</p></div>
-      </div>
-      <div class="craft-row" style="border-color:var(--line-l)" data-reveal>
-        <span class="num">05</span>
-        <div><h3>Data &amp; Model Ops</h3><p>Pipelines, fine-tuning, evals. The unglamorous machinery that makes the magic reliable.</p></div>
-      </div>
-      <div class="craft-row" style="border-color:var(--line-l)" data-reveal>
-        <span class="num">06</span>
-        <div><h3>Growth Engineering</h3><p>Ship. Measure. Sharpen. Repeat until the graph does the thing graphs are supposed to do.</p></div>
-      </div>
-      <div class="craft-row" style="border-color:var(--line-l)" data-reveal>
-        <span class="num">∞</span>
+    <div class="craft">
+      <div class="craft-row" data-reveal><span class="num">01</span>
+        <div><h3>AI Product Engineering</h3><p>LLM-native applications, autonomous agents, retrieval systems. Built to survive production traffic, not just the demo call.</p>
+        <div class="craft-tags"><span>AGENTS</span><span>RAG</span><span>EVALS</span></div></div></div>
+      <div class="craft-row" data-reveal><span class="num">02</span>
+        <div><h3>0 → 1 in Weeks</h3><p>Idea to working product before your competitors finish their kickoff meeting.</p></div></div>
+      <div class="craft-row" data-reveal><span class="num">03</span>
+        <div><h3>Agentic Automation</h3><p>Workflows that run themselves at 3 a.m. — triage, dispatch, follow-up — while your team sleeps like people who automated their busywork.</p></div></div>
+      <div class="craft-row" data-reveal><span class="num">04</span>
+        <div><h3>Design That Converts</h3><p>Interfaces people actually feel. We obsess over the last 4% of polish because that's the part users remember — and pay for.</p></div></div>
+      <div class="craft-row" data-reveal><span class="num">05</span>
+        <div><h3>Data &amp; Model Ops</h3><p>Pipelines, fine-tuning, evals. The unglamorous machinery that makes the magic reliable.</p></div></div>
+      <div class="craft-row" data-reveal><span class="num">06</span>
+        <div><h3>Growth Engineering</h3><p>Ship. Measure. Sharpen. Repeat until the graph does the thing graphs are supposed to do.</p></div></div>
+      <div class="craft-row" data-reveal><span class="num">∞</span>
         <div><h3>Something weirder?</h3><p>The best briefs start with "this is probably impossible, but…"</p>
-        <p style="margin-top:10px"><a class="craft-link" href="#transmission">TRY US →</a></p></div>
-      </div>
+        <p style="margin-top:10px"><a class="craft-link" href="#transmission">TRY US →</a></p></div></div>
     </div>
   </section>
 
-  <!-- ===== CH III — THE ASCENTS ===== -->
   <section class="sec on-sand" id="ascents">
-    <div class="chapter-mark" aria-hidden="true"><i>+ + +</i> Chapter III <i>+ + +</i></div>
+    <div class="chapter-mark" aria-hidden="true"><i>+ + +</i> Chapter II <i>+ + +</i></div>
     <h2 class="sec-title serif">The Ascents</h2>
-
     <!-- Sample case studies — replace imagery & names with real projects -->
     <article class="ascent" data-reveal>
       <div class="weave-photo">
@@ -628,7 +579,6 @@ body.menu-open .menu{opacity:1;visibility:visible}
       <p>An ops copilot that reads the chaos of a logistics floor and turns it into a queue of done.</p>
       <div class="stat px">−74%<small>MANUAL DISPATCH TIME</small></div>
     </article>
-
     <article class="ascent" data-reveal>
       <div class="weave-photo">
         <img class="under" src="https://picsum.photos/id/1067/900/560" alt="" aria-hidden="true" width="900" height="560" loading="lazy">
@@ -639,7 +589,6 @@ body.menu-open .menu{opacity:1;visibility:visible}
       <p>Financial document intelligence that reads faster than an army of analysts — and never gets bored.</p>
       <div class="stat px">12K<small>DOCS PARSED / DAY</small></div>
     </article>
-
     <article class="ascent" data-reveal>
       <div class="weave-photo">
         <img class="under" src="https://picsum.photos/id/1019/900/560" alt="" aria-hidden="true" width="900" height="560" loading="lazy">
@@ -652,33 +601,28 @@ body.menu-open .menu{opacity:1;visibility:visible}
     </article>
   </section>
 
-  <!-- ===== CH IV — THE ROUTE ===== -->
   <section class="sec" id="route">
-    <div class="chapter-mark" aria-hidden="true"><i>+ + +</i> Chapter IV <i>+ + +</i></div>
+    <div class="chapter-mark" aria-hidden="true"><i>+ + +</i> Chapter III <i>+ + +</i></div>
     <h2 class="sec-title serif">The Route</h2>
-    <ol class="route" style="border-color:var(--line-l)">
-      <li style="border-color:var(--line-l)" data-reveal><span class="num">01</span><h3>Find the pain</h3><p>We interrogate the problem until it confesses. No solutions allowed in the room yet.</p></li>
-      <li style="border-color:var(--line-l)" data-reveal><span class="num">02</span><h3>Prototype in days</h3><p>A working thing in your hands within days — ugly is fine, real is mandatory.</p></li>
-      <li style="border-color:var(--line-l)" data-reveal><span class="num">03</span><h3>Ship it</h3><p>Production, real users, real stakes. This is where most agencies wave goodbye. We move in.</p></li>
-      <li style="border-color:var(--line-l)" data-reveal><span class="num">04</span><h3>Sharpen forever</h3><p>Measure, refine, automate. Perfect isn't a launch state — it's a habit.</p></li>
+    <ol class="route">
+      <li data-reveal><span class="num">01</span><h3>Find the pain</h3><p>We interrogate the problem until it confesses. No solutions allowed in the room yet.</p></li>
+      <li data-reveal><span class="num">02</span><h3>Prototype in days</h3><p>A working thing in your hands within days — ugly is fine, real is mandatory.</p></li>
+      <li data-reveal><span class="num">03</span><h3>Ship it</h3><p>Production, real users, real stakes. This is where most agencies wave goodbye. We move in.</p></li>
+      <li data-reveal><span class="num">04</span><h3>Sharpen forever</h3><p>Measure, refine, automate. Perfect isn't a launch state — it's a habit.</p></li>
     </ol>
   </section>
 
-  <!-- ===== EPILOGUE ===== -->
   <section class="sec on-sand epilogue" id="transmission">
     <div class="chapter-mark" aria-hidden="true"><i>+ + +</i> Epilogue — Transmission Open <i>+ + +</i></div>
     <h2 class="epi-title px" data-reveal>GOT A REAL<br>PROBLEM?</h2>
     <p class="narrative" data-reveal style="max-width:44ch;margin:0 auto 32px">Bring us the thing
     everyone says can't be fixed. We'll bring the <em>crazy</em>.</p>
-    <div data-reveal>
-      <a class="pill" href="mailto:hello@optiflow.studio">Let's get crazy →</a>
-    </div>
+    <div data-reveal><a class="pill" href="mailto:hello@optiflow.studio">Let's get crazy →</a></div>
     <a class="mail" href="mailto:hello@optiflow.studio">hello@optiflow.studio</a>
   </section>
 
 </main>
 
-<!-- ================= FOOTER ================= -->
 <footer class="footer">
   <div class="foot-grid">
     <div class="foot-col">
@@ -714,13 +658,12 @@ body.menu-open .menu{opacity:1;visibility:visible}
   'use strict';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ============ walking robot-dog mascot (dithered) ============ */
+  /* ============ walking robot-dog mascot ============ */
   const mascot = document.getElementById('mascot');
   let mascotRaf = null;
   if (mascot) {
     const ctx = mascot.getContext('2d');
     const CELL = 9;
-    // draw one dithered "pixel": vertical strokes inside the cell
     function cell(cx, cy, jitter) {
       const x = cx * CELL, y = cy * CELL;
       ctx.fillRect(x, y - jitter, 2, CELL - 1 + jitter);
@@ -732,23 +675,16 @@ body.menu-open .menu{opacity:1;visibility:visible}
       ctx.fillStyle = '#B5A783';
       const bob = Math.round(Math.sin(t * 6) * 0.6);
       const OX = 6, OY = 9 + bob;
-      // body: x 4..21, y 6..11
       for (let x = 4; x <= 21; x++)
         for (let y = 6; y <= 11; y++)
           cell(OX + x, OY + y, (x * 7 + y * 3) % 4 === 0 ? 1 : 0);
-      // chest slope
       for (let y = 7; y <= 11; y++) cell(OX + 3, OY + y, 0);
-      // head: x 20..26, y 2..7
       for (let x = 20; x <= 26; x++)
         for (let y = 2; y <= 7; y++)
-          if (!(x >= 24 && y === 5)) cell(OX + x, OY + y, (x + y) % 5 === 0 ? 1 : 0); // eye notch
-      // snout
+          if (!(x >= 24 && y === 5)) cell(OX + x, OY + y, (x + y) % 5 === 0 ? 1 : 0);
       for (let x = 26; x <= 28; x++) for (let y = 5; y <= 7; y++) cell(OX + x, OY + y, 0);
-      // antenna ear
-      cell(OX + 25, OY + 1, 0); cell(OX + 25, OY + 0, 0); cell(OX + 26, OY - 1, 0);
-      // tail antenna
+      cell(OX + 25, OY + 1, 0); cell(OX + 25, OY, 0); cell(OX + 26, OY - 1, 0);
       cell(OX + 3, OY + 5, 0); cell(OX + 2, OY + 4, 0); cell(OX + 1, OY + 3, 0);
-      // 4 legs with walk phases
       const legX = [6, 10, 16, 20];
       for (let i = 0; i < 4; i++) {
         const ph = Math.sin(t * 6 + i * Math.PI / 2);
@@ -759,20 +695,13 @@ body.menu-open .menu{opacity:1;visibility:visible}
           cell(OX + legX[i] + 1 + (y > 13 ? sway : 0), OY + y, 0);
         }
       }
-      // ground dashes drifting left (walking illusion)
       const drift = Math.floor((t * 26) % 12);
-      for (let x = -1; x < 40; x += 4) {
-        ctx.fillRect((x * CELL) - drift, (OY + 16.4) * CELL, 10, 2);
-      }
+      for (let x = -1; x < 40; x += 4) ctx.fillRect((x * CELL) - drift, (OY + 16.4) * CELL, 10, 2);
     }
     if (reduced) renderDog(0.4);
-    else {
-      let t = 0;
-      (function walk() { t += 0.016; renderDog(t); mascotRaf = requestAnimationFrame(walk); })();
-    }
+    else { let t = 0; (function walk(){ t += 0.016; renderDog(t); mascotRaf = requestAnimationFrame(walk); })(); }
   }
 
-  /* ============ preloader lift ============ */
   function reveal() {
     if (!document.body.classList.contains('pre')) return;
     document.body.classList.remove('pre');
@@ -781,73 +710,122 @@ body.menu-open .menu{opacity:1;visibility:visible}
   }
   setTimeout(reveal, reduced ? 150 : 2600);
 
-  /* ============ layered mountain range (hero) ============ */
-  const mts = document.getElementById('mts');
-  if (mts) {
-    const ctx = mts.getContext('2d');
-    const hero = document.querySelector('.hero');
-    const dpr = Math.min(devicePixelRatio || 1, 2);
-    let W = 0, H = 0;
+  /* ============ SCENE A: scroll-driven mountain wipe ============ */
+  const wipe = document.getElementById('wipe');
+  const pinA = document.querySelector('.pinA');
+  const heroPhoto = document.querySelector('.hero-photo');
+  const pano = document.querySelector('.panorama');
+  const panoZoom = document.getElementById('panoZoom');
+  let W = 0, H = 0, wiping = false;
 
-    // ridged-noise peak profile
-    const ridged = (x, f, p) => 1 - Math.abs(Math.sin(x * f + p));
+  const ridged = (x, f, p) => 1 - Math.abs(Math.sin(x * f + p));
+  function profileFront(x) {
+    return 0.30 * Math.pow(ridged(x, 0.0021, 1.4), 1.6)
+         + 0.28 * Math.pow(ridged(x, 0.0009, 4.1), 1.3)
+         + 0.09 * Math.pow(ridged(x, 0.0058, 2.2), 2)
+         + 0.05;
+  }
+  function profileBack(x) {
+    return 0.32 * Math.pow(ridged(x, 0.0013, 0.4), 1.4)
+         + 0.20 * Math.pow(ridged(x, 0.0035, 5.0), 1.8)
+         + 0.20;
+  }
+  const rnd = (i) => { const s = Math.sin(i * 127.1) * 43758.5; return s - Math.floor(s); };
+  const easeIn = (p) => p * p * (3 - 2 * p);
 
-    function profileFront(x) {
-      return 0.32 * Math.pow(ridged(x, 0.0021, 1.4), 1.6)
-           + 0.30 * Math.pow(ridged(x, 0.0009, 4.1), 1.3)
-           + 0.10 * Math.pow(ridged(x, 0.0058, 2.2), 2)
-           + 0.06;
-    }
-    function profileBack(x) {
-      return 0.34 * Math.pow(ridged(x, 0.0013, 0.4), 1.4)
-           + 0.22 * Math.pow(ridged(x, 0.0035, 5.0), 1.8)
-           + 0.22;
-    }
-    const rnd = (i) => { const s = Math.sin(i * 127.1) * 43758.5; return s - Math.floor(s); };
+  let ctxW = null, dpr = 1;
+  function sizeWipe() {
+    if (!wipe) return;
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    W = wipe.offsetWidth || innerWidth;
+    H = wipe.offsetHeight || innerHeight;
+    wipe.width = W * dpr;
+    wipe.height = H * dpr;
+    ctxW = wipe.getContext('2d');
+    ctxW.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
 
-    function draw() {
-      W = hero.offsetWidth;
-      H = Math.floor(hero.offsetHeight * 0.62);
-      mts.width = W * dpr;
-      mts.height = H * dpr;
-      mts.style.height = H + 'px';
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, W, H);
-      const step = 5, bw = 3;
+  function drawWipe(p) {
+    if (!ctxW) return;
+    ctxW.clearRect(0, 0, W, H);
+    const rise = easeIn(p) * H * 1.35;
+    const step = 5, bw = 3;
 
-      // back ridge — sparse thin strokes
-      ctx.fillStyle = 'rgba(43,36,32,.5)';
+    ctxW.fillStyle = 'rgba(43,36,32,' + (0.5 * (1 - p)) + ')';
+    if (p < 0.98) {
       for (let x = 0, i = 0; x < W + step; x += step, i++) {
         if (i % 3 === 2) continue;
-        const h = profileBack(x) * H * 0.85;
-        ctx.fillRect(x + 1, H - h, 1.6, h);
+        const h = profileBack(x) * H * 0.8 + rise * 0.7;
+        ctxW.fillRect(x + 1, H - h, 1.6, Math.min(h, H));
       }
+    }
 
-      // front ridge — solid mass with feathered top + trees
-      ctx.fillStyle = '#2B2420';
-      for (let x = 0, i = 0; x < W + step; x += step, i++) {
-        let h = profileFront(x) * H * 0.92;
-        // dropped stitch
-        if (i % 23 === 0) h *= 0.78;
-        ctx.fillRect(x, H - h, bw, h);
-        // feathered top dashes
-        ctx.fillRect(x, H - h - 8 - rnd(i) * 14, bw - 1, 5);
-        if (rnd(i * 3) > 0.72) ctx.fillRect(x, H - h - 24 - rnd(i + 9) * 12, bw - 2, 4);
-        // conifers on gentle slopes
+    ctxW.fillStyle = '#2B2420';
+    for (let x = 0, i = 0; x < W + step; x += step, i++) {
+      let h = profileFront(x) * H * 0.9 + rise;
+      if (i % 23 === 0) h *= 0.9;
+      h = Math.min(h, H + 30);
+      ctxW.fillRect(x, H - h, bw, h);
+      if (h < H) {
+        ctxW.fillRect(x, H - h - 8 - rnd(i) * 14, bw - 1, 5);
+        if (rnd(i * 3) > 0.72) ctxW.fillRect(x, H - h - 24 - rnd(i + 9) * 12, bw - 2, 4);
         if (rnd(i * 7) > 0.8) {
           const th = 14 + rnd(i * 11) * 22;
-          ctx.fillRect(x, H - h - th, 2, th);
-          ctx.fillRect(x - 2, H - h - th * 0.55, 6, 3);
-          ctx.fillRect(x - 1, H - h - th * 0.8, 4, 3);
+          ctxW.fillRect(x, H - h - th, 2, th);
+          ctxW.fillRect(x - 2, H - h - th * 0.55, 6, 3);
+          ctxW.fillRect(x - 1, H - h - th * 0.8, 4, 3);
         }
       }
     }
-    let rt;
-    addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(draw, 200); });
-    draw();
-    // redraw once after layout settles (fonts/photo load can change hero height)
-    setTimeout(draw, 1400);
+    // resolve the stripe field into solid umber at the end of the wipe
+    if (p > 0.8) {
+      ctxW.fillStyle = 'rgba(43,36,32,' + Math.min(1, (p - 0.8) / 0.18) + ')';
+      ctxW.fillRect(0, 0, W, H);
+    }
   }
+
+  let lastP = -1;
+  function onScroll() {
+    wiping = false;
+    if (pinA && !reduced) {
+      const r = pinA.getBoundingClientRect();
+      const track = r.height - innerHeight;
+      const p = Math.max(0, Math.min(1, track > 0 ? -r.top / track : 0));
+      if (Math.abs(p - lastP) > 0.0005) {
+        lastP = p;
+        drawWipe(p);
+        if (heroPhoto) {
+          heroPhoto.style.transform = 'translateY(calc(-50% - ' + (p * 60) + 'px))';
+          heroPhoto.style.opacity = String(Math.max(0, 1 - p * 1.5));
+        }
+        document.querySelectorAll('.pinA .corner').forEach((c) => {
+          c.style.opacity = String(Math.max(0, 1 - p * 1.6));
+        });
+      }
+      document.body.classList.toggle('nav-on',
+        document.body.classList.contains('loaded') && p >= 0.999);
+    } else if (reduced) {
+      document.body.classList.add('nav-on');
+    }
+    if (pano && panoZoom && !reduced) {
+      const pr = pano.getBoundingClientRect();
+      const vis = Math.max(0, Math.min(1, 1 - (pr.top / innerHeight)));
+      panoZoom.style.transform = 'scale(' + (1 + vis * 0.05).toFixed(4) + ')';
+    }
+  }
+  addEventListener('scroll', () => {
+    if (!wiping) { wiping = true; requestAnimationFrame(onScroll); }
+  }, { passive: true });
+
+  let rt;
+  addEventListener('resize', () => {
+    clearTimeout(rt);
+    rt = setTimeout(() => { sizeWipe(); lastP = -1; onScroll(); }, 200);
+  });
+  sizeWipe();
+  drawWipe(0);
+  onScroll();
+  setTimeout(() => { sizeWipe(); lastP = -1; drawWipe(0); onScroll(); }, 1500);
 
   /* ============ reveals ============ */
   const io = new IntersectionObserver((entries) => {
