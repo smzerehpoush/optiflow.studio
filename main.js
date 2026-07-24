@@ -1,7 +1,8 @@
 /* ============================================================
    OPTIFLOW STUDIO — main.js
-   Preloader, flow-field canvas, cursor, reveals, manifesto,
-   counters, magnetic buttons, tilt, terminal, glitch, nav.
+   Preloader boot, neural-core canvas, cursor, decode text,
+   reveals, manifesto scrub, counters, magnetic, tilt,
+   terminal, glitch, HUD, nav.
    ============================================================ */
 
 (() => {
@@ -13,7 +14,14 @@
   /* ---------- Preloader ---------- */
   const preCount = document.getElementById('preCount');
   const preBar = document.getElementById('preBar');
+  const preMsg = document.getElementById('preMsg');
   const PRELOAD_MS = reduced ? 0 : 1100;
+  const BOOT_MSGS = [
+    [0, 'BOOT SEQUENCE INITIATED'],
+    [30, 'LOADING NEURAL CORE'],
+    [62, 'CALIBRATING CRAZY'],
+    [92, 'ALL SYSTEMS: PERFECT']
+  ];
 
   function runPreloader() {
     if (PRELOAD_MS === 0) {
@@ -27,6 +35,9 @@
       const val = Math.round(eased * 100);
       preCount.textContent = String(val).padStart(3, '0');
       preBar.style.width = val + '%';
+      for (const [threshold, msg] of BOOT_MSGS) {
+        if (val >= threshold) preMsg.textContent = msg;
+      }
       if (p < 1) {
         requestAnimationFrame(tick);
       } else {
@@ -76,27 +87,46 @@
     });
   }
 
-  /* ---------- Flow-field canvas ---------- */
+  /* ---------- Neural-core canvas: flow trails + 3D core ---------- */
   const canvas = document.getElementById('field');
   if (canvas && !reduced) {
     const ctx = canvas.getContext('2d');
     const hero = document.querySelector('.hero');
     const dpr = Math.min(devicePixelRatio || 1, 2);
     let W = 0, H = 0;
-    let particles = [];
+    let trails = [];
     let heroVisible = true;
     let raf = null;
     const mouse = { x: -9999, y: -9999 };
 
-    const COLORS = [
-      'rgba(0, 229, 255, 0.55)',
-      'rgba(0, 229, 255, 0.35)',
-      'rgba(124, 92, 255, 0.5)',
-      'rgba(124, 92, 255, 0.32)',
-      'rgba(238, 242, 246, 0.28)'
+    const TRAIL_COLORS = [
+      'rgba(0, 240, 255, 0.30)',
+      'rgba(0, 240, 255, 0.18)',
+      'rgba(139, 92, 255, 0.26)',
+      'rgba(139, 92, 255, 0.16)',
+      'rgba(255, 46, 151, 0.14)'
     ];
 
-    function spawn(p) {
+    /* 3D core: points on a fibonacci sphere + nearest-neighbor links */
+    const CORE_N = 300;
+    const corePts = [];
+    const GA = Math.PI * (3 - Math.sqrt(5));
+    for (let i = 0; i < CORE_N; i++) {
+      const y = 1 - (i / (CORE_N - 1)) * 2;
+      const r = Math.sqrt(Math.max(0, 1 - y * y));
+      corePts.push({ x: Math.cos(GA * i) * r, y, z: Math.sin(GA * i) * r });
+    }
+    const links = [];
+    for (let i = 0; i < CORE_N && links.length < 900; i++) {
+      for (let j = i + 1; j < CORE_N; j++) {
+        const a = corePts[i], b = corePts[j];
+        if (a.x * b.x + a.y * b.y + a.z * b.z > 0.955) links.push([i, j]);
+      }
+    }
+    const proj = new Array(CORE_N);
+    let rotY = 0, rotX = 0.12, targetRX = 0.12;
+
+    function spawnTrail(p) {
       p.x = Math.random() * W;
       p.y = Math.random() * H;
       p.px = p.x;
@@ -105,8 +135,8 @@
       p.vy = 0;
       p.speed = 0.55 + Math.random() * 1.1;
       p.life = 140 + Math.random() * 260;
-      p.color = COLORS[(Math.random() * COLORS.length) | 0];
-      p.width = 0.7 + Math.random() * 0.9;
+      p.color = TRAIL_COLORS[(Math.random() * TRAIL_COLORS.length) | 0];
+      p.width = 0.7 + Math.random() * 0.8;
       return p;
     }
 
@@ -118,10 +148,10 @@
       canvas.style.width = W + 'px';
       canvas.style.height = H + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.fillStyle = '#04060B';
+      ctx.fillStyle = '#030409';
       ctx.fillRect(0, 0, W, H);
-      const count = Math.min(Math.floor((W * H) / 11000), 300);
-      particles = Array.from({ length: count }, () => spawn({}));
+      const count = Math.min(Math.floor((W * H) / 16000), 200);
+      trails = Array.from({ length: count }, () => spawnTrail({}));
     }
 
     function fieldAngle(x, y, t) {
@@ -136,16 +166,18 @@
       if (!heroVisible) return;
       t += 0.008;
 
-      ctx.fillStyle = 'rgba(4, 6, 11, 0.065)';
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = 'rgba(3, 4, 9, 0.10)';
       ctx.fillRect(0, 0, W, H);
-      ctx.lineCap = 'round';
 
-      for (const p of particles) {
+      /* --- flow trails (additive) --- */
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.lineCap = 'round';
+      for (const p of trails) {
         const ang = fieldAngle(p.x, p.y, t);
         p.vx += Math.cos(ang) * 0.07 * p.speed;
         p.vy += Math.sin(ang) * 0.07 * p.speed;
 
-        // Mouse repulsion
         const dx = p.x - mouse.x;
         const dy = p.y - mouse.y;
         const d2 = dx * dx + dy * dy;
@@ -158,16 +190,14 @@
 
         p.vx *= 0.94;
         p.vy *= 0.94;
-
         p.px = p.x;
         p.py = p.y;
         p.x += p.vx;
         p.y += p.vy;
         p.life--;
 
-        // Wrap or respawn without drawing a streak
         if (p.life <= 0 || p.x < -10 || p.x > W + 10 || p.y < -10 || p.y > H + 10) {
-          spawn(p);
+          spawnTrail(p);
           continue;
         }
 
@@ -178,6 +208,62 @@
         ctx.lineTo(p.x, p.y);
         ctx.stroke();
       }
+
+      /* --- 3D neural core --- */
+      const narrow = W < 760;
+      const R = Math.min(W, H) * (narrow ? 0.24 : 0.30);
+      const cx = narrow ? W * 0.5 : W * 0.73;
+      const cy = narrow ? H * 0.30 : H * 0.44;
+      const pulse = 1 + 0.035 * Math.sin(t * 2.4);
+
+      rotY += 0.0022 + (mouse.x > 0 ? (mouse.x / W - 0.5) * 0.004 : 0);
+      targetRX = mouse.y > 0 ? (mouse.y / H - 0.5) * 0.9 : 0.12;
+      rotX += (targetRX - rotX) * 0.04;
+
+      const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+      const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+      const f = 2.4;
+
+      for (let i = 0; i < CORE_N; i++) {
+        const p = corePts[i];
+        const x1 = p.x * cosY + p.z * sinY;
+        const z1 = -p.x * sinY + p.z * cosY;
+        const y2 = p.y * cosX - z1 * sinX;
+        const z2 = p.y * sinX + z1 * cosX;
+        const s = f / (f - z2);
+        proj[i] = {
+          x: cx + x1 * R * pulse * s,
+          y: cy + y2 * R * pulse * s,
+          s,
+          d: (z2 + 1) / 2
+        };
+      }
+
+      ctx.lineWidth = 0.6;
+      for (let i = 0; i < links.length; i++) {
+        const a = proj[links[i][0]], b = proj[links[i][1]];
+        const alpha = 0.04 + 0.11 * ((a.d + b.d) / 2);
+        ctx.strokeStyle = (i % 3 === 0)
+          ? `rgba(139, 92, 255, ${alpha})`
+          : `rgba(0, 240, 255, ${alpha})`;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+      }
+
+      for (let i = 0; i < CORE_N; i++) {
+        const q = proj[i];
+        ctx.fillStyle = `rgba(0, 240, 255, ${0.05 + 0.05 * q.d})`;
+        ctx.beginPath();
+        ctx.arc(q.x, q.y, 5 * q.s, 0, 6.2832);
+        ctx.fill();
+        ctx.fillStyle = `rgba(230, 250, 255, ${0.25 + 0.55 * q.d})`;
+        ctx.beginPath();
+        ctx.arc(q.x, q.y, 1.3 * q.s, 0, 6.2832);
+        ctx.fill();
+      }
+
       raf = requestAnimationFrame(frame);
     }
 
@@ -223,11 +309,52 @@
   }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
   document.querySelectorAll('[data-reveal]').forEach((el) => revealIO.observe(el));
 
+  /* ---------- Decode / scramble text on reveal ---------- */
+  if (!reduced) {
+    const DECODE_CHARS = '▚▞▟#@$%&<>/\\|*+=~10';
+    function decodeEl(el) {
+      const nodes = [];
+      (function walk(n) {
+        n.childNodes.forEach((c) => {
+          if (c.nodeType === Node.TEXT_NODE && c.textContent.trim()) nodes.push(c);
+          else if (c.nodeType === Node.ELEMENT_NODE) walk(c);
+        });
+      })(el);
+      nodes.forEach((node) => {
+        const orig = node.textContent;
+        const len = orig.length;
+        const dur = 500 + len * 14;
+        const start = performance.now();
+        (function step(now) {
+          const p = Math.min((now - start) / dur, 1);
+          const solved = Math.floor(p * len);
+          let out = '';
+          for (let i = 0; i < len; i++) {
+            out += i < solved || orig[i] === ' '
+              ? orig[i]
+              : DECODE_CHARS[(Math.random() * DECODE_CHARS.length) | 0];
+          }
+          node.textContent = out;
+          if (p < 1) requestAnimationFrame(step);
+          else node.textContent = orig;
+        })(start);
+      });
+    }
+    const decodeIO = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          decodeIO.unobserve(e.target);
+          decodeEl(e.target);
+        }
+      }
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.eyebrow, .section-head h2').forEach((el) => decodeIO.observe(el));
+  }
+
   /* ---------- Manifesto word reveal ---------- */
   const manifesto = document.getElementById('manifesto');
   const manifestoText = document.getElementById('manifestoText');
   if (manifestoText) {
-    // Wrap every word in a span, preserving <em> emphasis
     function splitWords(node) {
       for (const child of Array.from(node.childNodes)) {
         if (child.nodeType === Node.TEXT_NODE) {
@@ -324,10 +451,10 @@
         const py = e.clientY - r.top;
         el.style.setProperty('--mx', px + 'px');
         el.style.setProperty('--my', py + 'px');
-        const rotY = ((px / r.width) - 0.5) * 5;
-        const rotX = (0.5 - (py / r.height)) * 5;
+        const rotYv = ((px / r.width) - 0.5) * 5;
+        const rotXv = (0.5 - (py / r.height)) * 5;
         el.style.transform =
-          `perspective(900px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateY(${lift}px)`;
+          `perspective(900px) rotateX(${rotXv.toFixed(2)}deg) rotateY(${rotYv.toFixed(2)}deg) translateY(${lift}px)`;
       });
       el.addEventListener('pointerleave', () => {
         el.style.transition = 'transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s';
@@ -398,9 +525,13 @@
     }
   }
 
-  /* ---------- Nav behavior ---------- */
+  /* ---------- Nav + HUD scroll behavior ---------- */
   const nav = document.getElementById('nav');
+  const progressBar = document.getElementById('progressBar');
+  const scrollPct = document.getElementById('scrollPct');
+  const heroContent = document.querySelector('.hero-content');
   let lastY = scrollY;
+
   addEventListener('scroll', () => {
     const y = scrollY;
     nav.classList.toggle('scrolled', y > 10);
@@ -409,7 +540,39 @@
       else if (lastY - y > 4 || y < 160) nav.classList.remove('hidden');
     }
     lastY = y;
+
+    const total = document.documentElement.scrollHeight - innerHeight;
+    const pct = total > 0 ? Math.min(100, Math.round((y / total) * 100)) : 0;
+    progressBar.style.width = pct + '%';
+    scrollPct.textContent = String(pct).padStart(3, '0');
+    document.body.classList.toggle('at-end', pct >= 97);
+
+    if (!reduced && heroContent && y < innerHeight) {
+      heroContent.style.transform = `translateY(${(y * 0.28).toFixed(1)}px)`;
+      heroContent.style.opacity = Math.max(0, 1 - y / (innerHeight * 0.85)).toFixed(3);
+    }
   }, { passive: true });
+
+  /* ---------- HUD rail active section ---------- */
+  const railLinks = document.querySelectorAll('.hud-rail a');
+  if (railLinks.length) {
+    const byTarget = new Map();
+    railLinks.forEach((a) => {
+      const id = a.getAttribute('href').slice(1);
+      const el = id === 'top' ? document.querySelector('.hero') : document.getElementById(id);
+      if (el) byTarget.set(el, a);
+    });
+    const railIO = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          railLinks.forEach((a) => a.classList.remove('active'));
+          const link = byTarget.get(e.target);
+          if (link) link.classList.add('active');
+        }
+      }
+    }, { rootMargin: '-40% 0px -40% 0px' });
+    byTarget.forEach((_, el) => railIO.observe(el));
+  }
 
   /* ---------- Mobile menu ---------- */
   const burger = document.getElementById('navBurger');

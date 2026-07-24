@@ -8,16 +8,38 @@
   <meta property="og:title" content="Optiflow Studio — Crazy enough to build perfect things">
   <meta property="og:description" content="An AI product studio. Real problems in, shipped products out.">
   <meta property="og:type" content="website">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2304060B'/%3E%3Ctext x='32' y='44' font-size='36' font-family='monospace' fill='%2300E5FF' text-anchor='middle'%3E%E2%9C%B1%3C/text%3E%3C/svg%3E">
+  <meta name="theme-color" content="#030409">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23030409'/%3E%3Cpath d='M32 6l6 20 20 6-20 6-6 20-6-20-20-6 20-6z' fill='%2300F0FF'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Unbounded:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Film grain overlay -->
+  <!-- Ambient aurora backdrop -->
+  <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+
+  <!-- Film grain + scanline overlays -->
   <div class="noise" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- Scroll progress -->
+  <div class="scroll-progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <!-- HUD corner readouts -->
+  <div class="hud-corner hud-bl mono" aria-hidden="true"><span class="hud-dot"></span>SYS://OPTIFLOW — ONLINE</div>
+  <div class="hud-corner hud-br mono" aria-hidden="true"><span id="scrollPct">000</span>% SCROLLED</div>
+
+  <!-- Section rail -->
+  <nav class="hud-rail" aria-label="Sections">
+    <a href="#top" data-label="INTRO" aria-label="Intro"></a>
+    <a href="#manifesto" data-label="MANIFESTO" aria-label="Manifesto"></a>
+    <a href="#capabilities" data-label="CAPABILITIES" aria-label="Capabilities"></a>
+    <a href="#work" data-label="WORK" aria-label="Work"></a>
+    <a href="#process" data-label="PROCESS" aria-label="Process"></a>
+    <a href="#contact" data-label="CONTACT" aria-label="Contact"></a>
+  </nav>
 
   <!-- Preloader -->
   <div class="preloader" id="preloader" aria-hidden="true">
@@ -26,6 +48,7 @@
       <span class="preloader-count mono" id="preCount">000</span>
     </div>
     <div class="preloader-bar"><span id="preBar"></span></div>
+    <span class="preloader-msg mono" id="preMsg">BOOT SEQUENCE INITIATED</span>
   </div>
 
   <!-- Custom cursor (fine pointers only) -->
@@ -35,7 +58,7 @@
   <!-- Navigation -->
   <header class="nav" id="nav">
     <a class="nav-logo mono" href="#top" aria-label="Optiflow Studio — home">
-      <span class="logo-mark" aria-hidden="true">✱</span>optiflow<span class="blink">_</span>
+      <svg class="logo-mark" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="lgn" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#00F0FF"/><stop offset="1" stop-color="#8B5CFF"/></linearGradient></defs><path d="M12 1l2.4 8.6L23 12l-8.6 2.4L12 23l-2.4-8.6L1 12l8.6-2.4z" fill="url(#lgn)"/></svg>optiflow<span class="blink">_</span>
     </a>
     <nav class="nav-links" aria-label="Primary">
       <a href="#work" data-hover>Work</a>
@@ -141,7 +164,7 @@
             <h3>0 → 1 in Weeks</h3>
             <p>Idea to working product before your competitors finish their kickoff meeting.</p>
             <div class="terminal mono" aria-hidden="true">
-              <div class="terminal-bar"><i></i><i></i><i></i></div>
+              <div class="terminal-bar"><i></i><i></i><i></i><span class="terminal-title">optiflow@core:~</span></div>
               <pre id="termOut">$ <span class="term-cursor">▊</span></pre>
             </div>
           </article>
@@ -312,7 +335,7 @@
   <footer class="footer">
     <div class="container footer-grid">
       <div class="footer-brand">
-        <a class="nav-logo mono" href="#top" data-hover><span class="logo-mark" aria-hidden="true">✱</span>optiflow<span class="blink">_</span></a>
+        <a class="nav-logo mono" href="#top" data-hover><svg class="logo-mark" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="lgf" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#00F0FF"/><stop offset="1" stop-color="#8B5CFF"/></linearGradient></defs><path d="M12 1l2.4 8.6L23 12l-8.6 2.4L12 23l-2.4-8.6L1 12l8.6-2.4z" fill="url(#lgf)"/></svg>optiflow<span class="blink">_</span></a>
         <p>An AI studio building products<br>that solve real problems.</p>
       </div>
       <nav class="footer-nav" aria-label="Footer">

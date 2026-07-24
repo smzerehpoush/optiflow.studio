@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Optiflow Studio — Design Lab</title>
+  <meta name="description" content="Four design directions for optiflow.studio — pick your favorite.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#05060C">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23030409'/%3E%3Cpath d='M32 6l6 20 20 6-20 6-6 20-6-20-20-6 20-6z' fill='%2300F0FF'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #05060C;
+      color: #EEF2F6;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: clamp(32px, 6vw, 80px) clamp(20px, 5vw, 64px) 64px;
+    }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    a { color: inherit; text-decoration: none; }
+    :focus-visible { outline: 2px solid #00F0FF; outline-offset: 3px; }
+    header { max-width: 1280px; margin: 0 auto clamp(36px, 5vw, 64px); }
+    .eyebrow {
+      color: #00F0FF;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      margin-bottom: 18px;
+    }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      text-transform: uppercase;
+    }
+    h1 span {
+      background: linear-gradient(92deg, #00F0FF, #8B5CFF);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .sub { color: #8B94A7; margin-top: 14px; max-width: 60ch; }
+    .grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(480px, 100%), 1fr));
+      gap: 24px;
+    }
+    .tile {
+      position: relative;
+      display: block;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 18px;
+      overflow: hidden;
+      background: #0A0F1D;
+      transition: border-color 0.3s, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.35s;
+    }
+    .tile:hover {
+      border-color: rgba(0, 240, 255, 0.45);
+      transform: translateY(-5px);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55), 0 0 30px rgba(0, 240, 255, 0.08);
+    }
+    .frame {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: #030409;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .frame iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 400%;
+      height: 400%;
+      transform: scale(0.25);
+      transform-origin: 0 0;
+      border: 0;
+      pointer-events: none;
+    }
+    .frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+    }
+    .tile-info {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 22px 20px;
+    }
+    .tile-info h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .tile-info h2 small {
+      display: block;
+      margin-top: 5px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 0.82rem;
+      color: #8B94A7;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+    .tile-num {
+      font-size: 0.68rem;
+      color: #8B94A7;
+      letter-spacing: 0.14em;
+      white-space: nowrap;
+    }
+    .tile:hover .tile-num { color: #00F0FF; }
+    .flag {
+      position: absolute;
+      top: 14px; left: 14px;
+      z-index: 2;
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      padding: 6px 12px;
+      border-radius: 100px;
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid rgba(0, 240, 255, 0.4);
+      color: #00F0FF;
+      backdrop-filter: blur(6px);
+    }
+    footer {
+      max-width: 1280px;
+      margin: 48px auto 0;
+      color: #8B94A7;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    footer a { color: #00F0FF; }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="eyebrow mono">[ OPTIFLOW STUDIO — INTERNAL DESIGN LAB ]</p>
+    <h1>ONE STUDIO.<br><span>FOUR MADNESSES.</span></h1>
+    <p class="sub">Same story, four visual universes. Click any tile to experience the full
+    live site — then tell us which one feels crazy enough.</p>
+  </header>
+
+  <div class="grid">
+    <a class="tile" href="../index.html">
+      <span class="flag mono">CURRENT FLAGSHIP</span>
+      <div class="frame"><iframe src="../index.html" title="Neural Core preview" loading="lazy" tabindex="-1"></iframe></div>
+      <div class="tile-info">
+        <h2>Neural Core<small>3D wireframe intelligence, cyan × violet, sci-fi HUD chrome.</small></h2>
+        <span class="tile-num mono">DIR/01</span>
+      </div>
+    </a>
+
+    <a class="tile" href="aether.html">
+      <div class="frame"><iframe src="aether.html" title="Aether Glass preview" loading="lazy" tabindex="-1"></iframe></div>
+      <div class="tile-info">
+        <h2>Aether Glass<small>Weightless prismatic glass — an AI lab designed by a fashion house.</small></h2>
+        <span class="tile-num mono">DIR/02</span>
+      </div>
+    </a>
+
+    <a class="tile" href="command.html">
+      <div class="frame"><iframe src="command.html" title="Command Deck preview" loading="lazy" tabindex="-1"></iframe></div>
+      <div class="tile-info">
+        <h2>Command Deck<small>Mission-control FUI — phosphor terminals, telemetry, boot sequences.</small></h2>
+        <span class="tile-num mono">DIR/03</span>
+      </div>
+    </a>
+
+    <a class="tile" href="monolith.html">
+      <div class="frame"><iframe src="monolith.html" title="Acid Monolith preview" loading="lazy" tabindex="-1"></iframe></div>
+      <div class="tile-info">
+        <h2>Acid Monolith<small>Neo-brutalist type walls, acid accent, zero softness.</small></h2>
+        <span class="tile-num mono">DIR/04</span>
+      </div>
+    </a>
+  </div>
+
+  <footer>
+    <span>© 2026 OPTIFLOW STUDIO — PARTNER DEMO</span>
+    <span>FEEDBACK → <a href="mailto:hello@optiflow.studio">HELLO@OPTIFLOW.STUDIO</a></span>
+  </footer>
+</body>
+</html>

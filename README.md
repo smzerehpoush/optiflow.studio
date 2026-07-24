@@ -3,16 +3,32 @@
 Dark, kinetic, futuristic landing page for Optiflow: an AI studio building
 products that solve real problems.
 
+**Live:** https://smzerehpoush.github.io/optiflow.studio/
+**Design lab (partner demos):** https://smzerehpoush.github.io/optiflow.studio/variants/
+
 ## Stack
 
 Zero dependencies. Pure HTML + CSS + vanilla JS. Fonts from Google Fonts
-(Space Grotesk / Inter / JetBrains Mono).
+(Unbounded / Space Grotesk / Inter / JetBrains Mono).
 
-- `index.html` — markup
+- `index.html` — markup (flagship "Neural Core" design)
 - `style.css` — design system + all styling
-- `main.js` — flow-field canvas, custom cursor, scroll reveals, manifesto
-  scrub, counters, magnetic buttons, card tilt/spotlight, terminal typing,
-  glitch, nav behavior, mobile menu
+- `main.js` — 3D neural-core canvas + flow trails, custom cursor, decode
+  text effects, scroll reveals, manifesto scrub, counters, magnetic buttons,
+  card tilt/spotlight, terminal typing, glitch, HUD (progress/rail/readouts),
+  nav behavior, mobile menu
+
+## Design variants (`variants/`)
+
+Four full design directions over the same content, for partner demos —
+`variants/index.html` is the gallery hub:
+
+1. **Neural Core** (`../index.html`) — flagship: 3D wireframe sphere, cyan × violet, FUI HUD
+2. **Aether Glass** (`aether.html`) — prismatic glassmorphism, luxury-future
+3. **Command Deck** (`command.html`) — mission-control terminal FUI
+4. **Acid Monolith** (`monolith.html`) — neo-brutalist type walls, acid accent
+
+Each variant is a single self-contained HTML file.
 
 ## Run locally
 
