@@ -20,7 +20,7 @@ Zero dependencies. Pure HTML + CSS + vanilla JS. Fonts from Google Fonts
 
 ## Design variants (`variants/`)
 
-Ten full design directions over the same content, for partner demos —
+Thirteen full design directions over the same content, for partner demos —
 `variants/index.html` is the gallery hub.
 
 **Dark series:**
@@ -35,8 +35,16 @@ Ten full design directions over the same content, for partner demos —
 7. **Blueprint** (`blueprint.html`) — engineering drawing, grid paper, dimension lines
 8. **Chrome Pulse** (`chrome.html`) — Y2K liquid metal, silver chrome, holo foil
 9. **Duality** (`duality.html`) — minimal luxe with a light/dark theme toggle
+
+**Reference cuts:**
 10. **Loom** (`loom.html`) — woven analog-digital (sand × umber, barcode landscapes,
     scramble type; inspired by sondaven.com × codapress.co.uk)
+11. **Riso Press** (`riso.html`) — developer risograph (bone × charcoal, dither
+    textures; inspired by contentarchitecture.dev)
+12. **Convergence** (`convergence.html`) — editorial frame-grid (serif × mono,
+    signal orange; inspired by vibecon.ai)
+13. **Tiny Theater** (`theater.html`) — emotional white-space theater (floating
+    chips, one statement at a time; inspired by tinywins.com)
 
 Each variant is a single self-contained HTML file.
 
