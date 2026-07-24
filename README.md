@@ -37,8 +37,9 @@ Thirteen full design directions over the same content, for partner demos —
 9. **Duality** (`duality.html`) — minimal luxe with a light/dark theme toggle
 
 **Reference cuts:**
-10. **Loom** (`loom.html`) — woven analog-digital (sand × umber, barcode landscapes,
-    scramble type; inspired by sondaven.com × codapress.co.uk)
+10. **Loom** (`loom.html`) — Son Daven-style expedition: dithered planet preloader,
+    barcode mountain landscapes, chapter storytelling, duotone photography
+    (placeholder photos via picsum.photos — swap for real product/team shots)
 11. **Riso Press** (`riso.html`) — developer risograph (bone × charcoal, dither
     textures; inspired by contentarchitecture.dev)
 12. **Convergence** (`convergence.html`) — editorial frame-grid (serif × mono,
