@@ -87,24 +87,24 @@
     });
   }
 
-  /* ---------- Neural-core canvas: flow trails + 3D core ---------- */
+  /* ---------- Neural-core canvas: matrix word-rain + 3D core ---------- */
   const canvas = document.getElementById('field');
   if (canvas && !reduced) {
     const ctx = canvas.getContext('2d');
     const hero = document.querySelector('.hero');
     const dpr = Math.min(devicePixelRatio || 1, 2);
     let W = 0, H = 0;
-    let trails = [];
-    let heroVisible = true;
-    let raf = null;
+    let cols = [];
     const mouse = { x: -9999, y: -9999 };
 
-    const TRAIL_COLORS = [
-      'rgba(0, 240, 255, 0.30)',
-      'rgba(0, 240, 255, 0.18)',
-      'rgba(139, 92, 255, 0.26)',
-      'rgba(139, 92, 255, 0.16)',
-      'rgba(255, 46, 151, 0.14)'
+    const WORDS = ['OPTIFLOW', 'SHIP', 'AGENTS', 'PROOF', 'REAL', 'BUILD', 'EVALS', 'RAG', '01', 'AI'];
+    const CELL = 18;
+    const RAIN_COLORS = [
+      'rgba(0, 240, 255, 0.85)',
+      'rgba(0, 240, 255, 0.55)',
+      'rgba(139, 92, 255, 0.80)',
+      'rgba(139, 92, 255, 0.50)',
+      'rgba(255, 46, 151, 0.55)'
     ];
 
     /* 3D core: points on a fibonacci sphere + nearest-neighbor links */
@@ -126,18 +126,15 @@
     const proj = new Array(CORE_N);
     let rotY = 0, rotX = 0.12, targetRX = 0.12;
 
-    function spawnTrail(p) {
-      p.x = Math.random() * W;
-      p.y = Math.random() * H;
-      p.px = p.x;
-      p.py = p.y;
-      p.vx = 0;
-      p.vy = 0;
-      p.speed = 0.55 + Math.random() * 1.1;
-      p.life = 140 + Math.random() * 260;
-      p.color = TRAIL_COLORS[(Math.random() * TRAIL_COLORS.length) | 0];
-      p.width = 0.7 + Math.random() * 0.8;
-      return p;
+    function spawnCol(c, x) {
+      c.x = x;
+      c.y = -CELL * (2 + Math.random() * 26);
+      c.speed = 0.5 + Math.random() * 1.6;
+      c.word = WORDS[(Math.random() * WORDS.length) | 0];
+      c.ci = 0;
+      c.acc = Math.random();
+      c.color = RAIN_COLORS[(Math.random() * RAIN_COLORS.length) | 0];
+      return c;
     }
 
     function resize() {
@@ -150,63 +147,38 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.fillStyle = '#030409';
       ctx.fillRect(0, 0, W, H);
-      const count = Math.min(Math.floor((W * H) / 16000), 200);
-      trails = Array.from({ length: count }, () => spawnTrail({}));
-    }
-
-    function fieldAngle(x, y, t) {
-      const a = Math.cos(x * 0.0016 + t * 0.32) + Math.sin(y * 0.0019 - t * 0.27);
-      const b = Math.sin((x + y) * 0.0008 + t * 0.15);
-      return (a + b) * 1.35;
+      cols = [];
+      for (let x = 0; x < W; x += CELL) cols.push(spawnCol({}, x));
     }
 
     let t = 0;
     function frame() {
-      raf = null;
-      if (!heroVisible) return;
       t += 0.008;
 
       ctx.globalCompositeOperation = 'source-over';
-      ctx.fillStyle = 'rgba(3, 4, 9, 0.10)';
+      ctx.fillStyle = 'rgba(3, 4, 9, 0.05)';
       ctx.fillRect(0, 0, W, H);
 
-      /* --- flow trails (additive) --- */
+      /* --- matrix word-rain (additive) --- */
       ctx.globalCompositeOperation = 'lighter';
-      ctx.lineCap = 'round';
-      for (const p of trails) {
-        const ang = fieldAngle(p.x, p.y, t);
-        p.vx += Math.cos(ang) * 0.07 * p.speed;
-        p.vy += Math.sin(ang) * 0.07 * p.speed;
-
-        const dx = p.x - mouse.x;
-        const dy = p.y - mouse.y;
-        const d2 = dx * dx + dy * dy;
-        if (d2 < 16900) {
-          const d = Math.sqrt(d2) || 1;
-          const f = (130 - d) / 130 * 0.9;
-          p.vx += (dx / d) * f;
-          p.vy += (dy / d) * f;
-        }
-
-        p.vx *= 0.94;
-        p.vy *= 0.94;
-        p.px = p.x;
-        p.py = p.y;
-        p.x += p.vx;
-        p.y += p.vy;
-        p.life--;
-
-        if (p.life <= 0 || p.x < -10 || p.x > W + 10 || p.y < -10 || p.y > H + 10) {
-          spawnTrail(p);
-          continue;
-        }
-
-        ctx.strokeStyle = p.color;
-        ctx.lineWidth = p.width;
-        ctx.beginPath();
-        ctx.moveTo(p.px, p.py);
-        ctx.lineTo(p.x, p.y);
-        ctx.stroke();
+      ctx.font = '600 14px "JetBrains Mono", monospace';
+      ctx.textBaseline = 'top';
+      for (const c of cols) {
+        let sp = c.speed;
+        if (mouse.x > 0 && Math.abs(c.x - mouse.x) < 70) sp += 1.4;
+        c.acc += sp * 0.22;
+        if (c.acc < 1) continue;
+        c.acc = 0;
+        c.y += CELL;
+        if (c.y > H + CELL * 4) { spawnCol(c, c.x); continue; }
+        if (c.y < 0) continue;
+        const prev = c.word[c.ci % c.word.length];
+        c.ci++;
+        const head = c.word[c.ci % c.word.length];
+        ctx.fillStyle = c.color;
+        ctx.fillText(prev, c.x, c.y - CELL);
+        ctx.fillStyle = 'rgba(235, 250, 255, 0.9)';
+        ctx.fillText(head, c.x, c.y);
       }
 
       /* --- 3D neural core --- */
@@ -264,13 +236,6 @@
         ctx.fill();
       }
 
-      raf = requestAnimationFrame(frame);
-    }
-
-    // rAF throttles itself when the tab is hidden/occluded — no manual
-    // document.hidden gating (an early-return there can kill the loop for good).
-    function kick() {
-      if (!raf && heroVisible) raf = requestAnimationFrame(frame);
     }
 
     hero.addEventListener('mousemove', (e) => {
@@ -283,11 +248,6 @@
       mouse.y = -9999;
     });
 
-    new IntersectionObserver((entries) => {
-      heroVisible = entries[0].isIntersecting;
-      kick();
-    }).observe(hero);
-
     let resizeTimer;
     addEventListener('resize', () => {
       clearTimeout(resizeTimer);
@@ -295,7 +255,14 @@
     });
 
     resize();
-    kick();
+    // Unkillable loop: re-arm FIRST so nothing can break the chain,
+    // then draw only while the hero is on screen.
+    (function loop() {
+      requestAnimationFrame(loop);
+      const r = hero.getBoundingClientRect();
+      if (r.bottom <= 0 || r.top >= innerHeight) return;
+      frame();
+    })();
   }
 
   /* ---------- Scroll reveals ---------- */

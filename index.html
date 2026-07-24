@@ -1,1559 +1,362 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Optiflow — AI Product Studio</title>
-<meta name="description" content="Optiflow is an AI product studio. We hunt down the problems everyone complains about and nobody fixes — then ship the products that make them disappear.">
-<meta property="og:title" content="Optiflow — AI Product Studio">
-<meta property="og:description" content="Real problems in — shipped products out. Humans × machines.">
-<meta property="og:type" content="website">
-<meta name="theme-color" content="#292420">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23292420'/%3E%3Cg fill='%23A89474'%3E%3Crect x='12' y='16' width='5' height='32'/%3E%3Crect x='21' y='24' width='5' height='24'/%3E%3Crect x='30' y='12' width='5' height='36'/%3E%3Crect x='39' y='28' width='5' height='20'/%3E%3Crect x='48' y='20' width='5' height='28'/%3E%3C/g%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://picsum.photos">
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link href="https://fonts.googleapis.com/css2?family=Prata&family=Jura:wght@400;500;600;700&family=Archivo+Black&display=swap" rel="stylesheet">
-<style>
-/* ============================================================
-   OPTIFLOW — AI product studio · scroll-cinema build
-   Palette: sand #A89474 · card sand #B3A181 · umber #292420
-   ============================================================ */
-:root{
-  --sand:#A89474;
-  --sand-2:#B3A181;
-  --sand-3:#8F7E62;
-  --umber:#292420;
-  --umber-2:#211D19;
-  --ink:#1C1815;
-  --l-on-dark:rgba(168,148,116,.28);
-  --l-on-sand:rgba(41,36,32,.32);
-  --ease:cubic-bezier(.19,1,.22,1);
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:auto}
-html.lenis,html.lenis body{height:auto}
-.lenis.lenis-smooth{scroll-behavior:auto!important}
-body{
-  background:var(--umber);
-  color:var(--sand);
-  font-family:'Jura',sans-serif;
-  font-size:14px;line-height:1.6;
-  letter-spacing:.08em;
-  -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
-}
-body.locked{overflow:hidden}
-::selection{background:var(--sand);color:var(--umber)}
-a{color:inherit;text-decoration:none}
-button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;letter-spacing:inherit}
-img{max-width:100%;display:block}
-:focus-visible{outline:1px solid var(--sand);outline-offset:3px}
-
-.serif{font-family:'Prata',serif;font-weight:400;letter-spacing:.01em}
-.lbl{font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase}
-.mono{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;line-height:1.75}
-
-/* scrollbar */
-::-webkit-scrollbar{width:5px}
-::-webkit-scrollbar-track{background:var(--umber)}
-::-webkit-scrollbar-thumb{background:var(--sand-3)}
-
-/* noise */
-.noise{
-  position:fixed;inset:-50%;width:200%;height:200%;z-index:9980;pointer-events:none;opacity:.05;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/* fixed equalizer glyph */
-#eq{position:fixed;left:18px;bottom:16px;z-index:60;opacity:.9;mix-blend-mode:difference}
-
-/* sparkle divider */
-.spark{display:inline-flex;gap:6px;align-items:center}
-.spark i{font-style:normal;font-size:9px;transform:translateY(-1px)}
-
-/* ============ NAV ============ */
-#nav{
-  position:fixed;inset:0 0 auto 0;z-index:500;
-  display:flex;align-items:center;gap:28px;
-  padding:16px 24px;
-  transition:transform .5s var(--ease);
-  color:var(--sand);
-}
-#nav.hid{transform:translateY(-110%)}
-#nav .burger{display:flex;flex-direction:column;gap:5px;width:26px}
-#nav .burger span{height:1.5px;background:currentColor;transition:transform .3s}
-#nav .n-link{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;opacity:.9}
-#nav .n-link:hover{opacity:1;text-decoration:underline;text-underline-offset:4px}
-#nav .n-logo{
-  position:absolute;left:50%;top:14px;transform:translateX(-50%);
-  height:26px;width:190px;opacity:0;transition:opacity .4s;
-}
-#nav.scrolled .n-logo{opacity:1}
-#nav .n-right{margin-left:auto;display:flex;align-items:center;gap:22px}
-#nav .n-cta{
-  font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
-  padding:11px 20px;border-radius:99px;
-  background:rgba(168,148,116,.14);
-  border:1px solid rgba(168,148,116,0);
-  backdrop-filter:blur(6px);
-  transition:background .3s,color .3s;
-}
-#nav .n-cta:hover{background:var(--sand);color:var(--umber)}
-#nav.on-sand{color:var(--umber)}
-#nav.on-sand .n-cta{background:rgba(41,36,32,.12)}
-#nav.on-sand .n-cta:hover{background:var(--umber);color:var(--sand)}
-
-/* menu overlay */
-#menu{
-  position:fixed;inset:0;z-index:490;background:var(--umber-2);
-  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;
-  opacity:0;visibility:hidden;transition:opacity .5s,visibility .5s;
-}
-#menu.open{opacity:1;visibility:visible}
-#menu a{font-family:'Prata',serif;font-size:clamp(26px,4.6vw,54px);text-transform:uppercase;opacity:.85}
-#menu a:hover{opacity:1;font-style:italic}
-#menu .m-meta{margin-top:34px;display:flex;gap:40px}
-
-/* ============ PRELOADER ============ */
-#pre{
-  position:fixed;inset:0;z-index:900;background:var(--umber-2);color:var(--sand);
-  display:flex;flex-direction:column;justify-content:space-between;
-  padding:20px 24px 0;overflow:hidden;
-}
-#pre .p-top{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
-#pre .p-top canvas{width:64px;height:46px}
-#pre .p-sheep{position:absolute;inset:0;display:grid;place-items:center}
-#pre .p-bottom{position:relative}
-#pre .p-cols{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px}
-#pre .p-cols .r{text-align:right}
-#pre canvas.wordmark{width:100%;height:190px;display:block}
-#pre.done{transition:opacity .8s .1s,visibility .8s .1s;opacity:0;visibility:hidden}
-
-/* ============ HERO ============ */
-#hero{position:relative;height:100vh;overflow:hidden;background:var(--sand)}
-#hero .h-media{position:absolute;inset:0;overflow:hidden;display:block}
-#hero .h-media img{
-  width:100%;height:100%;object-fit:cover;
-  filter:sepia(.35) saturate(.75) contrast(1.02) brightness(.82);
-  transform:scale(1.08);
-  animation:kenburns 26s linear infinite alternate;
-}
-@keyframes kenburns{from{transform:scale(1.08) translateX(-1.5%)}to{transform:scale(1.16) translateX(1.5%)}}
-#hero .h-media::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 30%,transparent 40%,rgba(20,16,12,.55))}
-#hero .h-ui{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:0 4vw 24vh}
-#hero .h-tag{margin-bottom:18px}
-#hero .h-word{width:min(1180px,92vw)}
-#hero .h-meta{
-  width:min(1180px,92vw);display:flex;justify-content:space-between;
-  margin-top:26px;gap:20px;
-}
-#hero .h-meta>div{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;line-height:1.9}
-#hero .h-meta .c{text-align:center}
-#hero .h-meta .r{text-align:right}
-#hero .h-ring{
-  position:absolute;right:6vw;bottom:7vh;width:118px;height:118px;border-radius:50%;
-  border:1px solid rgba(168,148,116,.75);display:grid;place-items:center;text-align:center;
-  font-size:9.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
-  transition:background .3s,color .3s;
-}
-#hero .h-ring:hover{background:var(--sand);color:var(--umber)}
-#hero .h-mountain{position:absolute;left:0;right:0;bottom:-2px;transform:translateY(101%);will-change:transform}
-#hero .h-mountain canvas{display:block;width:100%}
-
-/* ============ PROLOGUE ============ */
-#prologue{position:relative;background:var(--umber);padding:0 0 16vh}
-#prologue .bars-top{display:block;width:100%}
-#prologue .p-core{max-width:900px;margin:14vh auto 0;text-align:center;padding:0 5vw}
-#prologue .quote{
-  font-family:'Prata',serif;font-size:clamp(22px,3vw,40px);line-height:1.35;
-  text-transform:uppercase;margin-top:34px;
-}
-#prologue .p-cta{margin-top:44px}
-
-/* pill buttons */
-.pill{
-  display:inline-block;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
-  padding:13px 24px;border-radius:99px;border:1px solid transparent;
-  background:var(--sand);color:var(--umber);transition:background .3s,color .3s,border-color .3s;
-}
-.pill:hover{background:transparent;color:var(--sand);border-color:var(--sand)}
-.pill.ghost{background:transparent;color:var(--sand);border-color:rgba(168,148,116,.5)}
-.pill.ghost:hover{background:var(--sand);color:var(--umber)}
-.pill.dark{background:var(--umber);color:var(--sand)}
-.pill.dark:hover{background:transparent;color:var(--umber);border-color:var(--umber)}
-
-/* ============ ABOUT ============ */
-#about{position:relative;background:var(--umber);padding:10vh 6vw 0;overflow:hidden}
-#about .a-word{max-width:640px;margin-left:auto;margin-right:8vw}
-#about .a-word .big{font-family:'Prata',serif;font-size:clamp(56px,8.5vw,128px);line-height:.95;text-transform:uppercase}
-#about .a-word .by{margin-top:22px;display:flex;align-items:center;gap:10px}
-#about .a-grid{display:grid;grid-template-columns:1fr 1fr;gap:6vw;max-width:1080px;margin:16vh auto 0}
-#about h3.serif{font-size:clamp(34px,4.2vw,58px);text-transform:uppercase;line-height:1.05}
-#about .rule{width:44px;height:0;border-top:2px solid var(--sand);margin:20px 0 26px}
-#about .a-facade{margin:14vh -6vw 0;position:relative}
-#about .a-facade img{width:100%;height:110vh;object-fit:cover;filter:sepia(.4) saturate(.6) brightness(.88) contrast(1.02)}
-#about .a-facade::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,var(--umber) 0%,transparent 30%),linear-gradient(0deg,var(--umber) 0%,transparent 26%)}
-#about .a-video{position:absolute;top:6vh;right:10vw;width:min(300px,60vw);z-index:3;text-align:left}
-#about .a-video .frame{
-  border:1px solid var(--sand);padding:3px;outline:1px solid var(--sand);outline-offset:4px;
-  background:var(--ink);
-}
-#about .a-video .scr{position:relative;aspect-ratio:16/10.4;overflow:hidden;display:grid;place-items:center}
-#about .a-video .scr img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:sepia(.4) saturate(.5) brightness(.55)}
-#about .a-video .play{position:relative;width:0;height:0;border-left:14px solid #fff;border-top:8px solid transparent;border-bottom:8px solid transparent}
-#about .a-video figcaption{margin-top:10px;font-size:10.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase}
-
-/* ============ LOCATION ============ */
-#location{position:relative;background:var(--umber);padding:16vh 6vw 0;overflow:hidden}
-#location .l-display{position:relative;z-index:2;text-transform:uppercase;font-family:'Prata',serif;line-height:.98}
-#location .l-display .row1{font-size:clamp(44px,8vw,118px);text-align:right;margin-right:4vw}
-#location .l-display .row2{font-size:clamp(44px,8vw,118px);display:flex;align-items:baseline;gap:3vw;justify-content:center}
-#location .l-display .row2 .de{font-family:'Jura',sans-serif;font-weight:600;font-size:clamp(18px,2.4vw,34px);letter-spacing:.2em}
-#location .l-display .row3{font-size:clamp(44px,8vw,118px);margin-left:6vw}
-#location .l-lower{position:relative;display:grid;grid-template-columns:1.25fr .9fr;gap:4vw;margin-top:2vh;min-height:74vh}
-#location .l-map{position:relative}
-#location .l-map svg{width:100%;height:auto;display:block}
-#location .l-copy{padding-top:10vh}
-#location .l-copy .mono{max-width:420px}
-#location .l-copy .pill{margin-top:30px}
-#location .l-infra{
-  margin-top:9vh;background:var(--sand-2);color:var(--umber);
-  padding:22px 26px 60px;margin-right:-6vw;
-}
-/* drag slider */
-#drag{position:relative;background:var(--umber);padding:8vh 0 4vh;overflow:hidden}
-#drag .d-meta{position:absolute;left:6vw;top:14vh;z-index:3;max-width:240px}
-#drag .d-ring{
-  position:absolute;left:8vw;top:40vh;width:150px;height:150px;border-radius:50%;
-  border:1px solid rgba(168,148,116,.6);display:grid;place-items:center;text-align:center;
-  font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;z-index:3;
-  transition:background .3s,color .3s;
-}
-#drag .d-ring:hover{background:var(--sand);color:var(--umber)}
-#drag .d-track{
-  display:flex;gap:3vw;padding:0 6vw 0 34vw;
-  overflow-x:auto;scrollbar-width:none;cursor:grab;
-}
-#drag .d-track::-webkit-scrollbar{display:none}
-#drag .d-track.grabbing{cursor:grabbing}
-#drag .d-card{flex:0 0 auto;user-select:none}
-#drag .d-card.photo{width:min(340px,72vw)}
-#drag .d-card.photo img{width:100%;height:64vh;object-fit:cover;filter:sepia(.32) saturate(.8) brightness(.92);pointer-events:none}
-#drag .d-card.info{
-  width:min(560px,86vw);height:64vh;background:var(--sand-2);color:var(--umber);
-  display:flex;flex-direction:column;justify-content:space-between;align-items:center;
-  padding:6vh 4vw 5vh;text-align:center;
-}
-#drag .d-card.info .circ{
-  width:230px;height:230px;border-radius:50%;border:1px solid rgba(41,36,32,.7);
-  display:grid;place-items:center;
-}
-#drag .d-card.info .circ .n{font-family:'Prata',serif;font-size:56px;line-height:1}
-#drag .d-card.info .circ .u{font-family:'Prata',serif;font-size:22px;opacity:.75}
-#drag .d-card.info .to{font-size:15px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;line-height:2}
-#drag .d-nav{display:flex;align-items:center;gap:20px;justify-content:flex-end;padding:26px 6vw 0}
-#drag .d-count{display:flex;align-items:center;gap:12px;font-size:13px;font-weight:700}
-#drag .d-count .sep{width:1px;height:16px;background:var(--sand-3)}
-.arr{
-  width:46px;height:46px;border-radius:50%;border:1px solid rgba(168,148,116,.55);
-  display:grid;place-items:center;transition:background .3s,color .3s;font-size:16px;
-}
-.arr:hover{background:var(--sand);color:var(--umber)}
-#drag .d-hint{margin:10vh auto 6vh;width:min(480px,80vw);text-align:center;position:relative}
-#drag .d-hint .path{display:flex;align-items:center;justify-content:space-between;margin-top:18px}
-#drag .d-hint .dot-line{flex:1;border-bottom:2px dotted rgba(168,148,116,.55);margin:0 14px;transform:translateY(6px) rotate(3deg)}
-#drag .d-hint .ico{
-  width:56px;height:56px;border-radius:50%;border:1px solid rgba(168,148,116,.6);
-  display:grid;place-items:center;font-size:18px;
-}
-#drag .d-hint .ico.ghosty{border-style:dashed;opacity:.6}
-#summer{background:var(--umber);padding:6vh 6vw 22vh}
-#summer .quote{font-family:'Prata',serif;font-size:clamp(24px,3.4vw,44px);line-height:1.28;text-transform:uppercase;max-width:880px}
-#summer .pill{margin-top:44px}
-
-/* ============ DITHER WIPE ============ */
-#wipe{position:relative;height:100vh;background:var(--umber);overflow:hidden}
-#wipe canvas{position:absolute;inset:0;width:100%;height:100%}
-
-/* ============ UNIQUE (card parade) ============ */
-#unique{position:relative;background:var(--sand)}
-#unique .u-stage{position:sticky;top:0;height:100vh;overflow:hidden}
-#unique .u-head{
-  position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;
-  color:var(--umber);text-align:center;padding:0 6vw;
-}
-#unique .u-head h2{font-family:'Prata',serif;font-size:clamp(34px,5vw,72px);line-height:1.08;text-transform:uppercase;margin-top:18px}
-#unique .u-card{position:absolute;left:50%;top:50%;width:min(460px,80vw);will-change:transform}
-#unique .u-card .im{position:relative}
-#unique .u-card img{width:100%;height:min(600px,72vh);object-fit:cover;filter:sepia(.25) saturate(.85) brightness(.95)}
-#unique .u-card .cap{
-  position:absolute;left:14px;bottom:14px;color:#F2EADB;
-  font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
-  text-shadow:0 1px 8px rgba(0,0,0,.5);
-}
-#unique .u-card .plus{
-  position:absolute;right:14px;bottom:14px;width:40px;height:40px;border-radius:50%;
-  border:1px solid rgba(242,234,219,.8);color:#F2EADB;display:grid;place-items:center;font-size:16px;
-  text-shadow:0 1px 6px rgba(0,0,0,.5);
-}
-
-/* ============ APARTMENTS ============ */
-#apts{background:var(--sand-2);color:var(--umber);padding:14vh 6vw 10vh}
-#apts .ap-intro{max-width:760px;font-size:15px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;line-height:2}
-#apts .ap-grid{display:grid;grid-template-columns:.55fr 1.05fr 1.1fr;gap:0;margin-top:10vh;position:relative}
-#apts .col{padding:0 3vw}
-#apts .col+.col{border-left:1px solid var(--l-on-sand)}
-#apts .t-list{list-style:none;margin-top:34px}
-#apts .t-list li{margin-bottom:14px}
-#apts .t-list button{
-  font-size:15px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;opacity:.45;
-  display:flex;align-items:center;gap:10px;transition:opacity .3s;
-}
-#apts .t-list li.act button{opacity:1}
-#apts .t-list li.act button::before{content:"✦";font-size:11px}
-#apts .m2{display:flex;align-items:baseline;gap:14px;margin-top:4vh}
-#apts .m2 .from{font-size:13px;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
-#apts .m2 .num{font-family:'Prata',serif;font-size:clamp(56px,7vw,104px);line-height:1}
-#apts .m2 sup{font-family:'Prata',serif;font-size:.45em}
-#apts .chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:7vh;max-width:460px}
-#apts .chip{
-  font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-  border:1px solid rgba(41,36,32,.65);border-radius:99px;padding:8px 14px;
-}
-#apts .chip.solid{background:var(--umber);color:var(--sand-2)}
-#apts .ap-desc{margin-top:5vh;max-width:470px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;line-height:1.9}
-#apts .ap-act{display:flex;align-items:center;gap:26px;margin-top:5vh}
-#apts .ap-act .vid{display:flex;align-items:center;gap:14px;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
-#apts .ap-act .vid .pl{width:46px;height:46px;border-radius:50%;background:var(--umber);display:grid;place-items:center}
-#apts .ap-act .vid .pl::before{content:"";border-left:10px solid var(--sand-2);border-top:6px solid transparent;border-bottom:6px solid transparent;margin-left:3px}
-#apts .ap-photo{position:relative;overflow:hidden;min-height:78vh}
-#apts .ap-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:sepia(.28) saturate(.85) brightness(.97);transition:opacity .5s}
-#apts .ap-nav{display:flex;justify-content:flex-end;align-items:center;gap:22px;margin-top:26px}
-#apts .ap-nav .arr{border-color:rgba(41,36,32,.6)}
-#apts .ap-nav .arr:hover{background:var(--umber);color:var(--sand-2)}
-#apts .ap-nav .cnt{display:flex;gap:12px;align-items:center;font-weight:700}
-#apts .ap-nav .cnt .sep{width:1px;height:16px;background:rgba(41,36,32,.5)}
-
-/* ============ TIMELINE ============ */
-#timeline{position:relative;background:var(--sand-2);overflow:hidden}
-#timeline .pano{height:120vh;position:relative;overflow:hidden}
-#timeline .pano img{width:100%;height:100%;object-fit:cover;filter:sepia(.3) saturate(.75) brightness(.94)}
-#timeline .t-card{
-  position:absolute;left:50%;top:34%;transform:translateX(-50%);
-  width:min(500px,88vw);background:var(--umber);color:var(--sand);
-  padding:44px 40px 30px;
-}
-#timeline .t-years{display:flex;justify-content:space-between;align-items:center;font-family:'Prata',serif;font-size:clamp(42px,4.6vw,64px)}
-#timeline .t-years .dash{flex:1;border-top:2px solid var(--sand);margin:0 26px;opacity:.7;transform:translateY(6px)}
-#timeline .t-rows{margin-top:44px}
-#timeline .t-row{
-  display:flex;justify-content:space-between;gap:20px;
-  padding:13px 2px;border-top:1px solid var(--l-on-dark);
-  font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
-}
-#timeline .bars-btm{display:block;width:100%;margin-top:-1px}
-
-/* ============ MARQUEE ============ */
-#marq{background:var(--umber);overflow:hidden;padding:5vh 0 6vh;border-bottom:1px solid rgba(168,148,116,.12)}
-#marq .rail{display:flex;white-space:nowrap;width:max-content;animation:marq 26s linear infinite}
-#marq .rail span{font-family:'Prata',serif;font-size:clamp(30px,4.4vw,58px);text-transform:uppercase;padding-right:38px}
-#marq .rail span i{font-style:normal;font-size:.5em;vertical-align:middle;padding-left:38px}
-@keyframes marq{to{transform:translateX(-50%)}}
-
-/* ============ FINANCE ============ */
-#fin{position:relative;background:var(--umber);padding:12vh 6vw 10vh;overflow:hidden}
-#fin .f-mountain{position:absolute;left:50%;top:0;transform:translateX(-50%);opacity:.95;pointer-events:none}
-#fin .f-top{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:4vw;min-height:70vh}
-#fin .f-start .lbl{opacity:.8}
-#fin .f-start h3{font-family:'Prata',serif;font-size:clamp(40px,5vw,74px);line-height:1.05;text-transform:uppercase;margin-top:10px}
-#fin .f-stats{justify-self:end;width:min(360px,100%);display:flex;flex-direction:column;gap:26px}
-#fin .stat .k{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;opacity:.75}
-#fin .stat .v{font-size:20px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-top:6px}
-#fin .f-cols{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:10vw;margin-top:4vh}
-#fin .f-col h4{font-size:14px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;margin-bottom:8px}
-#fin .f-row{border-top:1px solid rgba(168,148,116,.35);padding:16px 2px;display:flex;justify-content:space-between;gap:24px;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;line-height:1.8}
-#fin .f-row.stack{flex-direction:column;gap:6px}
-#fin .f-cta{position:relative;display:flex;justify-content:flex-end;margin-top:7vh}
-
-/* ============ DEVELOPER ============ */
-#dev{position:relative;background:var(--umber);padding:14vh 6vw 0;text-align:center;overflow:hidden}
-#dev .bars-hang{position:absolute;top:0;left:0;right:0;opacity:.8;width:100%}
-#dev h2{font-family:'Prata',serif;font-size:clamp(34px,4.8vw,68px);line-height:1.12;text-transform:uppercase;max-width:900px;margin:16px auto 0;position:relative}
-#dev .d-card{
-  width:min(460px,90vw);margin:9vh auto 0;background:var(--sand-2);color:var(--umber);
-  padding:44px 34px 26px;text-align:center;position:relative;
-}
-#dev .d-card .txt{font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;line-height:1.9}
-#dev .d-card .spark{margin:30px 0 0;justify-content:center;width:100%}
-#dev .d-card .logo{font-family:'Archivo Black',sans-serif;font-size:52px;letter-spacing:-.02em;text-transform:lowercase;margin:56px 0 64px}
-#dev .d-card .logo sup{font-size:14px;vertical-align:super}
-#dev .d-card .d-foot{border-top:1px solid rgba(41,36,32,.7);padding-top:8px;margin-top:8px;display:flex;justify-content:space-between;font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;border-bottom:3px double rgba(41,36,32,.7);padding-bottom:8px}
-#stats{background:var(--umber-2);border-top:1px solid rgba(168,148,116,.12);padding:16vh 6vw 20vh}
-#stats .s-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4vw;max-width:1240px;margin:0 auto}
-#stats .s-cell{text-align:center}
-#stats .s-num{font-family:'Prata',serif;font-size:clamp(64px,7.5vw,120px);line-height:1}
-#stats .s-cap{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;margin-top:22px;line-height:1.9;opacity:.9}
-
-/* ============ GALLERY ============ */
-#gallery{position:relative;background:var(--sand);color:var(--umber);padding:16vh 0 0}
-#gallery .g-head{padding:0 6vw;display:flex;justify-content:space-between;align-items:flex-end}
-#gallery .g-head h2{font-family:'Prata',serif;font-size:clamp(34px,4.6vw,64px);text-transform:uppercase;line-height:1}
-#gallery .g-stage{position:relative;margin-top:6vh;height:100vh;overflow:hidden}
-#gallery .g-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:sepia(.3) saturate(.8) brightness(.95);opacity:0;transition:opacity .6s}
-#gallery .g-stage img.act{opacity:1}
-#gallery .g-ring{
-  position:absolute;left:26%;bottom:10vh;width:150px;height:150px;border-radius:50%;z-index:5;
-  border:1px solid rgba(41,36,32,.7);background:var(--sand-2);
-  display:grid;place-items:center;text-align:center;color:var(--umber);
-  font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
-  transition:background .3s;
-}
-#gallery .g-ring:hover{background:var(--sand)}
-#gallery .g-nav{position:absolute;right:4vw;bottom:5vh;z-index:5;display:flex;align-items:center;gap:20px;color:#F2EADB}
-#gallery .g-nav .arr{border-color:rgba(242,234,219,.75)}
-#gallery .g-nav .arr:hover{background:#F2EADB;color:var(--umber)}
-#gallery .g-nav .cnt{display:flex;gap:12px;align-items:center;font-weight:700;text-shadow:0 1px 6px rgba(0,0,0,.4)}
-#gallery .g-nav .cnt .sep{width:1px;height:16px;background:rgba(242,234,219,.6)}
-
-/* ============ INVEST CTA ============ */
-#invest{position:relative;min-height:130vh;overflow:hidden;display:flex;justify-content:center}
-#invest .bg{position:absolute;inset:0;overflow:hidden}
-#invest .bg img{width:100%;height:100%;object-fit:cover;filter:sepia(.3) saturate(.8) brightness(.95)}
-#invest .i-card{
-  position:relative;z-index:2;width:min(470px,92vw);
-  background:var(--sand-2);color:var(--umber);
-  display:flex;flex-direction:column;align-items:center;text-align:center;
-  padding:22vh 34px 30px;
-}
-#invest h2{font-family:'Prata',serif;font-size:clamp(30px,3.6vw,44px);line-height:1.2;text-transform:uppercase}
-#invest .pill{margin-top:28px}
-#invest .i-contacts{width:100%;margin-top:auto;padding-top:16vh}
-#invest .i-row{display:flex;justify-content:space-between;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border-bottom:2px solid rgba(41,36,32,.75);padding-bottom:10px}
-#invest canvas.i-word{width:100%;margin-top:26px}
-
-/* ============ BLOG ============ */
-#blog{position:relative;background:var(--umber);padding:14vh 6vw 0;overflow:hidden}
-#blog .b-head{display:grid;grid-template-columns:1fr 1fr;gap:4vw;align-items:end}
-#blog .b-head h2{font-family:'Prata',serif;font-size:clamp(34px,4.6vw,64px);text-transform:uppercase;line-height:1.05}
-#blog .b-meta{text-align:right}
-#blog .chips{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
-#blog .chip{font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border:1px solid rgba(168,148,116,.5);border-radius:99px;padding:7px 14px}
-#blog .b-grid{display:grid;grid-template-columns:1fr 1fr;gap:6vw;max-width:1100px;margin:10vh auto 0}
-#blog .b-card img{width:100%;height:230px;object-fit:cover;filter:sepia(.35) saturate(.7) brightness(.85)}
-#blog .b-card .tr{width:110px;border-top:1px solid var(--sand);margin:26px 0 18px}
-#blog .b-card h3{font-family:'Prata',serif;font-size:clamp(24px,2.6vw,40px);line-height:1.12;text-transform:uppercase;max-width:400px}
-#blog .b-card .dash{width:18px;border-top:1px solid var(--sand);margin:20px 0 14px;opacity:.7}
-#blog .b-card p{font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;line-height:1.9;max-width:360px}
-#blog .b-all{display:flex;justify-content:center;margin:9vh 0 0}
-#blog .b-all a{font-size:15px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;border-bottom:1px solid var(--sand);padding-bottom:8px}
-#blog .b-all a:hover{opacity:.8}
-#blog .treeline{display:block;width:100%;margin-top:8vh}
-
-/* ============ FAQ ============ */
-#faq{background:var(--umber);padding:6vh 6vw 12vh}
-#faq .f-letters{
-  display:flex;justify-content:space-between;align-items:flex-end;
-  max-width:980px;margin:0 auto 12vh;gap:4vw;
-}
-#faq .f-letters .L{font-family:'Prata',serif;font-size:clamp(80px,10vw,150px);line-height:.9}
-#faq .f-letters .cap{font-size:10.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;line-height:1.9;padding-bottom:14px}
-#faq .qa{max-width:980px;margin:0 auto;border-bottom:1px solid rgba(168,148,116,.3)}
-#faq .q-item{border-top:1px solid rgba(168,148,116,.3)}
-#faq .q-btn{
-  width:100%;display:grid;grid-template-columns:80px 1fr 40px;align-items:center;gap:20px;
-  padding:26px 2px;text-align:left;
-  font-size:13.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;line-height:1.7;
-}
-#faq .q-btn .pl{justify-self:end;font-size:20px;font-weight:400;transition:transform .35s}
-#faq .q-item.open .q-btn .pl{transform:rotate(45deg)}
-#faq .q-a{max-height:0;overflow:hidden;transition:max-height .5s var(--ease)}
-#faq .q-a p{padding:0 40px 28px 100px;font-size:11.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;line-height:1.95;opacity:.85;max-width:860px}
-
-/* ============ FOOTER ============ */
-footer{background:var(--umber-2);padding:12vh 4vw 0;position:relative}
-footer .f-grid{display:flex;justify-content:space-between;gap:5vw}
-footer .f-col .k{font-size:10.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;opacity:.55;margin-bottom:12px}
-footer .f-col .v{font-size:11.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;line-height:1.9}
-footer .f-col.r{text-align:right}
-footer .socials{display:flex;gap:12px;margin-top:26px}
-footer .socials a{
-  width:40px;height:40px;border-radius:50%;border:1px solid rgba(168,148,116,.5);
-  display:grid;place-items:center;font-size:11px;font-weight:700;
-}
-footer .socials a:hover{background:var(--sand);color:var(--umber)}
-footer .f-big{display:flex;justify-content:space-between;gap:6vw;align-items:flex-end;margin-top:16vh;padding-bottom:10vh}
-footer .f-big a{font-size:clamp(20px,2.6vw,40px);font-weight:600;letter-spacing:.08em;border-bottom:2px solid var(--sand);padding-bottom:10px}
-footer .f-big a:hover{opacity:.8}
-footer .f-strip{
-  background:var(--sand-2);color:var(--umber);margin:0 -4vw;
-  display:flex;justify-content:space-between;align-items:center;gap:20px;
-  padding:14px 4vw;font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
-}
-footer .f-strip .left{display:flex;align-items:center;gap:18px}
-
-/* ============ FUTURIST LAYERS ============ */
-#progressBeam{position:fixed;left:0;top:0;height:2px;width:100%;z-index:9990;pointer-events:none;
-  background:linear-gradient(90deg,var(--sand-3),var(--sand));transform-origin:0 50%;transform:scaleX(0)}
-#scanbeam{position:fixed;left:0;right:0;top:-12vh;height:12vh;z-index:9985;pointer-events:none;opacity:.55;
-  background:linear-gradient(180deg,transparent,rgba(168,148,116,.05) 78%,rgba(168,148,116,.30) 99%,transparent);
-  mix-blend-mode:screen;animation:scan 9s linear infinite}
-@keyframes scan{to{transform:translateY(112vh)}}
-#stars{position:absolute;inset:0;pointer-events:none;opacity:.85}
-#cur,#curRing{position:fixed;left:-40px;top:-40px;z-index:9999;pointer-events:none;border-radius:50%;
-  mix-blend-mode:difference;transform:translate(-50%,-50%)}
-#cur{width:6px;height:6px;background:#F2EADB}
-#curRing{width:34px;height:34px;border:1px solid rgba(242,234,219,.8);
-  transition:width .25s,height .25s,border-color .25s,opacity .25s}
-#curRing.on{width:58px;height:58px;border-color:#F2EADB}
-html.finecur,html.finecur a,html.finecur button{cursor:none}
-.pill{position:relative;overflow:hidden}
-.pill::after{content:"";position:absolute;top:0;bottom:0;left:-70%;width:44%;
-  background:linear-gradient(100deg,transparent,rgba(255,255,255,.4),transparent);
-  transform:skewX(-18deg);transition:left .6s var(--ease)}
-.pill:hover::after{left:130%}
-.h-ring,.d-ring,.g-ring{animation:ringpulse 4s var(--ease) infinite}
-@keyframes ringpulse{0%,100%{box-shadow:0 0 0 0 rgba(168,148,116,0)}50%{box-shadow:0 0 0 12px rgba(168,148,116,.09)}}
-@media (prefers-reduced-motion:reduce){
-  #scanbeam{display:none}
-  .h-ring,.d-ring,.g-ring{animation:none}
-}
-
-/* reveals */
-.rv{opacity:0;transform:translateY(34px)}
-.rv.in{opacity:1;transform:none;transition:opacity 1s var(--ease),transform 1s var(--ease)}
-
-/* ============ RESPONSIVE ============ */
-@media (max-width:900px){
-  #hero .h-meta{flex-direction:column;align-items:center;text-align:center;gap:8px}
-  #hero .h-meta .r{text-align:center}
-  #about .a-grid{grid-template-columns:1fr;gap:10vh}
-  #location .l-lower{grid-template-columns:1fr}
-  #location .l-infra{margin-right:0}
-  #apts .ap-grid{grid-template-columns:1fr}
-  #apts .col+.col{border-left:0;border-top:1px solid var(--l-on-sand);margin-top:6vh;padding-top:6vh}
-  #fin .f-top{grid-template-columns:1fr}
-  #fin .f-stats{justify-self:start}
-  #fin .f-cols{grid-template-columns:1fr;gap:8vh}
-  #stats .s-grid{grid-template-columns:1fr 1fr;gap:10vw}
-  #blog .b-head{grid-template-columns:1fr}
-  #blog .b-meta{text-align:left}
-  #blog .chips{justify-content:flex-start}
-  #blog .b-grid{grid-template-columns:1fr}
-  footer .f-grid{flex-direction:column}
-  footer .f-col.r{text-align:left}
-  footer .f-big{flex-direction:column;align-items:flex-start;gap:34px}
-  #faq .q-btn{grid-template-columns:44px 1fr 30px}
-  #faq .q-a p{padding-left:64px}
-  #drag .d-meta,#drag .d-ring{position:static;margin:0 6vw 4vh}
-  #drag .d-track{padding-left:6vw}
-}
-@media (prefers-reduced-motion:reduce){
-  #hero .h-media img{animation:none}
-  #marq .rail{animation:none}
-  .rv{opacity:1;transform:none}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Optiflow Studio — Crazy enough to build perfect things</title>
+  <meta name="description" content="Optiflow is an AI product studio. We hunt down real problems everyone complains about and nobody fixes — then ship the products that make them disappear.">
+  <meta property="og:title" content="Optiflow Studio — Crazy enough to build perfect things">
+  <meta property="og:description" content="An AI product studio. Real problems in, shipped products out.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#030409">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23030409'/%3E%3Cpath d='M32 6l6 20 20 6-20 6-6 20-6-20-20-6 20-6z' fill='%2300F0FF'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Unbounded:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="locked">
+<body>
 
-<div class="noise" aria-hidden="true"></div>
-<canvas id="eq" width="70" height="16" aria-hidden="true"></canvas>
-<div id="progressBeam" aria-hidden="true"></div>
-<div id="scanbeam" aria-hidden="true"></div>
-<div id="cur" aria-hidden="true"></div>
-<div id="curRing" aria-hidden="true"></div>
+  <!-- Ambient aurora backdrop -->
+  <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
 
-<!-- ============ PRELOADER ============ -->
-<div id="pre" aria-hidden="true">
-  <div class="p-top">
-    <canvas id="preGlyph" width="64" height="46"></canvas>
-    <div class="lbl">AI Product Studio</div>
-  </div>
-  <div class="p-sheep"><canvas id="sheep" width="420" height="300"></canvas></div>
-  <div class="p-bottom">
-    <div class="p-cols">
-      <div class="lbl">Real problems in<br>Shipped products out</div>
-      <div class="lbl r">Counting electric sheep<br>Please wait</div>
+  <!-- Film grain + scanline overlays -->
+  <div class="noise" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- Scroll progress -->
+  <div class="scroll-progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <!-- HUD corner readouts -->
+  <div class="hud-corner hud-bl mono" aria-hidden="true"><span class="hud-dot"></span>SYS://OPTIFLOW — ONLINE</div>
+  <div class="hud-corner hud-br mono" aria-hidden="true"><span id="scrollPct">000</span>% SCROLLED</div>
+
+  <!-- Section rail -->
+  <nav class="hud-rail" aria-label="Sections">
+    <a href="#top" data-label="INTRO" aria-label="Intro"></a>
+    <a href="#manifesto" data-label="MANIFESTO" aria-label="Manifesto"></a>
+    <a href="#capabilities" data-label="CAPABILITIES" aria-label="Capabilities"></a>
+    <a href="#work" data-label="WORK" aria-label="Work"></a>
+    <a href="#process" data-label="PROCESS" aria-label="Process"></a>
+    <a href="#contact" data-label="CONTACT" aria-label="Contact"></a>
+  </nav>
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="preloader-inner">
+      <span class="preloader-logo mono">optiflow<span class="blink">_</span></span>
+      <span class="preloader-count mono" id="preCount">000</span>
     </div>
-    <canvas class="wordmark" id="preWord" height="190"></canvas>
+    <div class="preloader-bar"><span id="preBar"></span></div>
+    <span class="preloader-msg mono" id="preMsg">BOOT SEQUENCE INITIATED</span>
   </div>
-</div>
 
-<!-- ============ NAV ============ -->
-<header id="nav">
-  <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
-  <button class="n-link" id="menuBtn">Menu</button>
-  <a class="n-link" href="#gallery">Showreel</a>
-  <canvas class="n-logo" id="navWord" height="52" aria-hidden="true"></canvas>
-  <div class="n-right">
-    <a class="n-link" href="#blog">Notes</a>
-    <a class="n-cta" href="#invest">Start a project</a>
-  </div>
-</header>
+  <!-- Custom cursor (fine pointers only) -->
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
 
-<nav id="menu" aria-label="Main menu">
-  <a href="#about">About</a>
-  <a href="#unique">Capabilities</a>
-  <a href="#apts">Services</a>
-  <a href="#gallery">Work</a>
-  <a href="#fin">Numbers</a>
-  <a href="#faq">FAQ</a>
-  <div class="m-meta">
-    <span class="lbl">Worldwide · Remote</span>
-    <span class="lbl">hello@optiflow.studio</span>
-  </div>
-</nav>
+  <!-- Navigation -->
+  <header class="nav" id="nav">
+    <a class="nav-logo mono" href="#top" aria-label="Optiflow Studio — home">
+      <svg class="logo-mark" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="lgn" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#00F0FF"/><stop offset="1" stop-color="#8B5CFF"/></linearGradient></defs><path d="M12 1l2.4 8.6L23 12l-8.6 2.4L12 23l-2.4-8.6L1 12l8.6-2.4z" fill="url(#lgn)"/></svg>optiflow<span class="blink">_</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#work" data-hover>Work</a>
+      <a href="#capabilities" data-hover>Capabilities</a>
+      <a href="#process" data-hover>Process</a>
+      <a href="#contact" data-hover>Contact</a>
+    </nav>
+    <a href="#contact" class="nav-cta mono magnetic" data-hover>START A PROJECT</a>
+    <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span>
+    </button>
+  </header>
 
-<main>
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="#work" class="mobile-link">Work</a>
+      <a href="#capabilities" class="mobile-link">Capabilities</a>
+      <a href="#process" class="mobile-link">Process</a>
+      <a href="#contact" class="mobile-link">Contact</a>
+    </nav>
+    <p class="mono mobile-menu-foot">HELLO@OPTIFLOW.STUDIO</p>
+  </div>
 
-<!-- ============ HERO ============ -->
-<section id="hero">
-  <div class="h-media" id="heroMedia">
-    <img src="https://picsum.photos/seed/loomhero/1600/900" fetchpriority="high" decoding="async" alt="Atmospheric placeholder — evening light in the mountains">
-  </div>
-  <canvas id="stars" aria-hidden="true"></canvas>
-  <div class="h-ui" id="heroUi">
-    <div class="h-tag lbl">AI Product Studio</div>
-    <canvas class="h-word" id="heroWord" height="240"></canvas>
-    <div class="h-meta">
-      <div class="l">Est. 2026<br><span style="opacity:.8">𐊍</span> Humans × Machines</div>
-      <div class="c">Real problems in —<br>shipped products out</div>
-      <div class="r">Worldwide<br>Remote-first</div>
-    </div>
-  </div>
-  <a class="h-ring" href="#invest">Start<br>a project</a>
-  <div class="h-mountain" id="heroMountain"><canvas id="mountainHero" height="260"></canvas></div>
-</section>
+  <main id="top">
 
-<!-- ============ PROLOGUE ============ -->
-<section id="prologue">
-  <canvas class="bars-top" id="barsTop" height="240" aria-hidden="true"></canvas>
-  <div class="p-core">
-    <div class="spark lbl rv" style="justify-content:center"><i>✦✦✦</i>&nbsp;&nbsp;Prologue&nbsp;&nbsp;<i>✦✦✦</i></div>
-    <p class="quote rv">«Everyone has an AI strategy. A deck. A roadmap. A committee. We have a habit — we ship»</p>
-    <div class="p-cta rv"><a class="pill ghost" href="#invest">Book a call</a></div>
-  </div>
-</section>
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <canvas id="field" aria-hidden="true"></canvas>
+      <div class="hero-glow" aria-hidden="true"></div>
 
-<!-- ============ ABOUT ============ -->
-<section id="about">
-  <div class="a-word rv">
-    <div class="big serif">Optiflow</div>
-    <div class="by lbl"><span style="opacity:.8">𐊍</span> an AI product studio</div>
-  </div>
-  <div class="a-grid">
-    <div class="rv">
-      <h3 class="serif">About us</h3>
-      <div class="rule"></div>
-      <p class="mono">OPTIFLOW is an AI product studio. We hunt down the problems nobody fixes — and ship the products that make them disappear.</p>
-      <a class="pill ghost" style="margin-top:34px" href="#unique">What we build</a>
-    </div>
-    <div class="rv">
-      <h3 class="serif">The craft</h3>
-      <div class="rule"></div>
-      <p class="mono">Senior product taste, plus autonomous agents building and testing around the clock. Interfaces people feel, models that survive real traffic.</p>
-    </div>
-  </div>
-  <div class="a-facade">
-    <img src="https://picsum.photos/seed/loomfacade/1400/1100" loading="lazy" decoding="async" alt="Atmospheric placeholder — night landscape">
-    <figure class="a-video rv">
-      <div class="frame">
-        <div class="scr">
-          <img src="https://picsum.photos/seed/loomteaser/640/420" loading="lazy" decoding="async" alt="">
-          <span class="play" aria-hidden="true"></span>
+      <div class="hero-content container">
+        <p class="eyebrow mono" data-reveal>[ AI PRODUCT STUDIO — REAL PROBLEMS ONLY ]</p>
+        <h1 class="hero-title">
+          <span class="line" data-reveal style="--d:.05s"><span class="glitch outline" data-text="CRAZY">CRAZY</span></span>
+          <span class="line" data-reveal style="--d:.15s">ENOUGH TO BUILD</span>
+          <span class="line" data-reveal style="--d:.25s"><span class="grad">PERFECT</span> THINGS<span class="accent">.</span></span>
+        </h1>
+        <div class="hero-sub" data-reveal style="--d:.4s">
+          <p>Optiflow is an AI studio. We hunt down the problems everyone complains
+          about and nobody fixes — then build the product that makes them disappear.</p>
+          <div class="hero-ctas">
+            <a href="#contact" class="btn btn-primary magnetic" data-hover>Start a project
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="#work" class="btn btn-ghost magnetic" data-hover>See the proof</a>
+          </div>
         </div>
       </div>
-      <figcaption>Do androids dream?</figcaption>
-    </figure>
-  </div>
-</section>
 
-<!-- ============ LOCATION ============ -->
-<section id="location">
-  <div class="l-display">
-    <div class="row1 rv">The studio</div>
-    <div class="row2 rv"><span class="de">where</span> <span>Ideas</span></div>
-    <div class="row3 rv">become products</div>
-  </div>
-  <div class="l-lower">
-    <div class="l-map rv">
-      <svg viewBox="0 0 640 520" fill="none" aria-label="Constellation map of Optiflow capabilities">
-        <g stroke="rgba(168,148,116,.22)" stroke-width="1.4">
-          <path d="M40 480 C 140 380, 120 300, 220 250 S 420 190, 470 90 S 600 40, 636 20"/>
-          <path d="M0 300 C 120 290, 210 330, 320 300 S 520 260, 640 300"/>
-          <path d="M200 520 C 240 430, 330 420, 380 340 S 430 220, 520 190"/>
-        </g>
-        <g stroke="rgba(168,148,116,.12)" stroke-width="22" stroke-linecap="round">
-          <path d="M60 470 C 150 390, 140 310, 230 260"/>
-        </g>
-        <g font-family="Jura" font-size="11" letter-spacing="2" fill="#A89474" font-weight="600">
-          <circle cx="105" cy="128" r="4" stroke="#A89474" fill="none"/>
-          <text x="125" y="122">AUTONOMOUS</text><text x="125" y="136">AGENTS</text>
-          <text x="125" y="152" opacity=".6">24/7</text>
-          <circle cx="258" cy="242" r="4" stroke="#A89474" fill="none"/>
-          <text x="230" y="226">RAG &amp; RETRIEVAL</text>
-          <circle cx="180" cy="300" r="4" stroke="#A89474" fill="none"/>
-          <text x="120" y="286">EVALS &amp;</text><text x="120" y="314">GUARDRAILS</text>
-          <circle cx="330" cy="308" r="4" stroke="#A89474" fill="none"/>
-          <text x="348" y="304">FINE-TUNING</text><text x="348" y="318">&amp; MODEL OPS</text>
-          <circle cx="360" cy="366" r="4" stroke="#A89474" fill="none"/>
-          <text x="378" y="362">INTERFACES</text><text x="378" y="376">PEOPLE FEEL</text>
-          <circle cx="560" cy="446" r="4" stroke="#A89474" fill="none"/>
-          <text x="452" y="442">GROWTH LOOPS</text>
-          <text x="452" y="458" opacity=".6">SHIP → MEASURE</text>
-        </g>
-        <g font-family="Archivo Black" font-size="34" fill="#A89474">
-          <text x="196" y="382" style="letter-spacing:2px">OF</text>
-        </g>
-      </svg>
-    </div>
-    <div class="l-copy">
-      <p class="mono rv">A small senior core, surrounded by autonomous agents that design, build and test around the clock.</p>
-      <div class="rv"><a class="pill ghost" href="#invest">Book a call</a></div>
-      <div class="l-infra rv"><span class="lbl">The pipeline</span></div>
-    </div>
-  </div>
-</section>
+      <div class="hero-foot container mono" data-reveal style="--d:.6s">
+        <span id="utcClock">00:00:00 UTC</span>
+        <span class="hero-foot-mid">SCROLL TO DESCEND <span class="scroll-arrow" aria-hidden="true">↓</span></span>
+        <span>EST. 2026 // HUMANS × MACHINES</span>
+      </div>
+    </section>
 
-<!-- drag cards -->
-<section id="drag">
-  <div class="d-meta">
-    <div class="lbl" style="opacity:.6">Contact</div>
-    <p class="mono" style="margin-top:10px">hello@optiflow.studio<br>Worldwide ·<br>Remote-first</p>
-  </div>
-  <a class="d-ring" href="#invest">Start<br>a project</a>
-  <div class="d-track" id="dragTrack">
-    <div class="d-card photo"><img draggable="false" loading="lazy" decoding="async" src="https://picsum.photos/seed/loomfall/560/800" alt="Placeholder photograph"></div>
-    <div class="d-card info">
-      <div class="circ"><div><span class="n">14</span> <span class="u">d</span></div></div>
-      <div class="to">From idea to<br>working prototype</div>
-    </div>
-    <div class="d-card photo"><img draggable="false" loading="lazy" decoding="async" src="https://picsum.photos/seed/loomwood/560/800" alt="Placeholder photograph"></div>
-    <div class="d-card info">
-      <div class="circ"><div><span class="n">6</span> <span class="u">wk</span></div></div>
-      <div class="to">From prototype to<br>production traffic</div>
-    </div>
-    <div class="d-card photo"><img draggable="false" loading="lazy" decoding="async" src="https://picsum.photos/seed/loomrocks/560/800" alt="Placeholder photograph"></div>
-    <div class="d-card info">
-      <div class="circ"><div><span class="n">24</span> <span class="u">/7</span></div></div>
-      <div class="to">Agents on<br>the night shift</div>
-    </div>
-  </div>
-  <div class="d-nav">
-    <div class="d-count"><span id="dragCur">1</span><span class="sep"></span><span>6</span></div>
-    <button class="arr" id="dragPrev" aria-label="Previous">‹</button>
-    <button class="arr" id="dragNext" aria-label="Next">›</button>
-  </div>
-  <div class="d-hint">
-    <div class="lbl">Hold &amp;<br>drag</div>
-    <div class="path">
-      <span class="ico">☀</span>
-      <span class="dot-line"></span>
-      <span class="ico ghosty">❄</span>
-    </div>
-  </div>
-</section>
-
-<section id="summer">
-  <p class="quote rv">While your competitors finish another planning cycle, you are already in production — real users, real revenue.</p>
-  <div class="rv"><a class="pill ghost" href="#gallery">See the proof</a></div>
-</section>
-
-<!-- ============ DITHER WIPE ============ -->
-<section id="wipe"><canvas id="wipeCv"></canvas></section>
-
-<!-- ============ UNIQUE ============ -->
-<section id="unique">
-  <div class="u-stage" id="uStage">
-    <div class="u-head">
-      <div class="spark lbl"><i>✦✦✦</i>&nbsp;&nbsp;Capabilities&nbsp;&nbsp;<i>✦✦✦</i></div>
-      <h2>What are we<br>dangerous at?</h2>
-    </div>
-    <!-- cards injected by JS -->
-  </div>
-  <div id="uTrack" style="height:520vh"></div>
-</section>
-
-<!-- ============ APARTMENTS ============ -->
-<section id="apts">
-  <p class="ap-intro rv">Engagement models shaped around one rule — ship something real, fast</p>
-  <div class="ap-grid">
-    <div class="col">
-      <div class="lbl" style="opacity:.6">Models</div>
-      <ul class="t-list" id="tList"></ul>
-    </div>
-    <div class="col">
-      <div class="m2"><span class="from">from</span><span class="num" id="apM2">2 <sup>wks</sup></span></div>
-      <div class="chips" id="apChips"></div>
-      <p class="ap-desc" id="apDesc"></p>
-      <div class="ap-act">
-        <a class="pill dark" href="#invest">Get a quote</a>
-        <a class="vid" href="#gallery"><span class="pl"></span>Watch<br>the reel</a>
+    <!-- ============ MARQUEE ============ -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>AI PRODUCTS <i>✦</i> REAL PROBLEMS <i>✦</i> ZERO SLIDEWARE <i>✦</i> SHIPPED, NOT PITCHED <i>✦</i> AGENTS ON DUTY <i>✦</i> PERFECT OR NOTHING <i>✦</i>&nbsp;</span>
+        <span>AI PRODUCTS <i>✦</i> REAL PROBLEMS <i>✦</i> ZERO SLIDEWARE <i>✦</i> SHIPPED, NOT PITCHED <i>✦</i> AGENTS ON DUTY <i>✦</i> PERFECT OR NOTHING <i>✦</i>&nbsp;</span>
       </div>
     </div>
-    <div class="col ap-photo"><img id="apImg" loading="lazy" decoding="async" src="https://picsum.photos/seed/loomapt1/720/960" alt="Engagement model illustration"></div>
-  </div>
-  <div class="ap-nav">
-    <div class="cnt"><span id="apCur">1</span><span class="sep"></span><span id="apTotal">6</span></div>
-    <button class="arr" id="apPrev" aria-label="Previous model">‹</button>
-    <button class="arr" id="apNext" aria-label="Next model">›</button>
-  </div>
-</section>
 
-<!-- ============ TIMELINE ============ -->
-<section id="timeline">
-  <div class="pano">
-    <img id="panoImg" loading="lazy" decoding="async" src="https://picsum.photos/seed/loompano/1600/960" alt="Panoramic placeholder photograph">
-    <div class="t-card rv">
-      <div class="t-years"><span>Day 1</span><span class="dash"></span><span>Day 90</span></div>
-      <div class="t-rows">
-        <div class="t-row"><span>Kickoff — problem autopsy</span><span>Days 1–3</span></div>
-        <div class="t-row"><span>First working prototype</span><span>Week 2</span></div>
-        <div class="t-row"><span>Production launch</span><span>Week 6+</span></div>
+    <!-- ============ MANIFESTO ============ -->
+    <section class="manifesto" id="manifesto">
+      <div class="manifesto-sticky">
+        <div class="container">
+          <p class="eyebrow mono">[ 00 — THE MANIFESTO ]</p>
+          <p class="manifesto-text" id="manifestoText">
+            Everyone has an AI strategy. A deck. A roadmap. A committee.
+            We have a different habit — we <em>ship</em>. Real problems don't get
+            solved by slideware. They get solved by people <em>crazy</em> enough
+            to promise perfect, and stubborn enough to <em>deliver</em> it.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CAPABILITIES ============ -->
+    <section class="section" id="capabilities">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow mono">[ 01 — CAPABILITIES ]</p>
+          <h2>WHAT WE'RE <span class="grad">DANGEROUS</span> AT</h2>
+        </div>
+
+        <div class="bento">
+          <article class="card tilt span-7" data-reveal>
+            <span class="card-num mono">/01</span>
+            <div class="card-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/></svg>
+            </div>
+            <h3>AI Product Engineering</h3>
+            <p>LLM-native applications, autonomous agents, retrieval systems.
+            Built to survive production traffic, not just the demo call.</p>
+            <div class="tags mono"><span>AGENTS</span><span>RAG</span><span>EVALS</span></div>
+          </article>
+
+          <article class="card tilt span-5 card-terminal" data-reveal style="--d:.1s">
+            <span class="card-num mono">/02</span>
+            <h3>0 → 1 in Weeks</h3>
+            <p>Idea to working product before your competitors finish their kickoff meeting.</p>
+            <div class="terminal mono" aria-hidden="true">
+              <div class="terminal-bar"><i></i><i></i><i></i><span class="terminal-title">optiflow@core:~</span></div>
+              <pre id="termOut">$ <span class="term-cursor">▊</span></pre>
+            </div>
+          </article>
+
+          <article class="card tilt span-5" data-reveal>
+            <span class="card-num mono">/03</span>
+            <div class="card-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="4"/><path d="M16 8l3-3M5 19l3-3M8 8L5 5M19 19l-3-3"/></svg>
+            </div>
+            <h3>Agentic Automation</h3>
+            <p>Workflows that run themselves at 3 a.m. — triage, dispatch, follow-up —
+            while your team sleeps like people who automated their busywork.</p>
+            <div class="tags mono"><span>WORKFLOWS</span><span>OPS</span></div>
+          </article>
+
+          <article class="card tilt span-7" data-reveal style="--d:.1s">
+            <span class="card-num mono">/04</span>
+            <div class="card-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+            </div>
+            <h3>Design That Converts</h3>
+            <p>Interfaces people actually feel. We obsess over the last 4% of polish
+            because that's the part users remember — and pay for.</p>
+            <div class="tags mono"><span>UI/UX</span><span>MOTION</span><span>BRAND</span></div>
+          </article>
+
+          <article class="card tilt span-4" data-reveal>
+            <span class="card-num mono">/05</span>
+            <div class="card-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            </div>
+            <h3>Data &amp; Model Ops</h3>
+            <p>Pipelines, fine-tuning, evals. The unglamorous machinery that makes the magic reliable.</p>
+          </article>
+
+          <article class="card tilt span-4" data-reveal style="--d:.1s">
+            <span class="card-num mono">/06</span>
+            <div class="card-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-6 4 3 5-8"/></svg>
+            </div>
+            <h3>Growth Engineering</h3>
+            <p>Ship. Measure. Sharpen. Repeat until the graph does the thing graphs are supposed to do.</p>
+          </article>
+
+          <article class="card tilt span-4 card-cta" data-reveal style="--d:.2s">
+            <span class="card-num mono">/∞</span>
+            <h3>Something weirder?</h3>
+            <p>The best briefs start with "this is probably impossible, but…"</p>
+            <a href="#contact" class="card-link mono" data-hover>TRY US →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ WORK ============ -->
+    <section class="section" id="work">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow mono">[ 02 — SELECTED WORK ]</p>
+          <h2>PROOF, NOT <span class="grad">PROMISES</span></h2>
+        </div>
+
+        <!-- Sample case studies — replace with real projects -->
+        <div class="work-grid">
+          <a href="#contact" class="work-card" data-reveal data-hover>
+            <div class="work-thumb thumb-cyan" aria-hidden="true"><span class="orb"></span></div>
+            <div class="work-meta mono"><span>001</span><span>LLM AGENTS · OPS</span></div>
+            <h3>Dispatch</h3>
+            <p>An ops copilot that reads the chaos of a logistics floor and turns it into a queue of done.</p>
+            <p class="work-stat mono"><strong>−74%</strong> MANUAL DISPATCH TIME</p>
+          </a>
+
+          <a href="#contact" class="work-card" data-reveal style="--d:.1s" data-hover>
+            <div class="work-thumb thumb-violet" aria-hidden="true"><span class="orb"></span></div>
+            <div class="work-meta mono"><span>002</span><span>DOC INTELLIGENCE · FINANCE</span></div>
+            <h3>Ledgerlens</h3>
+            <p>Financial document intelligence that reads faster than an army of analysts — and never gets bored.</p>
+            <p class="work-stat mono"><strong>12K</strong> DOCS PARSED / DAY</p>
+          </a>
+
+          <a href="#contact" class="work-card" data-reveal style="--d:.2s" data-hover>
+            <div class="work-thumb thumb-magenta" aria-hidden="true"><span class="orb"></span></div>
+            <div class="work-meta mono"><span>003</span><span>SUPPORT AUTOPILOT · SAAS</span></div>
+            <h3>Nightshift</h3>
+            <p>A support autopilot that resolves tickets while the founders sleep. Customers never noticed. That's the point.</p>
+            <p class="work-stat mono"><strong>68%</strong> RESOLVED AUTONOMOUSLY</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STATS ============ -->
+    <section class="section stats-section">
+      <div class="container">
+        <div class="stats" data-reveal>
+          <div class="stat">
+            <span class="stat-num mono"><span data-count="14"></span>d</span>
+            <span class="stat-label">idea → first prototype</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num mono"><span data-count="100"></span>%</span>
+            <span class="stat-label">of builds reach production</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num mono"><span data-count="24"></span>/7</span>
+            <span class="stat-label">agents on duty</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num mono"><span data-count="0"></span></span>
+            <span class="stat-label">slide decks produced</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROCESS ============ -->
+    <section class="section" id="process">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow mono">[ 03 — PROCESS ]</p>
+          <h2>FROM PAIN TO <span class="grad">PRODUCT</span></h2>
+        </div>
+
+        <ol class="process">
+          <li class="step" data-reveal>
+            <span class="step-num outline mono">01</span>
+            <h3>Find the pain</h3>
+            <p>We interrogate the problem until it confesses. No solutions allowed in the room yet.</p>
+          </li>
+          <li class="step" data-reveal style="--d:.1s">
+            <span class="step-num outline mono">02</span>
+            <h3>Prototype in days</h3>
+            <p>A working thing in your hands within days — ugly is fine, real is mandatory.</p>
+          </li>
+          <li class="step" data-reveal style="--d:.2s">
+            <span class="step-num outline mono">03</span>
+            <h3>Ship it</h3>
+            <p>Production, real users, real stakes. This is where most agencies wave goodbye. We move in.</p>
+          </li>
+          <li class="step" data-reveal style="--d:.3s">
+            <span class="step-num outline mono">04</span>
+            <h3>Sharpen forever</h3>
+            <p>Measure, refine, automate. Perfect isn't a launch state — it's a habit.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="section cta-section" id="contact">
+      <div class="cta-glow" aria-hidden="true"></div>
+      <div class="container cta-inner">
+        <p class="eyebrow mono" data-reveal>[ 04 — TRANSMISSION OPEN ]</p>
+        <h2 class="cta-title" data-reveal style="--d:.1s">GOT A REAL<br><span class="hollow" data-text="PROBLEM?">PROBLEM?</span></h2>
+        <p class="cta-sub" data-reveal style="--d:.2s">Bring us the thing everyone says can't be fixed.<br>We'll bring the crazy.</p>
+        <div data-reveal style="--d:.3s">
+          <a href="mailto:hello@optiflow.studio" class="btn btn-primary btn-big magnetic" data-hover>
+            LET'S GET CRAZY
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <p class="cta-mail mono" data-reveal style="--d:.4s">HELLO@OPTIFLOW.STUDIO</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="nav-logo mono" href="#top" data-hover><svg class="logo-mark" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="lgf" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#00F0FF"/><stop offset="1" stop-color="#8B5CFF"/></linearGradient></defs><path d="M12 1l2.4 8.6L23 12l-8.6 2.4L12 23l-2.4-8.6L1 12l8.6-2.4z" fill="url(#lgf)"/></svg>optiflow<span class="blink">_</span></a>
+        <p>An AI studio building products<br>that solve real problems.</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="#work" data-hover>Work</a>
+        <a href="#capabilities" data-hover>Capabilities</a>
+        <a href="#process" data-hover>Process</a>
+        <a href="#contact" data-hover>Contact</a>
+      </nav>
+      <div class="footer-social">
+        <a href="#" aria-label="X (Twitter)" data-hover><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="#" aria-label="GitHub" data-hover><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.34.95.1-.74.4-1.25.72-1.53-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.35.77 1.05.77 2.12v3.14c0 .3.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg></a>
+        <a href="#" aria-label="LinkedIn" data-hover><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.72C24 .77 23.2 0 22.22 0z"/></svg></a>
       </div>
     </div>
-  </div>
-  <canvas class="bars-btm" id="barsBtm" height="300" aria-hidden="true"></canvas>
-</section>
-
-<!-- ============ MARQUEE ============ -->
-<section id="marq" aria-hidden="true">
-  <div class="rail" id="marqRail"></div>
-</section>
-
-<!-- ============ FINANCE ============ -->
-<section id="fin">
-  <canvas class="f-mountain" id="finMountain"></canvas>
-  <div class="f-top">
-    <div class="f-start rv">
-      <div class="lbl">The only metric that matters</div>
-      <h3>Weeks,<br>not quarters</h3>
+    <div class="container footer-bottom mono">
+      <span>© 2026 OPTIFLOW STUDIO</span>
+      <span>BUILT BY HUMANS × MACHINES</span>
+      <a href="#top" data-hover>BACK TO TOP ↑</a>
     </div>
-    <div class="f-stats">
-      <div class="stat rv"><div class="k">Idea → first prototype</div><div class="v">14 days</div></div>
-      <div class="stat rv"><div class="k">Prototype → production</div><div class="v">6 weeks</div></div>
-      <div class="stat rv"><div class="k">Builds reaching production</div><div class="v">100%</div></div>
-      <div class="stat rv"><div class="k">Slide decks produced</div><div class="v">0</div></div>
-    </div>
-  </div>
-  <div class="f-cols">
-    <div class="f-col rv">
-      <h4>How we engage</h4>
-      <div class="f-row"><span>Discovery &amp; scoping call</span><span>Free</span></div>
-      <div class="f-row"><span>Working demo cadence</span><span>Every Friday</span></div>
-    </div>
-    <div class="f-col rv">
-      <h4>What you keep</h4>
-      <div class="f-row stack"><span>All code, models and data — yours</span></div>
-      <div class="f-row stack"><span>Docs and clean handover included</span></div>
-      <div class="f-row stack"><span>Agents stay on duty after launch</span></div>
-    </div>
-  </div>
-  <div class="f-cta rv"><a class="pill" href="#invest">Start a project</a></div>
-</section>
+  </footer>
 
-<!-- ============ DEVELOPER ============ -->
-<section id="dev">
-  <canvas class="bars-hang" id="barsDev" height="130" aria-hidden="true"></canvas>
-  <div class="spark lbl rv" style="justify-content:center"><i>✦✦✦</i>&nbsp;&nbsp;The studio&nbsp;&nbsp;<i>✦✦✦</i></div>
-  <h2 class="rv">Humans × machines, obsessed with the last 4% of polish</h2>
-  <div class="d-card rv">
-    <p class="txt">Agents, interfaces and infrastructure that add up to a new quality of work.</p>
-    <div class="spark"><i style="margin:0 auto">✦✦✦</i></div>
-    <div class="logo">optiflow<sup>®</sup></div>
-    <div class="d-foot"><span>Humans</span><span>× Machines</span></div>
-  </div>
-</section>
-
-<section id="stats">
-  <div class="s-grid">
-    <div class="s-cell rv"><div class="s-num">14d</div><div class="s-cap">idea → first prototype</div></div>
-    <div class="s-cell rv"><div class="s-num">100%</div><div class="s-cap">of builds reach production</div></div>
-    <div class="s-cell rv"><div class="s-num">24/7</div><div class="s-cap">autonomous agents on duty</div></div>
-    <div class="s-cell rv"><div class="s-num">0</div><div class="s-cap">slide decks produced</div></div>
-  </div>
-</section>
-
-<!-- ============ GALLERY ============ -->
-<section id="gallery">
-  <div class="g-head">
-    <h2 class="rv">Selected<br>work</h2>
-  </div>
-  <div class="g-stage" id="gStage">
-    <a class="g-ring" href="#invest">Start<br>a project</a>
-    <div class="g-nav">
-      <div class="cnt"><span id="gCur">1</span><span class="sep"></span><span id="gTotal">6</span></div>
-      <button class="arr" id="gPrev" aria-label="Previous frame">‹</button>
-      <button class="arr" id="gNext" aria-label="Next frame">›</button>
-    </div>
-  </div>
-</section>
-
-<!-- ============ INVEST ============ -->
-<section id="invest">
-  <div class="bg"><img loading="lazy" decoding="async" src="https://picsum.photos/seed/loominvest/1600/1040" alt="Atmospheric placeholder — mountains and pines"></div>
-  <div class="i-card">
-    <h2 class="rv">Got a real problem?</h2>
-    <div class="rv"><a class="pill dark" href="mailto:hello@optiflow.studio">Let&#8217;s get crazy</a></div>
-    <div class="i-contacts rv">
-      <div class="i-row"><span>Worldwide · Remote</span><span>hello@optiflow.studio</span></div>
-      <canvas class="i-word" id="investWord" height="150"></canvas>
-    </div>
-  </div>
-</section>
-
-<!-- ============ BLOG ============ -->
-<section id="blog">
-  <div class="b-head">
-    <h2 class="rv">Field notes<br>from the build floor</h2>
-    <div class="b-meta rv">
-      <div class="lbl" style="opacity:.6">Last updated:</div>
-      <div class="chips"><span class="chip">Notes</span><span class="chip">Build logs</span></div>
-      <div class="lbl" style="margin-top:12px">24/7/2026</div>
-    </div>
-  </div>
-  <div class="b-grid">
-    <article class="b-card rv">
-      <img loading="lazy" decoding="async" src="https://picsum.photos/seed/loomriver/640/400" alt="Placeholder photograph">
-      <div class="tr"></div>
-      <h3>Why AI pilots die in the demo</h3>
-      <div class="dash"></div>
-      <p>And how to build the ones that graduate to production traffic.</p>
-    </article>
-    <article class="b-card rv">
-      <img loading="lazy" decoding="async" src="https://picsum.photos/seed/loompress/640/400" alt="Placeholder photograph">
-      <div class="tr"></div>
-      <h3>Agents on the night shift</h3>
-      <div class="dash"></div>
-      <p>What autonomous operations look like while the founders sleep.</p>
-    </article>
-  </div>
-  <div class="b-all rv"><a href="#blog">Read all notes</a></div>
-  <canvas class="treeline" id="treeline" height="320" aria-hidden="true"></canvas>
-</section>
-
-<!-- ============ FAQ ============ -->
-<section id="faq">
-  <div class="f-letters rv">
-    <span class="L">F</span>
-    <span class="cap">Answers to the<br>usual questions</span>
-    <span class="L">A</span>
-    <span class="cap">Everything<br>worth knowing</span>
-    <span class="L">Q</span>
-  </div>
-  <div class="qa" id="qaList"></div>
-</section>
-
-<!-- ============ FOOTER ============ -->
-<footer>
-  <div class="f-grid">
-    <div class="f-col">
-      <div class="k">Write us</div>
-      <div class="v">hello@optiflow.studio<br>Worldwide ·<br>Remote-first</div>
-      <div class="socials">
-        <a href="#" aria-label="X (Twitter)">X</a>
-        <a href="#" aria-label="GitHub">GH</a>
-        <a href="#" aria-label="LinkedIn">IN</a>
-      </div>
-    </div>
-    <div class="f-col r">
-      <div class="k">Studio</div>
-      <div class="v">Est. 2026<br>Humans × Machines</div>
-      <div class="k" style="margin-top:26px">Availability</div>
-      <div class="v">Booking Q4 2026</div>
-    </div>
-  </div>
-  <div class="f-big">
-    <a href="mailto:hello@optiflow.studio">hello@optiflow.studio</a>
-    <a href="#invest">Start a project ↗</a>
-  </div>
-  <div class="f-strip">
-    <div class="left"><canvas id="stripGlyph" width="60" height="14"></canvas><span>© 2026 Optiflow Studio · Humans × Machines</span></div>
-    <a href="#">Privacy policy</a>
-  </div>
-</footer>
-
-</main>
-
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.15/dist/lenis.min.js"></script>
-<script>
-/* ============================================================
-   OPTIFLOW — scroll choreography & procedural dither art
-   ============================================================ */
-const SAND='#A89474', SAND2='#B3A181', UMBER='#292420', UMBER2='#211D19';
-const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const rng=(seed=>()=> (seed=(seed*16807)%2147483647)/2147483647)(1987);
-
-/* ---------- woven wordmark ---------- */
-function weave(canvas,text,{fg=SAND,pad=6,jitter=.5,seed=7}={}){
-  const dpr=Math.min(devicePixelRatio||1,2);
-  const w=canvas.clientWidth||canvas.parentElement.clientWidth||900;
-  if(!canvas.dataset.h)canvas.dataset.h=canvas.getAttribute('height')||190;
-  const h=+canvas.dataset.h;
-  canvas.width=w*dpr;canvas.height=h*dpr;
-  canvas.style.height=h+'px';
-  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
-  const off=document.createElement('canvas');
-  off.width=w;off.height=h;
-  const o=off.getContext('2d');
-  let fs=h*.92;
-  o.font=`900 ${fs}px "Archivo Black",sans-serif`;
-  let tw=o.measureText(text).width;
-  if(tw>w-pad*2){fs*=(w-pad*2)/tw;o.font=`900 ${fs}px "Archivo Black",sans-serif`}
-  o.fillStyle=fg;o.textBaseline='middle';o.textAlign='center';
-  o.fillText(text,w/2,h/2+fs*.06);
-  const r=(s=>()=> (s=(s*16807)%2147483647)/2147483647)(seed*99991+7);
-  const strip=Math.max(3,Math.round(w/220));
-  ctx.clearRect(0,0,w,h);
-  for(let x=0;x<w;x+=strip){
-    const n=Math.sin(x*.09+seed)*Math.cos(x*.023)+(r()-.5)*1.6;
-    const dy=n*h*.09*jitter;
-    const stretch=1+(r()-.5)*.18*jitter;
-    ctx.drawImage(off,x,0,strip,h, x,dy+h*(1-stretch)/2,strip,h*stretch);
-    if(r()<.16*jitter){
-      ctx.globalAlpha=.55;
-      ctx.drawImage(off,x,0,strip,h, x,dy+(r()>.5?-.16:.16)*h,strip,h);
-      ctx.globalAlpha=1;
-    }
-  }
-}
-
-/* ---------- barcode ridge (mountain of vertical bars) ---------- */
-function ridge(canvas,{fg=UMBER,dir=1,density=.8,seed=5,base=.55}={}){
-  const dpr=Math.min(devicePixelRatio||1,2);
-  const w=canvas.clientWidth||innerWidth;
-  if(!canvas.dataset.h)canvas.dataset.h=canvas.getAttribute('height')||260;
-  const h=+canvas.dataset.h;
-  canvas.width=w*dpr;canvas.height=h*dpr;canvas.style.height=h+'px';
-  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
-  const r=(s=>()=> (s=(s*16807)%2147483647)/2147483647)(seed*7919+3);
-  ctx.clearRect(0,0,w,h);ctx.fillStyle=fg;
-  let y=h*base;
-  for(let x=0;x<w;x+=3){
-    y+=(r()-.5)*6+Math.sin(x*.004+seed)*1.2;
-    y=Math.max(h*.1,Math.min(h*.95,y));
-    if(r()>density)continue;
-    const bw=r()<.08?4:1.6;
-    const gap=r()<.22;
-    const bh=(h-y)*(gap?.35+r()*.4:1);
-    if(dir>0) ctx.fillRect(x,h-bh,bw,bh);
-    else      ctx.fillRect(x,0,bw,bh);
-    if(r()<.06) ctx.fillRect(x,dir>0?h-bh-8-r()*20:bh+8+r()*20,bw,3);
-  }
-}
-
-/* ---------- dithered peak (finance) ---------- */
-function peak(canvas,w,h){
-  const dpr=Math.min(devicePixelRatio||1,2);
-  canvas.width=w*dpr;canvas.height=h*dpr;
-  canvas.style.width=w+'px';canvas.style.height=h+'px';
-  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
-  const r=(s=>()=> (s=(s*16807)%2147483647)/2147483647)(31337);
-  ctx.fillStyle=SAND;
-  const apex=w/2;
-  for(let x=0;x<w;x+=3.2){
-    const d=Math.abs(x-apex)/(w/2);
-    const top=h*(0.06+d*.86+Math.sin(x*.05)*.02);
-    for(let y=top;y<h;y+=5){
-      const light=(x<apex? .75-.45*d : .3-.25*(1-d))+Math.sin(y*.05+x*.02)*.18;
-      if(r()<light) ctx.fillRect(x,y,1.6,3.4);
-    }
-  }
-}
-
-/* ---------- dithered treeline (blog) ---------- */
-function treeline(canvas){
-  const dpr=Math.min(devicePixelRatio||1,2);
-  const w=canvas.clientWidth||innerWidth;
-  if(!canvas.dataset.h)canvas.dataset.h=canvas.getAttribute('height')||320;
-  const h=+canvas.dataset.h;
-  canvas.width=w*dpr;canvas.height=h*dpr;canvas.style.height=h+'px';
-  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
-  const r=(s=>()=> (s=(s*16807)%2147483647)/2147483647)(4242);
-  ctx.fillStyle=SAND;
-  let y=h*.55;
-  for(let x=0;x<w;x+=3){
-    y+=(r()-.5)*8;y=Math.max(h*.2,Math.min(h*.85,y));
-    for(let yy=y;yy<h;yy+=4){ if(r()<.5-.4*((yy-y)/(h-y))) continue; ctx.fillRect(x,yy,1.5,2.6); }
-    if(r()<.05){ctx.fillRect(x,y-14-r()*30,1.5,14+r()*30)}
-  }
-}
-
-/* ---------- walking dithered sheep (preloader) ---------- */
-function sheepFactory(canvas){
-  const ctx=canvas.getContext('2d');
-  const W=canvas.width,H=canvas.height;
-  const off=document.createElement('canvas');off.width=W;off.height=H;
-  const o=off.getContext('2d');
-  function silhouette(t){
-    o.clearRect(0,0,W,H);o.fillStyle='#fff';
-    const cx=W/2,cy=H/2;
-    o.beginPath();o.ellipse(cx,cy-8,86,52,0,0,7);o.fill();
-    for(let i=0;i<9;i++){const a=i/9*Math.PI*2;o.beginPath();o.ellipse(cx+Math.cos(a)*74,cy-8+Math.sin(a)*40,18,14,0,0,7);o.fill()}
-    o.beginPath();o.ellipse(cx+96,cy-34,26,18,-.35,0,7);o.fill();
-    o.beginPath();o.ellipse(cx+112,cy-26,12,9,-.5,0,7);o.fill();
-    o.beginPath();o.ellipse(cx+86,cy-52,10,5,-.6,0,7);o.fill();
-    for(let i=0;i<4;i++){
-      const ph=t*6+i*Math.PI/1.7;
-      const lx=cx-52+i*34+Math.sin(ph)*10;
-      const ly=cy+38, ll=44+Math.cos(ph)*6;
-      o.save();o.translate(lx,ly);o.rotate(Math.sin(ph)*.28);o.fillRect(-4,0,8,ll);o.restore();
-    }
-    return o.getImageData(0,0,W,H).data;
-  }
-  const r=(s=>()=> (s=(s*16807)%2147483647)/2147483647)(555);
-  const cols=[];for(let x=0;x<W;x+=3)cols.push({x,ph:r()*9,sp:.4+r()*.8});
-  return function draw(t){
-    const data=silhouette(t);
-    ctx.clearRect(0,0,W,H);ctx.fillStyle=SAND;
-    for(const c of cols){
-      const flick=Math.sin(t*3*c.sp+c.ph);
-      for(let y=0;y<H;y+=4){
-        const i=(y*W+c.x)*4+3;
-        if(data[i]>120&&Math.sin(y*.6+c.ph+t*2)>-.55){
-          ctx.fillRect(c.x,y+flick*1.4,1.6,3);
-        }
-      }
-    }
-  };
-}
-
-/* ---------- equalizer glyph ---------- */
-function eqDraw(canvas,t){
-  const ctx=canvas.getContext('2d');const W=canvas.width,H=canvas.height;
-  ctx.clearRect(0,0,W,H);ctx.fillStyle=SAND;
-  for(let i=0;i<16;i++){
-    const x=i*(W/16);
-    const a=Math.sin(t*2+i*1.3)*.5+.5;
-    const h=3+a*(H-4);
-    ctx.fillRect(x,(H-h)/2,2,h);
-  }
-}
-
-/* ---------- dither wipe scene ---------- */
-function wipeFactory(canvas){
-  const resize=()=>{canvas.width=canvas.clientWidth||innerWidth;canvas.height=canvas.clientHeight||innerHeight};
-  resize();addEventListener('resize',resize);
-  const r=(s=>()=> (s=(s*16807)%2147483647)/2147483647)(777);
-  const pts=[];for(let i=0;i<2600;i++)pts.push({a:r()*Math.PI*2,d:Math.pow(r(),.5),ph:r()*9,ln:6+r()*40});
-  return function(p){
-    const ctx=canvas.getContext('2d');const W=canvas.width,H=canvas.height;
-    ctx.clearRect(0,0,W,H);ctx.fillStyle=SAND;
-    const R=Math.min(W,H)*.34;
-    for(const pt of pts){
-      const vis=(Math.sin(pt.ph)*.5+.5);
-      if(vis>p*1.35)continue;
-      const x=W/2+Math.cos(pt.a)*pt.d*R*2.2;
-      const y=H/2+Math.sin(pt.a)*pt.d*R;
-      const inside=pt.d<.62;
-      const alpha=inside?1:.75-pt.d*.4;
-      ctx.globalAlpha=Math.max(.08,alpha);
-      ctx.fillRect(x,y-pt.ln/2,1.6,pt.ln*(inside?1.4:1));
-    }
-    ctx.globalAlpha=1;
-  };
-}
-
-/* ---------- text decode (scramble) ---------- */
-const GLY='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-const GLY2='\u2596\u2598\u259d\u2597\u2591\u2592\u00b7+\u00d7';
-function scramble(el,dur=700){
-  if(reduced)return;
-  const nodes=[];
-  (function walk(n){n.childNodes.forEach(c=>{if(c.nodeType===3&&c.textContent.trim())nodes.push(c);else if(c.nodeType===1)walk(c)})})(el);
-  const serif=!!el.closest('.serif,.l-display,.quote')||el.querySelector('.serif')!==null||/H\d/.test(el.tagName);
-  const pool=serif?GLY:GLY+GLY2;
-  nodes.forEach(node=>{
-    const orig=node.textContent;
-    if(orig.length>70)return;
-    const t0=performance.now();
-    (function tick(t){
-      const p=Math.min(1,((t||performance.now())-t0)/dur);
-      const keep=Math.floor(orig.length*p);
-      let out=orig.slice(0,keep);
-      for(let i=keep;i<orig.length;i++){
-        const ch=orig[i];
-        out+= ch===' '?' ':(Math.random()<.7?pool[(Math.random()*pool.length)|0]:ch);
-      }
-      node.textContent=out;
-      if(p<1)requestAnimationFrame(tick);else node.textContent=orig;
-    })(t0);
-  });
-}
-
-/* ---------- rolling counters ---------- */
-function countUp(el){
-  const m=el.textContent.match(/^(\d+)(.*)$/);if(!m)return;
-  const target=+m[1],suf=m[2],t0=performance.now(),dur=1100;
-  (function tick(){
-    const p=Math.min(1,(performance.now()-t0)/dur),e=1-Math.pow(1-p,3);
-    el.textContent=Math.round(target*e)+suf;
-    if(p<1)requestAnimationFrame(tick);
-  })();
-}
-
-/* ============================================================ init */
-function boot(){
-  ['900 100px "Archivo Black"','400 100px Prata','600 100px Jura'].forEach(f=>document.fonts.load(f));
-  document.fonts.ready.then(init);
-}
-if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot);else boot();
-function init(){
-  const eq=document.getElementById('eq');
-  const stripGlyph=document.getElementById('stripGlyph');
-
-  /* preloader */
-  const pre=document.getElementById('pre');
-  const sheep=sheepFactory(document.getElementById('sheep'));
-  const pg=document.getElementById('preGlyph').getContext('2d');
-  pg.fillStyle=SAND;
-  [[2,8,10,30],[14,16,10,22],[26,4,10,34],[38,20,10,18],[50,12,10,26]].forEach(b=>pg.fillRect(b[0],b[1],b[2],b[3]));
-  weave(document.getElementById('preWord'),'OPTIFLOW',{jitter:1});
-  let preT=0,preOn=true;
-  (function preLoop(){
-    if(!preOn)return;
-    preT+=.016;
-    sheep(preT);
-    if(((preT*60)|0)%6===0)weave(document.getElementById('preWord'),'OPTIFLOW',{jitter:1,seed:3+((preT*2)|0)});
-    eqDraw(eq,preT);
-    requestAnimationFrame(preLoop);
-  })();
-
-  /* hero & static art */
-  weave(document.getElementById('heroWord'),'OPTIFLOW',{jitter:.55,seed:11});
-  weave(document.getElementById('navWord'),'OPTIFLOW',{jitter:.5,seed:11});
-  ridge(document.getElementById('mountainHero'),{fg:UMBER,dir:1,seed:9,base:.4});
-  ridge(document.getElementById('barsTop'),{fg:SAND,dir:-1,seed:14,base:.5,density:.65});
-  ridge(document.getElementById('barsBtm'),{fg:UMBER,dir:1,seed:21,base:.35});
-  ridge(document.getElementById('barsDev'),{fg:SAND,dir:-1,seed:33,base:.6,density:.4});
-  treeline(document.getElementById('treeline'));
-  peak(document.getElementById('finMountain'),Math.min(innerWidth*.62,900),Math.min(innerHeight*1.05,860));
-  eqDraw(stripGlyph,1);
-  weave(document.getElementById('investWord'),'OPTIFLOW',{fg:UMBER,jitter:1.1,seed:29});
-
-  /* marquee */
-  document.getElementById('marqRail').innerHTML=
-    Array(2).fill('<span>Proof, not promises<i>✦</i></span>'.repeat(4)).join('');
-
-  /* apartments */
-  const APTS=[
-    {t:'Sprint',n:'2',u:'wks',img:'loomapt1',chips:['1 focused problem','working prototype','daily demos','fixed quote'],
-     d:'Two weeks, one painful problem, one working prototype in your hands.'},
-    {t:'MVP',n:'6',u:'wks',img:'loomapt2',chips:['real users day one','LLM-native core','evals baked in','production infra'],
-     d:'From prototype to a product with real users \u2014 built to survive production, not the demo call.'},
-    {t:'Autopilot',n:'4',u:'wks',img:'loomapt3',chips:['one workflow automated','runs at 3 a.m.','human-in-the-loop','audit trail'],
-     d:'One recurring workflow handed to agents that never sleep.'},
-    {t:'Product',n:'12',u:'wks',img:'loomapt4',chips:['full product build','design + engineering','fine-tuned models','growth loops'],
-     d:'Brand, interface, models, infrastructure \u2014 shipped, measured, sharpened.'},
-    {t:'Embedded',n:'1',u:'mo+',img:'loomapt5',chips:['senior pod in your team','weekly demos','cancel anytime'],
-     d:'A human-and-agent pod shipping alongside your engineers.'},
-    {t:'Impossible',n:'∞',u:'',img:'loomapt6',chips:['\u201cprobably impossible\u201d','R&D spikes','weird briefs welcome'],
-     d:'The best briefs start with \u201cthis is probably impossible, but\u2026\u201d'},
-  ];
-  const tList=document.getElementById('tList');
-  APTS.forEach((a,i)=>{
-    const li=document.createElement('li');if(!i)li.className='act';
-    const b=document.createElement('button');b.textContent=a.t;b.addEventListener('click',()=>setApt(i));
-    li.appendChild(b);tList.appendChild(li);
-  });
-  let apI=0;
-  function setApt(i){
-    apI=(i+APTS.length)%APTS.length;
-    const a=APTS[apI];
-    document.getElementById('apM2').innerHTML=a.n+' <sup>'+a.u+'</sup>';
-    document.getElementById('apChips').innerHTML=a.chips.map((c,j)=>`<span class="chip${j===0?' solid':''}">${c}</span>`).join('');
-    document.getElementById('apDesc').textContent=a.d;
-    const img=document.getElementById('apImg');
-    img.style.opacity=0;
-    setTimeout(()=>{img.src=`https://picsum.photos/seed/${a.img}/720/960`;img.onload=()=>img.style.opacity=1},260);
-    document.getElementById('apCur').textContent=apI+1;
-    [...tList.children].forEach((li,j)=>li.classList.toggle('act',j===apI));
-  }
-  setApt(0);
-  document.getElementById('apPrev').addEventListener('click',()=>setApt(apI-1));
-  document.getElementById('apNext').addEventListener('click',()=>setApt(apI+1));
-
-  /* unique cards */
-  const CHAPTERS=[
-    ['Autonomous agents','loomspa'],
-    ['RAG & retrieval','loomfood'],
-    ['Evals & guardrails','loomyoga'],
-    ['Product design','loomwork'],
-    ['Motion & brand','loomkids'],
-    ['Data & model ops','loomfire'],
-    ['Growth engineering','loomcamp'],
-    ['Something weirder','loomshop'],
-  ];
-  const uStage=document.getElementById('uStage');
-  const uCards=CHAPTERS.map(([cap,seed])=>{
-    const d=document.createElement('div');d.className='u-card';
-    d.innerHTML=`<div class="im"><img loading="lazy" decoding="async" src="https://picsum.photos/seed/${seed}/560/800" alt="${cap}">
-      <span class="cap">${cap}</span><span class="plus">+</span></div>`;
-    uStage.appendChild(d);return d;
-  });
-
-  /* gallery */
-  const gStage=document.getElementById('gStage');
-  const G=6,gImgs=[];
-  for(let i=0;i<G;i++){
-    const im=document.createElement('img');
-    im.loading=i?'lazy':'eager';im.decoding='async';
-    im.src=`https://picsum.photos/seed/loomgal${i}/1600/930`;
-    im.alt='Optiflow — selected work frame';
-    if(!i)im.className='act';
-    gStage.insertBefore(im,gStage.firstChild);
-    gImgs.push(im);
-  }
-  let gI=0;
-  function setG(i){gI=(i+G)%G;gImgs.forEach((im,j)=>im.classList.toggle('act',j===gI));document.getElementById('gCur').textContent=gI+1}
-  document.getElementById('gPrev').addEventListener('click',()=>setG(gI-1));
-  document.getElementById('gNext').addEventListener('click',()=>setG(gI+1));
-  document.getElementById('gTotal').textContent=G;
-
-  /* FAQ */
-  const FAQS=[
-    ['What do you actually ship?','Working software in production: LLM-native products, agent workflows and the interfaces around them.'],
-    ['How fast will we see something real?','A working prototype within two weeks \u2014 you click it, break it, decide with evidence.'],
-    ['Who owns the code and the models?','You do. Everything is yours, documented and handed over.'],
-    ['What does it cost?','Free scoping call, fixed quote before we write a line of code.'],
-    ['What happens after launch?','We move in, not out \u2014 agents keep monitoring, evaluating and improving.'],
-    ['What if it really is impossible?','Then discovery proves it cheaply. Our favourite products all started as \u201cimpossible\u201d.'],
-  ];
-  const qa=document.getElementById('qaList');
-  FAQS.forEach(([q,a],i)=>{
-    const item=document.createElement('div');item.className='q-item';
-    item.innerHTML=`<button class="q-btn" aria-expanded="false"><span>0${i+1}</span><span>${q}</span><span class="pl">+</span></button>
-      <div class="q-a"><p>${a}</p></div>`;
-    const btn=item.querySelector('.q-btn'),ans=item.querySelector('.q-a');
-    btn.addEventListener('click',()=>{
-      const open=item.classList.toggle('open');
-      btn.setAttribute('aria-expanded',open);
-      ans.style.maxHeight=open?ans.scrollHeight+'px':0;
-    });
-    qa.appendChild(item);
-  });
-
-  /* menu */
-  const menu=document.getElementById('menu');
-  const toggleMenu=()=>{
-    const opening=!menu.classList.contains('open');
-    menu.classList.toggle('open');
-    document.body.classList.toggle('locked',menu.classList.contains('open'));
-    if(opening&&!reduced)menu.querySelectorAll('a').forEach((a,i)=>setTimeout(()=>scramble(a,480),i*70));
-  };
-  document.getElementById('burger').addEventListener('click',toggleMenu);
-  document.getElementById('menuBtn').addEventListener('click',toggleMenu);
-  menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{menu.classList.remove('open');document.body.classList.remove('locked')}));
-
-  /* drag slider */
-  const track=document.getElementById('dragTrack');
-  let isDown=false,startX=0,startScroll=0;
-  track.addEventListener('pointerdown',e=>{isDown=true;track.classList.add('grabbing');startX=e.clientX;startScroll=track.scrollLeft;track.setPointerCapture(e.pointerId)});
-  track.addEventListener('pointermove',e=>{if(!isDown)return;track.scrollLeft=startScroll-(e.clientX-startX)});
-  ['pointerup','pointercancel'].forEach(ev=>track.addEventListener(ev,()=>{isDown=false;track.classList.remove('grabbing')}));
-  track.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX))window.scrollBy(0,e.deltaY)},{passive:true});
-  const cards=[...track.children];
-  track.addEventListener('scroll',()=>{
-    const sl=track.scrollLeft+track.clientWidth*.4;
-    let idx=0;
-    for(let i=0;i<cards.length;i++){if(cards[i].offsetLeft<sl)idx=i}
-    document.getElementById('dragCur').textContent=idx+1;
-  },{passive:true});
-  document.getElementById('dragPrev').addEventListener('click',()=>track.scrollBy({left:-420,behavior:'smooth'}));
-  document.getElementById('dragNext').addEventListener('click',()=>track.scrollBy({left:420,behavior:'smooth'}));
-
-  /* ---------- scroll engine ---------- */
-  gsap.registerPlugin(ScrollTrigger);
-  if(!reduced){
-    const lenis=new Lenis({lerp:.1,smoothWheel:true});
-    lenis.on('scroll',ScrollTrigger.update);
-    gsap.ticker.add(t=>lenis.raf(t*1000));
-    gsap.ticker.lagSmoothing(0);
-  }
-
-  /* nav behavior + theme */
-  const nav=document.getElementById('nav');
-  const beam=document.getElementById('progressBeam');
-  let lastY=0;
-  ScrollTrigger.create({
-    start:0,end:'max',
-    onUpdate(self){
-      const y=self.scroll();
-      beam.style.transform='scaleX('+self.progress+')';
-      nav.classList.toggle('scrolled',y>innerHeight*.9);
-      nav.classList.toggle('hid',y>lastY&&y>innerHeight*1.2&&!menu.classList.contains('open'));
-      lastY=y;
-    }
-  });
-  ['#unique','#apts','#timeline','#gallery'].forEach(sel=>{
-    ScrollTrigger.create({
-      trigger:sel,start:'top 60px',end:'bottom 60px',
-      onToggle(self){nav.classList.toggle('on-sand',self.isActive)}
-    });
-  });
-
-  /* hero pin: video shrinks to card on sand, mountains rise */
-  gsap.set('#heroMedia',{clipPath:'inset(0% 0% 0% 0%)'});
-  const heroTl=gsap.timeline({
-    scrollTrigger:{trigger:'#hero',start:'top top',end:'+=280%',scrub:reduced?false:.6,pin:true}
-  });
-  heroTl
-    .to('#heroUi .h-meta',{opacity:0,y:-30,duration:.6},0)
-    .to('#heroUi .h-tag',{opacity:0,duration:.4},.05)
-    .to('.h-ring',{opacity:0,duration:.4},.05)
-    .to('#heroWord',{scale:.42,transformOrigin:'50% 100%',yPercent:-160,duration:1.6,ease:'none'},.15)
-    .to('#heroMedia',{clipPath:'inset(28% 31% 28% 31%)',duration:1.6,ease:'none'},.15)
-    .fromTo('#heroMountain',{yPercent:101},{yPercent:0,duration:1.2,ease:'none'},1.15)
-    .to('#heroWord',{opacity:0,duration:.4},1.7)
-    .to('#heroMedia',{yPercent:-14,opacity:.9,duration:.8},1.9);
-
-  /* wipe scene */
-  const wipeDraw=wipeFactory(document.getElementById('wipeCv'));
-  wipeDraw(0);
-  ScrollTrigger.create({
-    trigger:'#wipe',start:'top bottom',end:'bottom top',scrub:true,
-    onUpdate(self){wipeDraw(self.progress)}
-  });
-
-  /* unique card parade */
-  const uHead=document.querySelector('#unique .u-head');
-  const paradeTl=gsap.timeline({
-    scrollTrigger:{trigger:'#unique',start:'top top',end:'bottom bottom',scrub:reduced?false:.5}
-  });
-  uCards.forEach((card,i)=>{
-    const side=i%2?1:-1;
-    const rot=(rng()-.5)*22;
-    const drift=(rng()-.5)*40;
-    gsap.set(card,{xPercent:-50,yPercent:-50,x:side*innerWidth*.75,y:innerHeight*.75,rotation:rot,scale:.92});
-    paradeTl.to(card,{x:side*drift*3,y:-innerHeight*.05,rotation:rot*.4,scale:1,duration:1.6,ease:'none'},i*1.05)
-            .to(card,{x:-side*innerWidth*.7,y:-innerHeight*.8,rotation:-rot,duration:1.6,ease:'none'},i*1.05+1.6);
-  });
-  paradeTl.to(uHead,{opacity:.15,duration:2},2).to(uHead,{opacity:1,duration:2},'>+3');
-
-  /* parallax */
-  gsap.fromTo('#panoImg',{yPercent:-8,scale:1.12},{yPercent:8,scale:1.12,ease:'none',
-    scrollTrigger:{trigger:'#timeline .pano',start:'top bottom',end:'bottom top',scrub:true}});
-  gsap.fromTo('#invest .bg img',{yPercent:-10,scale:1.15},{yPercent:10,scale:1.15,ease:'none',
-    scrollTrigger:{trigger:'#invest',start:'top bottom',end:'bottom top',scrub:true}});
-
-  /* reveals (+ rolling counters) */
-  document.querySelectorAll('.rv').forEach(el=>{
-    ScrollTrigger.create({trigger:el,start:'top 88%',once:true,onEnter:()=>{
-      el.classList.add('in');
-      if(!reduced&&el.matches('.s-cell,.stat'))el.querySelectorAll('.s-num,.v').forEach(countUp);
-    }});
-  });
-
-  /* decode-on-reveal for labels & display headings */
-  if(!reduced){
-    const DEC=document.querySelectorAll('.lbl,#about h3.serif,#location .l-display>div,#unique .u-head h2,#dev>h2,#fin .f-start h3,#gallery .g-head h2,#blog .b-head h2,#invest h2,#apts .t-list button');
-    const io=new IntersectionObserver(es=>es.forEach(e=>{
-      if(e.isIntersecting){scramble(e.target);io.unobserve(e.target)}
-    }),{threshold:.3});
-    DEC.forEach(el=>io.observe(el));
-  }
-
-  /* matrix word-rain over hero */
-  const stars=document.getElementById('stars');
-  if(stars&&!reduced){
-    const sctx=stars.getContext('2d');
-    const WORDS=['OPTIFLOW','SHIP','AGENTS','PROOF','REAL','BUILD','EVALS','RAG','01','AI'];
-    const CELL=16,FONT=12;
-    let sw=0,sh=0,cols=[];
-    const resizeStars=()=>{
-      sw=stars.width=stars.clientWidth;sh=stars.height=stars.clientHeight;
-      cols=[];
-      for(let x=0;x<sw;x+=CELL)cols.push({
-        x,y:-CELL*(2+Math.random()*30),
-        sp:.6+Math.random()*1.7,
-        w:WORDS[(Math.random()*WORDS.length)|0],ci:0,
-        dim:Math.random()<.35,acc:Math.random()
-      });
-    };
-    resizeStars();addEventListener('resize',resizeStars);
-    sctx.textBaseline='top';
-    gsap.ticker.add(()=>{
-      if(document.hidden||scrollY>innerHeight*4)return;
-      sctx.globalCompositeOperation='destination-out';
-      sctx.fillStyle='rgba(0,0,0,.10)';sctx.fillRect(0,0,sw,sh);
-      sctx.globalCompositeOperation='source-over';
-      sctx.font='600 '+FONT+'px Jura';
-      for(const c of cols){
-        c.acc+=c.sp*.12;
-        if(c.acc<1)continue;
-        c.acc=0;c.y+=CELL;
-        if(c.y>sh+CELL*4){
-          c.y=-CELL*(2+Math.random()*22);
-          c.w=WORDS[(Math.random()*WORDS.length)|0];c.ci=0;
-          c.sp=.6+Math.random()*1.7;continue;
-        }
-        if(c.y<0)continue;
-        const prev=c.w[c.ci%c.w.length];c.ci++;
-        const head=c.w[c.ci%c.w.length];
-        sctx.fillStyle='rgba(28,24,21,.6)';
-        sctx.fillText(prev,c.x+1,c.y-CELL+1);
-        sctx.fillText(head,c.x+1,c.y+1);
-        sctx.fillStyle=c.dim?'rgba(179,161,129,.8)':'rgba(216,201,168,.95)';
-        sctx.fillText(prev,c.x,c.y-CELL);
-        sctx.fillStyle='#FFF6E0';
-        sctx.fillText(head,c.x,c.y);
-      }
-    });
-  }
-
-  /* custom cursor (fine pointers) */
-  if(matchMedia('(pointer:fine)').matches){
-    document.documentElement.classList.add('finecur');
-    const cd=document.getElementById('cur'),cr=document.getElementById('curRing');
-    let tx=-40,ty=-40,rx=-40,ry=-40;
-    addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY;cd.style.left=tx+'px';cd.style.top=ty+'px'},{passive:true});
-    gsap.ticker.add(()=>{rx+=(tx-rx)*.16;ry+=(ty-ry)*.16;cr.style.left=rx+'px';cr.style.top=ry+'px'});
-    document.querySelectorAll('a,button').forEach(el=>{
-      el.addEventListener('pointerenter',()=>cr.classList.add('on'));
-      el.addEventListener('pointerleave',()=>cr.classList.remove('on'));
-    });
-  }
-
-  /* ambient loops: eq + wordmark recompute bursts */
-  const hw=document.getElementById('heroWord');
-  let burst=0,lastTick=-1;
-  gsap.ticker.add(t=>{
-    if(!preOn)eqDraw(eq,t);
-    if(reduced||scrollY>innerHeight*2.2)return;
-    if(burst>0){
-      weave(hw,'OPTIFLOW',{jitter:.55+burst*.22,seed:(t*60|0)%9973});
-      burst--;
-      if(!burst)weave(hw,'OPTIFLOW',{jitter:.55,seed:11});
-    }else{
-      const tick=(t*2)|0;
-      if(tick!==lastTick){lastTick=tick;if(Math.random()<.14)burst=4}
-    }
-  });
-
-  /* preloader exit */
-  const finish=()=>{
-    pre.classList.add('done');
-    preOn=false;
-    document.body.classList.remove('locked');
-    setTimeout(()=>pre.remove(),1200);
-    ScrollTrigger.refresh();
-  };
-  setTimeout(finish,reduced?400:1400);
-
-  addEventListener('resize',()=>{
-    weave(document.getElementById('heroWord'),'OPTIFLOW',{jitter:.55,seed:11});
-    weave(document.getElementById('navWord'),'OPTIFLOW',{jitter:.5,seed:11});
-    ridge(document.getElementById('mountainHero'),{fg:UMBER,dir:1,seed:9,base:.4});
-    ridge(document.getElementById('barsTop'),{fg:SAND,dir:-1,seed:14,base:.5,density:.65});
-    ridge(document.getElementById('barsBtm'),{fg:UMBER,dir:1,seed:21,base:.35});
-    ridge(document.getElementById('barsDev'),{fg:SAND,dir:-1,seed:33,base:.6,density:.4});
-    treeline(document.getElementById('treeline'));
-  });
-}
-</script>
+  <script src="main.js"></script>
 </body>
 </html>
