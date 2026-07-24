@@ -37,9 +37,14 @@ Thirteen full design directions over the same content, for partner demos —
 9. **Duality** (`duality.html`) — minimal luxe with a light/dark theme toggle
 
 **Reference cuts:**
-10. **Loom** (`loom.html`) — Son Daven-style expedition: dithered planet preloader,
-    barcode mountain landscapes, chapter storytelling, duotone photography
-    (placeholder photos via picsum.photos — swap for real product/team shots)
+10. **Loom** (`loom.html`) — full scene-for-scene rebuild in the style of
+    sondaven.com/ua: dithered sheep preloader + woven wordmark, video-to-card
+    hero shrink, barcode mountain transitions, prologue quote, location map +
+    drag slider, pinned chapter card parade, apartment type switcher, '26–'29
+    timeline, serif marquee, dithered peak finance scene, developer card,
+    gallery, invest card, blog, FAQ. Ukrainian demo copy (original text, same
+    structure as the reference), fictional LOOM brand, GSAP ScrollTrigger +
+    Lenis via CDN, placeholder photos via picsum.photos
 11. **Riso Press** (`riso.html`) — developer risograph (bone × charcoal, dither
     textures; inspired by contentarchitecture.dev)
 12. **Convergence** (`convergence.html`) — editorial frame-grid (serif × mono,
