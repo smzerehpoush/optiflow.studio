@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Optiflow Studio — Paper Lab</title>
+<meta name="description" content="Optiflow is an AI product studio. We hunt down the problems everyone complains about and nobody fixes — then build the product that makes them disappear.">
+<meta name="theme-color" content="#FAF9F5">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400;1,9..144,600;1,9..144,900&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --paper:#FAF9F5;
+    --paper-2:#F3F1EA;
+    --ink:#111111;
+    --ink-70:rgba(17,17,17,.70);
+    --ink-55:rgba(17,17,17,.55);
+    --ink-40:rgba(17,17,17,.40);
+    --ink-14:rgba(17,17,17,.14);
+    --ink-08:rgba(17,17,17,.08);
+    --klein:#002FA7;
+    --klein-ink:#00246f;
+    --stamp:#E0331F;
+    --serif:"Fraunces",Georgia,"Times New Roman",serif;
+    --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    --mono:"IBM Plex Mono","SFMono-Regular",Menlo,monospace;
+    --maxw:1240px;
+    --pad:clamp(20px,5vw,80px);
+    --hair:1px solid var(--ink-14);
+    --ease:cubic-bezier(.2,.7,.2,1);
+  }
+
+  /* ============ RESET ============ */
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+    position:relative;
+  }
+  img,svg{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+  ul{list-style:none}
+
+  /* paper grain overlay */
+  .grain{
+    position:fixed;inset:0;z-index:1;pointer-events:none;
+    opacity:.045;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ============ TYPE ============ */
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--klein);
+    font-weight:500;
+    display:inline-block;
+  }
+  .fig{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-40);
+  }
+  h1,h2,h3{font-family:var(--serif);font-weight:900;line-height:1.02;letter-spacing:-.02em}
+  .italic{font-style:italic;font-weight:600}
+  .klein{color:var(--klein)}
+
+  /* ============ LAYOUT ============ */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+  section{position:relative;z-index:2}
+  .rule{height:1px;background:var(--ink-14);border:0}
+  .section-head{
+    display:flex;align-items:baseline;justify-content:space-between;
+    gap:24px;padding-bottom:26px;margin-bottom:52px;
+    border-bottom:var(--hair);flex-wrap:wrap;
+  }
+  .section-head h2{font-size:clamp(30px,5vw,58px)}
+  .section-head .fig{white-space:nowrap;align-self:flex-end}
+
+  /* ============ NAV ============ */
+  header.nav{
+    position:sticky;top:0;z-index:60;
+    background:rgba(250,249,245,.82);
+    backdrop-filter:saturate(140%) blur(10px);
+    -webkit-backdrop-filter:saturate(140%) blur(10px);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s var(--ease),background .3s var(--ease);
+  }
+  header.nav.scrolled{border-bottom-color:var(--ink-14)}
+  .nav-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    height:72px;max-width:var(--maxw);margin:0 auto;
+    padding-left:var(--pad);padding-right:var(--pad);
+  }
+  .logo{
+    font-family:var(--serif);font-weight:900;font-size:23px;letter-spacing:-.02em;
+    display:inline-flex;align-items:baseline;
+  }
+  .logo .cursor{
+    display:inline-block;width:.62em;height:1.05em;margin-left:2px;
+    background:var(--klein);transform:translateY(.12em);
+    animation:blink 1.15s steps(1) infinite;
+  }
+  @keyframes blink{50%{opacity:0}}
+  @media (prefers-reduced-motion:reduce){.logo .cursor{animation:none}}
+  .nav-links{display:flex;align-items:center;gap:34px}
+  .nav-links a.navlink{
+    font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-70);position:relative;padding:4px 0;
+  }
+  .nav-links a.navlink::after{
+    content:"";position:absolute;left:0;bottom:0;height:1.5px;width:100%;
+    background:var(--klein);transform:scaleX(0);transform-origin:left;
+    transition:transform .35s var(--ease);
+  }
+  .nav-links a.navlink:hover{color:var(--ink)}
+  .nav-links a.navlink:hover::after{transform:scaleX(1)}
+  .btn{
+    font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;
+    display:inline-flex;align-items:center;gap:9px;
+    padding:12px 20px;border:1.5px solid var(--ink);
+    background:var(--ink);color:var(--paper);
+    transition:transform .25s var(--ease),background .25s var(--ease),color .25s var(--ease);
+    white-space:nowrap;
+  }
+  .btn:hover{background:var(--klein);border-color:var(--klein);transform:translateY(-2px)}
+  .btn .arr{transition:transform .3s var(--ease)}
+  .btn:hover .arr{transform:translateX(4px)}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .btn.ghost:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .nav-cta{display:inline-flex}
+  .burger{display:none;width:44px;height:44px;flex-direction:column;justify-content:center;align-items:center;gap:5px}
+  .burger span{display:block;width:24px;height:2px;background:var(--ink);transition:transform .3s var(--ease),opacity .2s var(--ease)}
+  .burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .burger.open span:nth-child(2){opacity:0}
+  .burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+  /* mobile menu */
+  .mobile-menu{
+    position:fixed;inset:0;z-index:55;background:var(--paper);
+    display:flex;flex-direction:column;justify-content:center;gap:6px;
+    padding:var(--pad);
+    transform:translateY(-100%);transition:transform .5s var(--ease);
+    visibility:hidden;
+  }
+  .mobile-menu.open{transform:translateY(0);visibility:visible}
+  .mobile-menu a{
+    font-family:var(--serif);font-weight:600;font-size:clamp(34px,10vw,54px);
+    letter-spacing:-.02em;padding:10px 0;border-bottom:var(--hair);
+    display:flex;align-items:baseline;gap:16px;
+  }
+  .mobile-menu a .n{font-family:var(--mono);font-size:13px;font-weight:400;color:var(--klein);letter-spacing:.1em}
+  .mobile-menu .btn{margin-top:32px;justify-content:center;font-size:14px;padding:16px}
+
+  /* ============ HERO ============ */
+  .hero{padding-top:clamp(56px,10vw,110px);padding-bottom:clamp(48px,7vw,84px);position:relative}
+  .hero-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+  .hero .eyebrow{margin-bottom:30px}
+  .hero h1{
+    font-size:clamp(48px,10.5vw,138px);
+    line-height:.94;letter-spacing:-.035em;
+    max-width:15ch;
+  }
+  .hero h1 .l2{display:block}
+  .hero h1 em{color:var(--klein)}
+  .hero-lower{
+    display:grid;grid-template-columns:1.15fr .85fr;gap:48px;
+    margin-top:clamp(36px,5vw,56px);align-items:end;
+  }
+  .hero-sub{font-size:clamp(18px,2.3vw,22px);line-height:1.5;color:var(--ink-70);max-width:44ch}
+  .hero-sub b{color:var(--ink);font-weight:600}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .hero-cta .btn{padding:15px 24px;font-size:13px}
+  .hero-side{
+    border-left:var(--hair);padding-left:28px;
+    display:flex;flex-direction:column;gap:20px;
+  }
+  .hero-side .fig{margin-bottom:2px}
+  .hero-note{font-family:var(--mono);font-size:12.5px;line-height:1.7;color:var(--ink-55)}
+  .hero-note sup{color:var(--klein);font-weight:500}
+
+  /* stamp */
+  .stamp{
+    font-family:var(--mono);font-weight:500;text-transform:uppercase;
+    letter-spacing:.06em;color:var(--stamp);
+    border:2px solid var(--stamp);border-radius:5px;
+    padding:8px 14px;font-size:14px;display:inline-block;
+    box-shadow:inset 0 0 0 1px rgba(224,51,31,.25);
+    position:relative;
+  }
+  .stamp.sm{font-size:11px;padding:5px 9px;border-width:1.5px}
+  .hero-stamp{
+    position:absolute;top:6%;right:calc(var(--pad) - 6px);
+    transform:rotate(9deg);opacity:.92;z-index:3;
+    font-size:clamp(14px,2vw,19px);
+  }
+
+  /* ============ MARQUEE ============ */
+  .marquee{
+    border-top:var(--hair);border-bottom:var(--hair);
+    padding:20px 0;overflow:hidden;background:var(--paper-2);
+    --dur:34s;
+  }
+  .marquee-track{display:flex;width:max-content;animation:scroll var(--dur) linear infinite}
+  .marquee:hover .marquee-track{animation-play-state:paused}
+  .marquee-track span{
+    font-family:var(--serif);font-weight:600;font-size:clamp(22px,3.4vw,34px);
+    letter-spacing:-.01em;padding:0 26px;white-space:nowrap;color:var(--ink);
+  }
+  .marquee-track span .sep{color:var(--klein);font-style:normal}
+  @keyframes scroll{to{transform:translateX(-50%)}}
+  @media (prefers-reduced-motion:reduce){.marquee-track{animation:none;flex-wrap:wrap;width:auto;justify-content:center}}
+
+  /* ============ MANIFESTO ============ */
+  .manifesto{padding:clamp(72px,11vw,140px) 0}
+  .manifesto .fig{display:block;margin-bottom:36px}
+  .manifesto p{
+    font-family:var(--serif);font-weight:400;
+    font-size:clamp(28px,4.6vw,58px);line-height:1.16;letter-spacing:-.02em;
+    max-width:20ch;
+  }
+  .manifesto p .hl{color:var(--klein);font-style:italic;font-weight:600}
+  .manifesto p .muted{color:var(--ink-40)}
+
+  /* ============ CAPABILITIES ============ */
+  .caps{padding:clamp(48px,7vw,90px) 0}
+  .caps-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:0;border-top:var(--hair);border-left:var(--hair)}
+  .cap{
+    grid-column:span 4;border-right:var(--hair);border-bottom:var(--hair);
+    padding:34px 30px 40px;position:relative;
+    background:var(--paper);transition:background .4s var(--ease);
+    min-height:230px;display:flex;flex-direction:column;
+  }
+  .cap:hover{background:var(--paper-2)}
+  .cap .cap-num{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;color:var(--ink-40);margin-bottom:22px}
+  .cap h3{font-size:clamp(22px,2.5vw,29px);font-weight:900;letter-spacing:-.02em;margin-bottom:14px;line-height:1.05}
+  .cap:hover h3{color:var(--klein)}
+  .cap p{font-size:15.5px;line-height:1.55;color:var(--ink-70);max-width:38ch}
+  .cap .tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto;padding-top:22px}
+  .cap .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55);border:1px solid var(--ink-14);padding:4px 9px;border-radius:3px}
+  .cap .cap-link{
+    font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--klein);margin-top:auto;padding-top:22px;display:inline-flex;align-items:center;gap:8px;
+    position:relative;width:fit-content;
+  }
+  .cap .cap-link .u{position:absolute;left:0;bottom:16px;height:1.5px;background:var(--klein);width:100%;transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+  .cap .cap-link:hover .u{transform:scaleX(1)}
+  .cap .cap-link:hover{color:var(--klein-ink)}
+  .cap.wide{grid-column:span 6}
+  .cap.accent{background:var(--klein);color:var(--paper)}
+  .cap.accent .cap-num{color:rgba(250,249,245,.55)}
+  .cap.accent h3,.cap.accent:hover h3{color:var(--paper)}
+  .cap.accent p{color:rgba(250,249,245,.85)}
+  .cap.accent .cap-link{color:var(--paper)}
+  .cap.accent .cap-link .u{background:var(--paper)}
+  .cap.accent:hover{background:var(--klein-ink)}
+  .cap-corner{position:absolute;top:14px;right:16px;font-family:var(--mono);font-size:11px;color:var(--ink-40)}
+  .cap.accent .cap-corner{color:rgba(250,249,245,.5)}
+
+  /* ============ WORK ============ */
+  .work{padding:clamp(48px,7vw,90px) 0}
+  .case{
+    display:grid;grid-template-columns:88px 1fr auto;gap:clamp(20px,4vw,64px);
+    align-items:start;padding:clamp(34px,5vw,52px) 0;border-bottom:var(--hair);
+    position:relative;
+  }
+  .work .cases{border-top:var(--hair)}
+  .case-idx{font-family:var(--mono);font-size:14px;color:var(--klein);letter-spacing:.05em;padding-top:8px}
+  .case-body{max-width:52ch}
+  .case-tags{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-40);margin-bottom:16px}
+  .case-body h3{font-size:clamp(30px,4.6vw,54px);font-weight:900;letter-spacing:-.025em;line-height:1;margin-bottom:16px}
+  .case:hover .case-body h3{color:var(--klein)}
+  .case-body h3 em{font-style:italic;font-weight:600}
+  .case-desc{font-size:17px;line-height:1.5;color:var(--ink-70)}
+  .case-stat{text-align:right;padding-top:6px;min-width:150px}
+  .case-stat .num{font-family:var(--serif);font-weight:900;font-size:clamp(34px,5vw,58px);letter-spacing:-.03em;line-height:1;color:var(--ink)}
+  .case-stat .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-55);margin-top:12px;max-width:16ch;margin-left:auto}
+
+  /* ============ STATS BAND ============ */
+  .stats{background:var(--ink);color:var(--paper);padding:clamp(60px,8vw,96px) 0;position:relative;z-index:2}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  .stat{padding:0 clamp(14px,2.4vw,34px);border-left:1px solid rgba(250,249,245,.16)}
+  .stat:first-child{border-left:0;padding-left:0}
+  .stat .num{font-family:var(--serif);font-weight:900;font-size:clamp(46px,7vw,86px);letter-spacing:-.04em;line-height:.9;color:var(--paper);display:flex;align-items:baseline}
+  .stat .num .suf{font-size:.42em;color:#7f9bff;margin-left:2px;letter-spacing:0}
+  .stat .lbl{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:rgba(250,249,245,.6);margin-top:20px;line-height:1.5}
+  .stats .fig{color:rgba(250,249,245,.4);margin-bottom:44px;display:block}
+
+  /* ============ PROCESS ============ */
+  .process{padding:clamp(48px,7vw,90px) 0}
+  .steps{border-top:var(--hair)}
+  .step{
+    display:grid;grid-template-columns:120px 1fr;gap:clamp(24px,5vw,72px);
+    padding:clamp(30px,4.5vw,48px) 0;border-bottom:var(--hair);align-items:baseline;
+    transition:padding-left .4s var(--ease);
+  }
+  .step:hover{padding-left:12px}
+  .step-num{font-family:var(--serif);font-weight:900;font-size:clamp(40px,6vw,84px);letter-spacing:-.03em;color:var(--ink-14);line-height:.8;transition:color .4s var(--ease)}
+  .step:hover .step-num{color:var(--klein)}
+  .step-body h3{font-size:clamp(24px,3.2vw,38px);font-weight:900;letter-spacing:-.02em;margin-bottom:12px}
+  .step-body p{font-size:17px;line-height:1.55;color:var(--ink-70);max-width:52ch}
+
+  /* ============ CTA ============ */
+  .cta{padding:clamp(80px,12vw,150px) 0;text-align:center;position:relative;overflow:hidden}
+  .cta .stamp-mark{position:absolute;top:12%;left:8%;transform:rotate(-11deg);opacity:.9}
+  .cta .stamp-mark2{position:absolute;bottom:16%;right:9%;transform:rotate(7deg);opacity:.9}
+  .cta .eyebrow{margin-bottom:26px}
+  .cta h2{font-size:clamp(44px,9vw,118px);line-height:.94;letter-spacing:-.035em;margin:0 auto}
+  .cta h2 em{color:var(--klein);font-style:italic;font-weight:900}
+  .cta p{font-size:clamp(18px,2.3vw,23px);color:var(--ink-70);max-width:40ch;margin:30px auto 42px}
+  .cta .btn{font-size:15px;padding:18px 34px}
+  .cta .mail{display:inline-block;margin-top:34px;font-family:var(--mono);font-size:13px;letter-spacing:.14em;color:var(--ink-55);position:relative}
+  .cta .mail::after{content:"";position:absolute;left:0;bottom:-3px;height:1.5px;width:100%;background:var(--klein);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+  .cta .mail:hover{color:var(--klein)}
+  .cta .mail:hover::after{transform:scaleX(1)}
+
+  /* ============ FOOTER ============ */
+  footer{border-top:var(--hair);padding:clamp(48px,6vw,72px) 0 40px;position:relative;z-index:2}
+  .foot-top{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;flex-wrap:wrap;margin-bottom:56px}
+  .foot-links{display:flex;gap:28px;flex-wrap:wrap}
+  .foot-links a{font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-70);position:relative;padding:2px 0}
+  .foot-links a::after{content:"";position:absolute;left:0;bottom:-2px;height:1.5px;width:100%;background:var(--klein);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+  .foot-links a:hover{color:var(--ink)}
+  .foot-links a:hover::after{transform:scaleX(1)}
+  .socials{display:flex;gap:12px}
+  .socials a{
+    width:42px;height:42px;border:var(--hair);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;color:var(--ink-70);
+    transition:background .25s var(--ease),color .25s var(--ease),border-color .25s var(--ease),transform .25s var(--ease);
+  }
+  .socials a:hover{background:var(--ink);color:var(--paper);border-color:var(--ink);transform:translateY(-3px)}
+  .socials svg{width:17px;height:17px}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding-top:32px;border-top:var(--hair)}
+  .foot-bottom span{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-40)}
+  .foot-logo{font-family:var(--serif);font-weight:900;font-size:22px}
+
+  /* ============ REVEAL ============ */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  .reveal[data-d="1"]{transition-delay:.08s}
+  .reveal[data-d="2"]{transition-delay:.16s}
+  .reveal[data-d="3"]{transition-delay:.24s}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    .btn,.socials a,.step,.cap{transition:none}
+  }
+
+  /* ============ FOCUS ============ */
+  :focus-visible{outline:2.5px solid var(--klein);outline-offset:3px;border-radius:2px}
+  .skip{position:absolute;left:-9999px;top:0;z-index:100;background:var(--ink);color:var(--paper);padding:12px 18px;font-family:var(--mono);font-size:13px}
+  .skip:focus{left:12px;top:12px}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:980px){
+    .nav-links,.nav-cta{display:none}
+    .burger{display:flex}
+    .cap{grid-column:span 6 !important}
+    .cap.wide{grid-column:span 6 !important}
+  }
+  @media (max-width:820px){
+    .hero-lower{grid-template-columns:1fr;gap:36px}
+    .hero-side{border-left:0;padding-left:0;border-top:var(--hair);padding-top:26px}
+    .stats-grid{grid-template-columns:1fr 1fr;gap:0}
+    .stat{padding:28px clamp(14px,4vw,30px);border-left:0;border-top:1px solid rgba(250,249,245,.16)}
+    .stat:nth-child(odd){padding-left:0;border-left:0}
+    .stat:nth-child(even){border-left:1px solid rgba(250,249,245,.16)}
+    .stat:nth-child(-n+2){border-top:0}
+    .case{grid-template-columns:52px 1fr;gap:20px}
+    .case-stat{grid-column:1 / -1;text-align:left;padding-top:20px;border-top:var(--hair);margin-top:8px}
+    .case-stat .lbl{margin-left:0}
+  }
+  @media (max-width:620px){
+    body{font-size:16px}
+    .cap{grid-column:span 12 !important}
+    .cap.wide{grid-column:span 12 !important}
+    .hero-stamp{top:auto;bottom:-8px}
+    .step{grid-template-columns:1fr;gap:8px}
+    .step-num{font-size:clamp(38px,14vw,60px)}
+    .section-head{margin-bottom:38px}
+    .foot-top{flex-direction:column;gap:32px}
+  }
+  @media (max-width:400px){
+    .stats-grid{grid-template-columns:1fr}
+    .stat{border-left:0 !important;border-top:1px solid rgba(250,249,245,.16) !important;padding-left:0 !important;padding-right:0}
+    .stat:first-child{border-top:0 !important}
+  }
+</style>
+</head>
+<body>
+<a href="#main" class="skip">Skip to content</a>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="logo" aria-label="Optiflow Studio home">optiflow_<span class="cursor" aria-hidden="true"></span></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#work" class="navlink">Work</a>
+      <a href="#caps" class="navlink">Capabilities</a>
+      <a href="#process" class="navlink">Process</a>
+      <a href="#contact" class="navlink">Contact</a>
+    </nav>
+    <a href="#contact" class="btn nav-cta">Start a project <span class="arr" aria-hidden="true">→</span></a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- mobile menu -->
+<nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
+  <a href="#work"><span class="n">01</span> Work</a>
+  <a href="#caps"><span class="n">02</span> Capabilities</a>
+  <a href="#process"><span class="n">03</span> Process</a>
+  <a href="#contact"><span class="n">04</span> Contact</a>
+  <a href="#contact" class="btn">Start a project →</a>
+</nav>
+
+<main id="main">
+<span id="top"></span>
+
+<!-- ============ HERO ============ -->
+<section class="hero" aria-labelledby="hero-h1">
+  <div class="hero-stamp" aria-hidden="true"><span class="stamp">NO SLIDEWARE</span></div>
+  <div class="wrap hero-grid">
+    <p class="eyebrow reveal">[ AI Product Studio — Real Problems Only ]</p>
+    <h1 id="hero-h1" class="reveal" data-d="1">Crazy enough <em>to&nbsp;build</em><span class="l2">perfect things.</span></h1>
+    <div class="hero-lower">
+      <div class="reveal" data-d="2">
+        <p class="hero-sub">Optiflow is an AI studio. We hunt down the problems everyone complains about and nobody fixes — <b>then build the product that makes them disappear.</b></p>
+        <div class="hero-cta" style="margin-top:32px">
+          <a href="#contact" class="btn">Start a project <span class="arr" aria-hidden="true">→</span></a>
+          <a href="#work" class="btn ghost">See the proof</a>
+        </div>
+      </div>
+      <aside class="hero-side reveal" data-d="3">
+        <div>
+          <span class="fig">fig. 01 — the studio</span>
+          <p class="hero-note">Est. for builders, not pitchers. We measure work in things shipped<sup>†</sup>, not slides rendered.</p>
+        </div>
+        <div>
+          <span class="fig">note 1</span>
+          <p class="hero-note">Currently accepting problems labelled <em>"probably impossible."</em><sup>‡</sup></p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MARQUEE ============ -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="marquee">
+    <span>AI Products <span class="sep">✦</span> Real Problems <span class="sep">✦</span> Zero Slideware <span class="sep">✦</span> Shipped, Not Pitched <span class="sep">✦</span> Agents On Duty <span class="sep">✦</span> Perfect Or Nothing <span class="sep">✦</span>&nbsp;</span>
+    <span>AI Products <span class="sep">✦</span> Real Problems <span class="sep">✦</span> Zero Slideware <span class="sep">✦</span> Shipped, Not Pitched <span class="sep">✦</span> Agents On Duty <span class="sep">✦</span> Perfect Or Nothing <span class="sep">✦</span>&nbsp;</span>
+  </div>
+</div>
+
+<!-- ============ MANIFESTO ============ -->
+<section class="manifesto" aria-label="Manifesto">
+  <div class="wrap">
+    <span class="fig reveal">§ Manifesto — fig. 02</span>
+    <p class="reveal" data-d="1">Everyone has an AI strategy. <span class="muted">A deck. A roadmap. A committee.</span> We have a different habit — we <span class="hl">ship</span>. Real problems don't get solved by slideware. They get solved by people <span class="hl">crazy</span> enough to promise perfect, and stubborn enough to <span class="hl">deliver</span> it.</p>
+  </div>
+</section>
+
+<!-- ============ CAPABILITIES ============ -->
+<section class="caps" id="caps" aria-labelledby="caps-h">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 id="caps-h">What we're<br>dangerous at</h2>
+      <span class="fig">fig. 03 — capabilities index</span>
+    </div>
+    <div class="caps-grid">
+      <article class="cap wide reveal">
+        <span class="cap-corner">plate 01</span>
+        <span class="cap-num">C—01</span>
+        <h3>AI Product Engineering</h3>
+        <p>LLM-native applications, autonomous agents, retrieval systems. Built to survive production traffic, not just the demo call.</p>
+        <div class="tags"><span class="tag">Agents</span><span class="tag">RAG</span><span class="tag">Evals</span></div>
+      </article>
+      <article class="cap reveal" data-d="1">
+        <span class="cap-corner">plate 02</span>
+        <span class="cap-num">C—02</span>
+        <h3>0 → 1 in Weeks</h3>
+        <p>Idea to working product before your competitors finish their kickoff meeting.</p>
+      </article>
+      <article class="cap reveal" data-d="2">
+        <span class="cap-corner">plate 03</span>
+        <span class="cap-num">C—03</span>
+        <h3>Agentic Automation</h3>
+        <p>Workflows that run themselves at 3&nbsp;a.m. — triage, dispatch, follow-up — while your team sleeps like people who automated their busywork.</p>
+      </article>
+      <article class="cap reveal">
+        <span class="cap-corner">plate 04</span>
+        <span class="cap-num">C—04</span>
+        <h3>Design That Converts</h3>
+        <p>Interfaces people actually feel. We obsess over the last 4% of polish because that's the part users remember — and pay for.</p>
+      </article>
+      <article class="cap reveal" data-d="1">
+        <span class="cap-corner">plate 05</span>
+        <span class="cap-num">C—05</span>
+        <h3>Data &amp; Model Ops</h3>
+        <p>Pipelines, fine-tuning, evals. The unglamorous machinery that makes the magic reliable.</p>
+      </article>
+      <article class="cap reveal" data-d="2">
+        <span class="cap-corner">plate 06</span>
+        <span class="cap-num">C—06</span>
+        <h3>Growth Engineering</h3>
+        <p>Ship. Measure. Sharpen. Repeat until the graph does the thing graphs are supposed to do.</p>
+      </article>
+      <article class="cap accent reveal">
+        <span class="cap-corner">plate 07</span>
+        <span class="cap-num">C—07</span>
+        <h3>Something weirder?</h3>
+        <p>The best briefs start with "this is probably impossible, but…"</p>
+        <a href="#contact" class="cap-link">Try us <span aria-hidden="true">→</span><span class="u"></span></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WORK ============ -->
+<section class="work" id="work" aria-labelledby="work-h">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 id="work-h">Proof,<br>not promises</h2>
+      <span class="fig">fig. 04 — selected specimens</span>
+    </div>
+    <div class="cases">
+      <article class="case reveal">
+        <div class="case-idx">001</div>
+        <div class="case-body">
+          <div class="case-tags">LLM Agents · Ops</div>
+          <h3>Dispatch</h3>
+          <p class="case-desc">An ops copilot that reads the chaos of a logistics floor and turns it into a queue of done.</p>
+        </div>
+        <div class="case-stat">
+          <div class="num" data-count="-74" data-suffix="%" data-prefix="−">−74%</div>
+          <div class="lbl">Manual dispatch time</div>
+        </div>
+      </article>
+      <article class="case reveal">
+        <div class="case-idx">002</div>
+        <div class="case-body">
+          <div class="case-tags">Doc Intelligence · Finance</div>
+          <h3>Ledgerlens</h3>
+          <p class="case-desc">Financial document intelligence that reads faster than an army of analysts — and never gets bored.</p>
+        </div>
+        <div class="case-stat">
+          <div class="num" data-count="12" data-suffix="K">12K</div>
+          <div class="lbl">Docs parsed / day</div>
+        </div>
+      </article>
+      <article class="case reveal">
+        <div class="case-idx">003</div>
+        <div class="case-body">
+          <div class="case-tags">Support Autopilot · SaaS</div>
+          <h3>Nightshift</h3>
+          <p class="case-desc">A support autopilot that resolves tickets while the founders sleep. Customers never noticed. That's the point.</p>
+        </div>
+        <div class="case-stat">
+          <div class="num" data-count="68" data-suffix="%">68%</div>
+          <div class="lbl">Resolved autonomously</div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATS BAND ============ -->
+<section class="stats" aria-label="Studio numbers">
+  <div class="wrap">
+    <span class="fig reveal">fig. 05 — the receipts</span>
+    <div class="stats-grid">
+      <div class="stat reveal">
+        <div class="num"><span data-count="14">0</span><span class="suf">d</span></div>
+        <div class="lbl">Idea → first prototype</div>
+      </div>
+      <div class="stat reveal" data-d="1">
+        <div class="num"><span data-count="100">0</span><span class="suf">%</span></div>
+        <div class="lbl">Of builds reach production</div>
+      </div>
+      <div class="stat reveal" data-d="2">
+        <div class="num"><span data-count="24">0</span><span class="suf">/7</span></div>
+        <div class="lbl">Agents on duty</div>
+      </div>
+      <div class="stat reveal" data-d="3">
+        <div class="num"><span data-count="0">0</span></div>
+        <div class="lbl">Slide decks produced</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROCESS ============ -->
+<section class="process" id="process" aria-labelledby="proc-h">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 id="proc-h">From pain<br>to product</h2>
+      <span class="fig">fig. 06 — method</span>
+    </div>
+    <div class="steps">
+      <article class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h3>Find the pain</h3>
+          <p>We interrogate the problem until it confesses. No solutions allowed in the room yet.</p>
+        </div>
+      </article>
+      <article class="step reveal">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h3>Prototype in days</h3>
+          <p>A working thing in your hands within days — ugly is fine, real is mandatory.</p>
+        </div>
+      </article>
+      <article class="step reveal">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h3>Ship it</h3>
+          <p>Production, real users, real stakes. This is where most agencies wave goodbye. We move in.</p>
+        </div>
+      </article>
+      <article class="step reveal">
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <h3>Sharpen forever</h3>
+          <p>Measure, refine, automate. Perfect isn't a launch state — it's a habit.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta" id="contact" aria-labelledby="cta-h">
+  <div class="stamp-mark" aria-hidden="true"><span class="stamp">SHIPPED</span></div>
+  <div class="stamp-mark2" aria-hidden="true"><span class="stamp sm">PERFECT OR NOTHING</span></div>
+  <div class="wrap">
+    <p class="eyebrow reveal">[ Open Brief ]</p>
+    <h2 id="cta-h" class="reveal" data-d="1">Got a <em>real</em><br>problem?</h2>
+    <p class="reveal" data-d="2">Bring us the thing everyone says can't be fixed. We'll bring the crazy.</p>
+    <div class="reveal" data-d="2">
+      <a href="mailto:hello@optiflow.studio" class="btn">Let's get crazy <span class="arr" aria-hidden="true">→</span></a>
+    </div>
+    <a href="mailto:hello@optiflow.studio" class="mail reveal" data-d="3">HELLO@OPTIFLOW.STUDIO</a>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer aria-label="Footer">
+  <div class="wrap">
+    <div class="foot-top">
+      <a href="#top" class="foot-logo">optiflow_</a>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="#work">Work</a>
+        <a href="#caps">Capabilities</a>
+        <a href="#process">Process</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="socials">
+        <a href="#" aria-label="Optiflow on X">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.966 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg>
+        </a>
+        <a href="#" aria-label="Optiflow on GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.08-.73.08-.73 1.2.08 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.49.99.11-.77.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.31-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6.01 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.87.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.62-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 24 12.5C24 5.87 18.63.5 12 .5Z"/></svg>
+        </a>
+        <a href="#" aria-label="Optiflow on LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Optiflow Studio</span>
+      <span>Built by Humans × Machines</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---- nav scrolled state ---- */
+  var nav = document.getElementById("nav");
+  function onScroll(){
+    if(window.scrollY > 8){ nav.classList.add("scrolled"); }
+    else { nav.classList.remove("scrolled"); }
+  }
+  window.addEventListener("scroll", onScroll, {passive:true});
+  onScroll();
+
+  /* ---- mobile menu ---- */
+  var burger = document.getElementById("burger");
+  var menu = document.getElementById("mobileMenu");
+  function closeMenu(){
+    menu.classList.remove("open");
+    burger.classList.remove("open");
+    burger.setAttribute("aria-expanded","false");
+    burger.setAttribute("aria-label","Open menu");
+    document.body.style.overflow="";
+  }
+  function openMenu(){
+    menu.classList.add("open");
+    burger.classList.add("open");
+    burger.setAttribute("aria-expanded","true");
+    burger.setAttribute("aria-label","Close menu");
+    document.body.style.overflow="hidden";
+  }
+  burger.addEventListener("click", function(){
+    if(menu.classList.contains("open")) closeMenu(); else openMenu();
+  });
+  menu.querySelectorAll("a").forEach(function(a){
+    a.addEventListener("click", closeMenu);
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape" && menu.classList.contains("open")) closeMenu();
+  });
+
+  /* ---- reveal on scroll ---- */
+  var reveals = document.querySelectorAll(".reveal");
+  if(reduce || !("IntersectionObserver" in window)){
+    reveals.forEach(function(el){ el.classList.add("in"); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+      });
+    }, {threshold:0.12, rootMargin:"0px 0px -8% 0px"});
+    reveals.forEach(function(el){ io.observe(el); });
+  }
+
+  /* ---- animated counters ---- */
+  function animateCount(el){
+    var target = parseFloat(el.getAttribute("data-count"));
+    var suffix = el.getAttribute("data-suffix") || "";
+    var prefix = el.getAttribute("data-prefix") || "";
+    if(reduce){ el.textContent = prefix + Math.abs(target) + suffix; return; }
+    var dur = 1400, start = null, from = 0;
+    var negative = target < 0;
+    var abs = Math.abs(target);
+    function tick(ts){
+      if(!start) start = ts;
+      var p = Math.min((ts - start)/dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      var val = Math.round(from + (abs - from) * eased);
+      el.textContent = (negative ? "−" : prefix) + val + suffix;
+      if(p < 1) requestAnimationFrame(tick);
+      else el.textContent = (negative ? "−" : prefix) + abs + suffix;
+    }
+    requestAnimationFrame(tick);
+  }
+  var counters = document.querySelectorAll("[data-count]");
+  if(!("IntersectionObserver" in window)){
+    counters.forEach(animateCount);
+  } else {
+    var cio = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ animateCount(en.target); cio.unobserve(en.target); }
+      });
+    }, {threshold:0.6});
+    counters.forEach(function(el){ cio.observe(el); });
+  }
+
+  /* ---- pause marquee when offscreen (perf) ---- */
+  var marquee = document.getElementById("marquee");
+  if(marquee && "IntersectionObserver" in window && !reduce){
+    var mio = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        marquee.style.animationPlayState = en.isIntersecting ? "running" : "paused";
+      });
+    });
+    mio.observe(marquee);
+  }
+})();
+</script>
+</body>
+</html>

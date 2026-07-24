@@ -133,6 +133,34 @@
       color: #00F0FF;
       backdrop-filter: blur(6px);
     }
+    .series {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: clamp(40px, 5vw, 64px) 0 22px;
+    }
+    .series:first-of-type { padding-top: 0; }
+    .series h3 {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      color: #00F0FF;
+      white-space: nowrap;
+    }
+    .series::after {
+      content: '';
+      height: 1px;
+      flex: 1;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .flag-light {
+      background: rgba(255, 176, 32, 0.1);
+      border-color: rgba(255, 176, 32, 0.45);
+      color: #FFB020;
+    }
     footer {
       max-width: 1280px;
       margin: 48px auto 0;
@@ -150,11 +178,12 @@
 <body>
   <header>
     <p class="eyebrow mono">[ OPTIFLOW STUDIO — INTERNAL DESIGN LAB ]</p>
-    <h1>ONE STUDIO.<br><span>FOUR MADNESSES.</span></h1>
-    <p class="sub">Same story, four visual universes. Click any tile to experience the full
-    live site — then tell us which one feels crazy enough.</p>
+    <h1>ONE STUDIO.<br><span>TEN MADNESSES.</span></h1>
+    <p class="sub">Same story, ten visual universes — a dark series and a light series.
+    Click any tile to experience the full live site, then tell us which one feels crazy enough.</p>
   </header>
 
+  <div class="series"><h3>SERIES 01 — DARK</h3></div>
   <div class="grid">
     <a class="tile" href="../index.html">
       <span class="flag mono">CURRENT FLAGSHIP</span>
@@ -186,6 +215,59 @@
       <div class="tile-info">
         <h2>Acid Monolith<small>Neo-brutalist type walls, acid accent, zero softness.</small></h2>
         <span class="tile-num mono">DIR/04</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="series"><h3>SERIES 02 — LIGHT</h3></div>
+  <div class="grid">
+    <a class="tile" href="paper.html">
+      <div class="frame"><iframe src="paper.html" title="Paper Lab preview" loading="lazy" tabindex="-1"></iframe></div>
+      <div class="tile-info">
+        <h2>Paper Lab<small>Editorial serif on paper — science journal × fashion magazine.</small></h2>
+        <span class="tile-num mono">DIR/05</span>
+      </div>
+    </a>
+
+    <a class="tile" href="solar.html">
+      <div class="frame"><iframe src="solar.html" title="Solar Flare preview" loading="lazy" tabindex="-1"></iframe></div>
+      <div class="tile-info">
+        <h2>Solar Flare<small>Daylight futurism — sunrise gradients, warm glass, optimism.</small></h2>
+        <span class="tile-num mono">DIR/06</span>
+      </div>
+    </a>
+
+    <a class="tile" href="blueprint.html">
+      <div class="frame"><iframe src="blueprint.html" title="Blueprint preview" loading="lazy" tabindex="-1"></iframe></div>
+      <div class="tile-info">
+        <h2>Blueprint<small>Engineering drawing — grid paper, dimension lines, drafted precision.</small></h2>
+        <span class="tile-num mono">DIR/07</span>
+      </div>
+    </a>
+
+    <a class="tile" href="chrome.html">
+      <div class="frame"><iframe src="chrome.html" title="Chrome Pulse preview" loading="lazy" tabindex="-1"></iframe></div>
+      <div class="tile-info">
+        <h2>Chrome Pulse<small>Liquid-metal Y2K — silver chrome, holographic foil, bubble shapes.</small></h2>
+        <span class="tile-num mono">DIR/08</span>
+      </div>
+    </a>
+
+    <a class="tile" href="duality.html">
+      <span class="flag flag-light mono">LIGHT + DARK TOGGLE</span>
+      <div class="frame"><iframe src="duality.html" title="Duality preview" loading="lazy" tabindex="-1"></iframe></div>
+      <div class="tile-info">
+        <h2>Duality<small>Ultra-minimal luxe with a flawless light/dark theme switch.</small></h2>
+        <span class="tile-num mono">DIR/09</span>
+      </div>
+    </a>
+
+    <a class="tile" href="loom.html">
+      <span class="flag flag-light mono">NEW — REFERENCE BLEND</span>
+      <div class="frame"><iframe src="loom.html" title="Loom preview" loading="lazy" tabindex="-1"></iframe></div>
+      <div class="tile-info">
+        <h2>Loom<small>Woven analog-digital — sand × umber, barcode landscapes, scramble type.</small></h2>
+        <span class="tile-num mono">DIR/10</span>
       </div>
     </a>
   </div>

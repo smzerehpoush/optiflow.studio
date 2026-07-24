@@ -20,13 +20,23 @@ Zero dependencies. Pure HTML + CSS + vanilla JS. Fonts from Google Fonts
 
 ## Design variants (`variants/`)
 
-Four full design directions over the same content, for partner demos —
-`variants/index.html` is the gallery hub:
+Ten full design directions over the same content, for partner demos —
+`variants/index.html` is the gallery hub.
 
+**Dark series:**
 1. **Neural Core** (`../index.html`) — flagship: 3D wireframe sphere, cyan × violet, FUI HUD
 2. **Aether Glass** (`aether.html`) — prismatic glassmorphism, luxury-future
 3. **Command Deck** (`command.html`) — mission-control terminal FUI
 4. **Acid Monolith** (`monolith.html`) — neo-brutalist type walls, acid accent
+
+**Light series:**
+5. **Paper Lab** (`paper.html`) — editorial serif on paper, Klein blue, journal annotations
+6. **Solar Flare** (`solar.html`) — daylight futurism, sunrise gradient blobs
+7. **Blueprint** (`blueprint.html`) — engineering drawing, grid paper, dimension lines
+8. **Chrome Pulse** (`chrome.html`) — Y2K liquid metal, silver chrome, holo foil
+9. **Duality** (`duality.html`) — minimal luxe with a light/dark theme toggle
+10. **Loom** (`loom.html`) — woven analog-digital (sand × umber, barcode landscapes,
+    scramble type; inspired by sondaven.com × codapress.co.uk)
 
 Each variant is a single self-contained HTML file.
 

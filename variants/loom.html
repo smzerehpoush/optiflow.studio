@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Optiflow Studio — Loom</title>
+<meta name="description" content="Optiflow is an AI product studio. Real problems in, shipped products out. Woven on the loom.">
+<meta name="theme-color" content="#B9AD8A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%232A2521'/%3E%3Cpath d='M14 44V20h4v24zm8 0V20h2v24zm6 0V20h6v24zm10 0V20h2v24zm6 0V20h4v24z' fill='%23B9AD8A'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sand:#B9AD8A;
+  --sand-2:#C4B995;
+  --umber:#2A2521;
+  --umber-2:#332D27;
+  --ink:#241F1B;
+  --line-d:rgba(36,31,27,.3);
+  --line-l:rgba(185,173,138,.28);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{
+  background:var(--sand);
+  color:var(--ink);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:1rem;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+body.menu-open{overflow:hidden}
+::selection{background:var(--umber);color:var(--sand)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--umber);outline-offset:3px}
+.dark :focus-visible{outline-color:var(--sand)}
+img,svg{max-width:100%}
+
+.container{width:min(1240px,92vw);margin-inline:auto}
+
+/* ---------- grain ---------- */
+.grain{
+  position:fixed;inset:-50%;width:200%;height:200%;
+  pointer-events:none;z-index:9990;opacity:.06;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- floating pill nav (Codapress) ---------- */
+.pill-nav{
+  position:fixed;top:14px;left:50%;transform:translate(-50%,-160%);
+  z-index:1000;display:flex;align-items:center;gap:6px;
+  background:rgba(42,37,33,.92);color:var(--sand);
+  border:1px solid rgba(185,173,138,.25);border-radius:100px;
+  padding:8px 10px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:transform .5s var(--ease);
+}
+.pill-nav.show{transform:translate(-50%,0)}
+.pill-nav .mark{
+  width:30px;height:30px;display:grid;place-items:center;
+  background:var(--sand);color:var(--umber);border-radius:50%;
+  font-weight:700;font-size:.8rem;
+}
+.pill-nav a{
+  font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  text-decoration:none;padding:8px 12px;border-radius:100px;
+  transition:background .25s,color .25s;
+}
+.pill-nav a:hover{background:var(--sand);color:var(--umber)}
+.pill-nav .cta{border:1px solid rgba(185,173,138,.4)}
+
+/* ---------- burger (mobile) ---------- */
+.burger{
+  position:fixed;top:14px;right:14px;z-index:1200;display:none;
+  width:46px;height:46px;background:var(--umber);border:1px solid var(--line-l);
+  border-radius:50%;cursor:pointer;flex-direction:column;gap:6px;
+  align-items:center;justify-content:center;
+}
+.burger span{width:18px;height:2px;background:var(--sand);transition:transform .3s}
+body.menu-open .burger span:first-child{transform:translateY(4px) rotate(45deg)}
+body.menu-open .burger span:last-child{transform:translateY(-4px) rotate(-45deg)}
+.mobile-menu{
+  position:fixed;inset:0;z-index:1100;background:var(--umber);color:var(--sand);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
+  opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s;
+}
+body.menu-open .mobile-menu{opacity:1;visibility:visible}
+.mobile-menu a{
+  font-size:clamp(1.4rem,6vw,2rem);letter-spacing:.14em;text-transform:uppercase;
+  text-decoration:none;padding:8px 14px;
+}
+.mobile-menu a:hover{background:var(--sand);color:var(--umber)}
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative;min-height:100svh;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+#weave{position:absolute;inset:0;width:100%;height:100%}
+.hero-frame{
+  position:relative;z-index:2;flex:1;display:flex;flex-direction:column;
+  justify-content:space-between;padding:26px clamp(18px,3.5vw,48px);
+}
+.frame-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.f-label{
+  font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;
+  line-height:1.8;
+}
+.f-label b{display:block;font-weight:700}
+.logo-block{
+  display:inline-block;background:var(--umber);color:var(--sand);
+  padding:8px 12px;font-weight:700;font-size:.95rem;letter-spacing:.06em;
+  text-decoration:none;
+}
+.hero-mid{
+  position:relative;z-index:2;text-align:center;padding-inline:4vw;
+}
+.hero-mid p{
+  max-width:52ch;margin:0 auto;font-size:clamp(.85rem,1.35vw,1.02rem);
+}
+.hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.btn{
+  display:inline-block;border:1.5px solid var(--umber);
+  padding:14px 24px;font-family:inherit;font-size:.78rem;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;text-decoration:none;
+  background:transparent;color:var(--ink);cursor:pointer;
+  transition:background .15s,color .15s;
+}
+.btn:hover{background:var(--umber);color:var(--sand)}
+.btn.solid{background:var(--umber);color:var(--sand)}
+.btn.solid:hover{background:transparent;color:var(--ink)}
+.dark .btn{border-color:var(--sand);color:var(--sand)}
+.dark .btn:hover{background:var(--sand);color:var(--umber)}
+.dark .btn.solid{background:var(--sand);color:var(--umber)}
+.dark .btn.solid:hover{background:transparent;color:var(--sand)}
+
+.hero-title{
+  position:relative;z-index:2;
+  font-weight:700;text-transform:uppercase;
+  font-size:clamp(2.4rem,10.2vw,9.2rem);
+  line-height:.92;letter-spacing:-.01em;
+  text-align:center;
+  padding-bottom:10px;
+  user-select:none;
+}
+.woven{
+  -webkit-mask-image:repeating-linear-gradient(90deg,#000 0 6px,transparent 6px 7px,#000 7px 15px,transparent 15px 17px,#000 17px 21px,transparent 21px 22px);
+  mask-image:repeating-linear-gradient(90deg,#000 0 6px,transparent 6px 7px,#000 7px 15px,transparent 15px 17px,#000 17px 21px,transparent 21px 22px);
+}
+
+/* ---------- chapter divider (Son Daven) ---------- */
+.chapter{
+  display:flex;align-items:center;justify-content:center;gap:18px;
+  padding:clamp(40px,6vw,72px) 0 clamp(28px,3.5vw,44px);
+  font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;
+}
+.chapter i{font-style:normal;letter-spacing:.4em}
+
+/* ---------- marquee ---------- */
+.marquee{
+  border-block:1.5px solid var(--umber);
+  background:var(--umber);color:var(--sand);
+  overflow:hidden;padding-block:12px;
+}
+.marquee-track{display:flex;width:max-content;animation:mq 32s linear infinite}
+.marquee-track span{
+  white-space:nowrap;font-size:.82rem;font-weight:600;letter-spacing:.22em;
+  text-transform:uppercase;
+}
+.marquee-track em{font-style:normal;margin-inline:16px}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ---------- sections ---------- */
+.sec{padding-block:clamp(70px,9vw,130px)}
+.dark{background:var(--umber);color:var(--sand)}
+.dark ::selection{background:var(--sand);color:var(--umber)}
+
+.sec-head{margin-bottom:clamp(40px,5vw,64px)}
+.sec-head .kicker{
+  font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;
+  display:block;margin-bottom:14px;
+}
+.sec-head h2{
+  font-weight:700;text-transform:uppercase;
+  font-size:clamp(1.7rem,4.6vw,3.6rem);
+  line-height:1.05;letter-spacing:-.01em;
+}
+
+/* ---------- manifesto ---------- */
+.manifesto p{
+  max-width:30ch;margin-inline:auto;text-align:center;
+  font-size:clamp(1.25rem,3vw,2.3rem);line-height:1.55;
+  font-weight:500;text-transform:uppercase;letter-spacing:.02em;
+}
+.manifesto em{font-style:normal;background:var(--sand);color:var(--umber);padding:0 .18em}
+
+/* ---------- capabilities (Codapress line-art cards) ---------- */
+.cap-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border-top:1.5px solid var(--umber);border-left:1.5px solid var(--umber);
+}
+.cap{
+  border-right:1.5px solid var(--umber);border-bottom:1.5px solid var(--umber);
+  padding:26px 24px 30px;position:relative;
+  transition:background .15s,color .15s;
+}
+.cap:hover{background:var(--umber);color:var(--sand)}
+.cap:hover .cap-art *{stroke:var(--sand)}
+.cap:hover .tag{border-color:var(--line-l)}
+.cap-num{font-size:.66rem;letter-spacing:.2em;display:block;margin-bottom:16px}
+.cap-art{display:block;margin-bottom:20px}
+.cap-art *{stroke:var(--umber);transition:stroke .15s;fill:none;stroke-width:1.5}
+.cap h3{
+  font-size:1.02rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.08em;margin-bottom:10px;
+}
+.cap p{font-size:.82rem;line-height:1.7}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.tag{
+  font-size:.6rem;letter-spacing:.16em;padding:4px 9px;
+  border:1px solid var(--line-d);
+}
+.cap-link{
+  display:inline-block;margin-top:16px;font-size:.72rem;font-weight:700;
+  letter-spacing:.16em;text-decoration:underline;text-underline-offset:4px;
+}
+
+/* ---------- work (barcode plates) ---------- */
+.work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.5vw,28px)}
+.work{
+  border:1.5px solid var(--sand);text-decoration:none;display:block;
+  padding:16px 16px 22px;transition:background .15s,color .15s;
+}
+.work:hover{background:var(--sand);color:var(--umber)}
+.work:hover .bars rect{fill:var(--umber)}
+.work:hover .work-meta,.work:hover .work-stat span{border-color:var(--line-d)}
+.bars-wrap{border:1px solid var(--line-l);margin-bottom:16px;transition:border-color .15s}
+.work:hover .bars-wrap{border-color:var(--line-d)}
+.bars{display:block;width:100%;height:auto}
+.bars rect{fill:var(--sand);transition:fill .15s}
+.work-meta{
+  display:flex;justify-content:space-between;gap:10px;
+  font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px dashed var(--line-l);
+}
+.work h3{font-size:1.3rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+.work p{font-size:.8rem;line-height:1.7}
+.work-stat{margin-top:14px;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase}
+.work-stat b{display:block;font-size:1.6rem;letter-spacing:0}
+
+/* ---------- stats ledger ---------- */
+.ledger{border-top:1.5px solid var(--umber)}
+.ledger-row{
+  display:flex;align-items:baseline;gap:18px;
+  border-bottom:1.5px solid var(--umber);
+  padding:20px 4px;font-size:clamp(.8rem,1.6vw,1.05rem);
+  text-transform:uppercase;letter-spacing:.08em;
+}
+.ledger-row .dots{flex:1;border-bottom:2px dotted var(--line-d);transform:translateY(-6px)}
+.ledger-row b{font-size:clamp(1.6rem,3.6vw,2.6rem);font-weight:700;letter-spacing:0}
+
+/* ---------- process ---------- */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-left:1.5px solid var(--sand)}
+.step{border-right:1.5px solid var(--sand);padding:8px 22px 0}
+.step .n{
+  font-size:clamp(2.2rem,4.5vw,3.4rem);font-weight:700;display:block;margin-bottom:12px;
+  -webkit-mask-image:repeating-linear-gradient(90deg,#000 0 4px,transparent 4px 5px,#000 5px 9px,transparent 9px 10px);
+  mask-image:repeating-linear-gradient(90deg,#000 0 4px,transparent 4px 5px,#000 5px 9px,transparent 9px 10px);
+}
+.step h3{font-size:.95rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.step p{font-size:.8rem;line-height:1.7}
+
+/* ---------- CTA ---------- */
+.cta{text-align:center}
+.cta .hero-title{font-size:clamp(2.2rem,8.6vw,7.4rem)}
+.cta p.sub{max-width:44ch;margin:18px auto 34px;font-size:.95rem}
+.cta .mail{
+  display:inline-block;margin-top:26px;font-size:.75rem;letter-spacing:.2em;
+  text-decoration:underline;text-underline-offset:5px;
+}
+
+/* ---------- footer ---------- */
+.footer{background:var(--umber);color:var(--sand);border-top:1.5px solid var(--sand)}
+.foot-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-left:1px solid var(--line-l);border-right:1px solid var(--line-l);
+}
+.foot-cell{
+  border-right:1px solid var(--line-l);padding:22px 20px;
+  font-size:.72rem;letter-spacing:.1em;line-height:2;
+}
+.foot-cell:last-child{border-right:0}
+.foot-cell .k{
+  display:block;font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;
+  opacity:.65;margin-bottom:8px;
+}
+.foot-cell a{text-decoration:none;display:block;width:fit-content;text-transform:uppercase}
+.foot-cell a:hover{background:var(--sand);color:var(--umber)}
+.foot-social{display:flex;gap:12px}
+.foot-social a{border:1px solid var(--line-l);width:38px;height:38px;display:grid;place-items:center}
+.foot-social a:hover{background:var(--sand);color:var(--umber)}
+.foot-bottom{
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  border-top:1px solid var(--line-l);padding:18px clamp(18px,3.5vw,48px);
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+}
+.foot-bottom a{text-decoration:none}
+.foot-bottom a:hover{background:var(--sand);color:var(--umber)}
+
+/* ---------- reveals ---------- */
+[data-reveal]{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease) var(--d,0s),transform .8s var(--ease) var(--d,0s)}
+[data-reveal].in{opacity:1;transform:none}
+
+/* ---------- responsive ---------- */
+@media(max-width:1024px){
+  .cap-grid{grid-template-columns:repeat(2,1fr)}
+  .work-grid{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:1fr 1fr;border-top:1.5px solid var(--sand)}
+  .step{padding-block:20px}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .foot-cell{border-bottom:1px solid var(--line-l)}
+}
+@media(max-width:720px){
+  .pill-nav .plink{display:none}
+  .burger{display:flex}
+  .cap-grid{grid-template-columns:1fr}
+  .work-grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr}
+  .frame-row .f-right{display:none}
+  .hero-title{font-size:clamp(2rem,13vw,4rem)}
+}
+
+/* ---------- reduced motion ---------- */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  [data-reveal]{opacity:1;transform:none}
+  .marquee-track{animation:none}
+}
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<!-- Floating pill nav -->
+<nav class="pill-nav" id="pillNav" aria-label="Primary">
+  <a class="mark" href="#top" aria-label="Optiflow home">O</a>
+  <a class="plink" href="#work">Work</a>
+  <a class="plink" href="#capabilities">Craft</a>
+  <a class="plink" href="#process">Process</a>
+  <a class="cta" href="#contact">Start&nbsp;a&nbsp;project</a>
+</nav>
+
+<button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+  <span></span><span></span>
+</button>
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <a href="#work">Work</a>
+  <a href="#capabilities">Capabilities</a>
+  <a href="#process">Process</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <canvas id="weave" aria-hidden="true"></canvas>
+
+    <div class="hero-frame">
+      <div class="frame-row">
+        <div class="f-label">
+          <a class="logo-block" href="#top">optiflow_</a>
+          <b style="margin-top:10px">AI Product Studio</b>
+          Est. 2026
+        </div>
+        <div class="f-label f-right" style="text-align:right">
+          [ Real problems only ]<br>
+          Woven by humans × machines
+        </div>
+      </div>
+
+      <div class="hero-mid">
+        <p data-reveal>Optiflow is an AI studio. We hunt down the problems everyone
+        complains about and nobody fixes — then build the product that makes
+        them disappear.</p>
+        <div class="hero-ctas" data-reveal style="--d:.15s">
+          <a class="btn solid" href="#contact">Start a project →</a>
+          <a class="btn" href="#work">See the proof →</a>
+        </div>
+      </div>
+
+      <div class="frame-row" style="align-items:flex-end">
+        <span class="f-label">Thread 001 — Prologue</span>
+        <span class="f-label f-right">Scroll to read ↓</span>
+      </div>
+    </div>
+
+    <h1 class="hero-title woven" id="heroTitle">Crazy&nbsp;enough</h1>
+  </header>
+
+  <!-- ============ MARQUEE ============ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>AI Products <em>✦</em> Real Problems <em>✦</em> Zero Slideware <em>✦</em> Shipped, Not Pitched <em>✦</em> Agents On Duty <em>✦</em> Perfect Or Nothing <em>✦</em>&nbsp;</span>
+      <span>AI Products <em>✦</em> Real Problems <em>✦</em> Zero Slideware <em>✦</em> Shipped, Not Pitched <em>✦</em> Agents On Duty <em>✦</em> Perfect Or Nothing <em>✦</em>&nbsp;</span>
+    </div>
+  </div>
+
+  <!-- ============ MANIFESTO ============ -->
+  <section class="sec dark manifesto" id="manifesto">
+    <div class="container">
+      <div class="chapter" aria-hidden="true"><i>✦ ✦ ✦</i> Chapter 00 — The Manifesto <i>✦ ✦ ✦</i></div>
+      <p data-reveal>Everyone has an AI strategy. A deck. A roadmap. A committee.
+      We have a different habit — we <em>ship</em>. Real problems don't get solved
+      by slideware. They get solved by people <em>crazy</em> enough to promise
+      perfect, and stubborn enough to <em>deliver</em> it.</p>
+    </div>
+  </section>
+
+  <!-- ============ CAPABILITIES ============ -->
+  <section class="sec" id="capabilities">
+    <div class="container">
+      <div class="chapter" aria-hidden="true"><i>✦ ✦ ✦</i> Chapter 01 <i>✦ ✦ ✦</i></div>
+      <div class="sec-head" style="text-align:center">
+        <span class="kicker">Six disciplines — one standard</span>
+        <h2 data-decode>What we're dangerous at</h2>
+      </div>
+
+      <div class="cap-grid">
+        <article class="cap" data-reveal>
+          <span class="cap-num">MOD/01</span>
+          <svg class="cap-art" width="84" height="84" viewBox="0 0 84 84" aria-hidden="true"><rect x="6" y="6" width="72" height="72"/><path d="M6 42h72M42 6v72"/><circle cx="42" cy="42" r="18"/></svg>
+          <h3>AI Product Engineering</h3>
+          <p>LLM-native applications, autonomous agents, retrieval systems. Built to survive production traffic, not just the demo call.</p>
+          <div class="tags"><span class="tag">AGENTS</span><span class="tag">RAG</span><span class="tag">EVALS</span></div>
+        </article>
+
+        <article class="cap" data-reveal style="--d:.05s">
+          <span class="cap-num">MOD/02</span>
+          <svg class="cap-art" width="84" height="84" viewBox="0 0 84 84" aria-hidden="true"><path d="M6 78V6h72"/><path d="M6 6l72 72"/><path d="M6 42a36 36 0 0 1 36-36"/></svg>
+          <h3>0 → 1 in Weeks</h3>
+          <p>Idea to working product before your competitors finish their kickoff meeting.</p>
+        </article>
+
+        <article class="cap" data-reveal style="--d:.1s">
+          <span class="cap-num">MOD/03</span>
+          <svg class="cap-art" width="84" height="84" viewBox="0 0 84 84" aria-hidden="true"><path d="M6 20h72M6 42h72M6 64h72"/><path d="M20 6v72M64 6v72"/></svg>
+          <h3>Agentic Automation</h3>
+          <p>Workflows that run themselves at 3 a.m. — triage, dispatch, follow-up — while your team sleeps like people who automated their busywork.</p>
+        </article>
+
+        <article class="cap" data-reveal>
+          <span class="cap-num">MOD/04</span>
+          <svg class="cap-art" width="84" height="84" viewBox="0 0 84 84" aria-hidden="true"><path d="M78 78H6V6"/><path d="M6 78A72 72 0 0 1 78 6"/><circle cx="60" cy="60" r="10"/></svg>
+          <h3>Design That Converts</h3>
+          <p>Interfaces people actually feel. We obsess over the last 4% of polish because that's the part users remember — and pay for.</p>
+        </article>
+
+        <article class="cap" data-reveal style="--d:.05s">
+          <span class="cap-num">MOD/05</span>
+          <svg class="cap-art" width="84" height="84" viewBox="0 0 84 84" aria-hidden="true"><ellipse cx="42" cy="18" rx="30" ry="9"/><path d="M12 18v48c0 5 13 9 30 9s30-4 30-9V18"/><path d="M12 42c0 5 13 9 30 9s30-4 30-9"/></svg>
+          <h3>Data &amp; Model Ops</h3>
+          <p>Pipelines, fine-tuning, evals. The unglamorous machinery that makes the magic reliable.</p>
+        </article>
+
+        <article class="cap" data-reveal style="--d:.1s">
+          <span class="cap-num">MOD/06</span>
+          <svg class="cap-art" width="84" height="84" viewBox="0 0 84 84" aria-hidden="true"><path d="M6 78h72"/><path d="M10 66l20-24 14 12 26-34"/><path d="M56 20h14v14"/></svg>
+          <h3>Growth Engineering</h3>
+          <p>Ship. Measure. Sharpen. Repeat until the graph does the thing graphs are supposed to do.</p>
+        </article>
+
+        <article class="cap" data-reveal style="grid-column:1/-1">
+          <span class="cap-num">MOD/∞</span>
+          <h3>Something weirder?</h3>
+          <p>The best briefs start with "this is probably impossible, but…"</p>
+          <a class="cap-link" href="#contact">TRY US →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WORK ============ -->
+  <section class="sec dark" id="work">
+    <div class="container">
+      <div class="chapter" aria-hidden="true"><i>✦ ✦ ✦</i> Chapter 02 <i>✦ ✦ ✦</i></div>
+      <div class="sec-head" style="text-align:center">
+        <span class="kicker">Selected work</span>
+        <h2 data-decode>Proof, not promises</h2>
+      </div>
+
+      <!-- Sample case studies — replace with real projects -->
+      <div class="work-grid">
+        <a class="work" href="#contact" data-reveal>
+          <div class="bars-wrap"><svg class="bars" data-seed="3" viewBox="0 0 320 200" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+          <div class="work-meta"><span>001</span><span>LLM Agents · Ops</span></div>
+          <h3>Dispatch</h3>
+          <p>An ops copilot that reads the chaos of a logistics floor and turns it into a queue of done.</p>
+          <p class="work-stat"><b>−74%</b>Manual dispatch time</p>
+        </a>
+
+        <a class="work" href="#contact" data-reveal style="--d:.08s">
+          <div class="bars-wrap"><svg class="bars" data-seed="7" viewBox="0 0 320 200" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+          <div class="work-meta"><span>002</span><span>Doc Intelligence · Finance</span></div>
+          <h3>Ledgerlens</h3>
+          <p>Financial document intelligence that reads faster than an army of analysts — and never gets bored.</p>
+          <p class="work-stat"><b>12K</b>Docs parsed / day</p>
+        </a>
+
+        <a class="work" href="#contact" data-reveal style="--d:.16s">
+          <div class="bars-wrap"><svg class="bars" data-seed="11" viewBox="0 0 320 200" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+          <div class="work-meta"><span>003</span><span>Support Autopilot · SaaS</span></div>
+          <h3>Nightshift</h3>
+          <p>A support autopilot that resolves tickets while the founders sleep. Customers never noticed. That's the point.</p>
+          <p class="work-stat"><b>68%</b>Resolved autonomously</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATS LEDGER ============ -->
+  <section class="sec">
+    <div class="container">
+      <div class="chapter" aria-hidden="true"><i>✦ ✦ ✦</i> Chapter 03 <i>✦ ✦ ✦</i></div>
+      <div class="ledger" data-reveal>
+        <div class="ledger-row"><span>Idea → first prototype</span><span class="dots"></span><b><span data-count="14">0</span>d</b></div>
+        <div class="ledger-row"><span>Builds that reach production</span><span class="dots"></span><b><span data-count="100">0</span>%</b></div>
+        <div class="ledger-row"><span>Agents on duty</span><span class="dots"></span><b><span data-count="24">0</span>/7</b></div>
+        <div class="ledger-row"><span>Slide decks produced</span><span class="dots"></span><b>0</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROCESS ============ -->
+  <section class="sec dark" id="process">
+    <div class="container">
+      <div class="chapter" aria-hidden="true"><i>✦ ✦ ✦</i> Chapter 04 <i>✦ ✦ ✦</i></div>
+      <div class="sec-head" style="text-align:center">
+        <span class="kicker">The pattern</span>
+        <h2 data-decode>From pain to product</h2>
+      </div>
+      <ol class="steps" style="list-style:none">
+        <li class="step" data-reveal><span class="n">01</span><h3>Find the pain</h3><p>We interrogate the problem until it confesses. No solutions allowed in the room yet.</p></li>
+        <li class="step" data-reveal style="--d:.07s"><span class="n">02</span><h3>Prototype in days</h3><p>A working thing in your hands within days — ugly is fine, real is mandatory.</p></li>
+        <li class="step" data-reveal style="--d:.14s"><span class="n">03</span><h3>Ship it</h3><p>Production, real users, real stakes. This is where most agencies wave goodbye. We move in.</p></li>
+        <li class="step" data-reveal style="--d:.21s"><span class="n">04</span><h3>Sharpen forever</h3><p>Measure, refine, automate. Perfect isn't a launch state — it's a habit.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="sec cta" id="contact">
+    <div class="container">
+      <div class="chapter" aria-hidden="true"><i>✦ ✦ ✦</i> Epilogue — Transmission Open <i>✦ ✦ ✦</i></div>
+      <h2 class="hero-title woven" data-decode>Got a real<br>problem?</h2>
+      <p class="sub" data-reveal>Bring us the thing everyone says can't be fixed.
+      We'll bring the crazy.</p>
+      <div data-reveal style="--d:.1s">
+        <a class="btn solid" href="mailto:hello@optiflow.studio">Let's get crazy →</a>
+      </div>
+      <a class="mail" href="mailto:hello@optiflow.studio">hello@optiflow.studio</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="foot-grid">
+    <div class="foot-cell">
+      <span class="k">Studio</span>
+      <a class="logo-block" style="background:var(--sand);color:var(--umber)" href="#top">optiflow_</a>
+      <p style="margin-top:10px;font-size:.7rem">An AI studio building products that solve real problems.</p>
+    </div>
+    <div class="foot-cell">
+      <span class="k">Index</span>
+      <a href="#work">Work</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#process">Process</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="foot-cell">
+      <span class="k">Thread</span>
+      Pattern: Jacquard<br>
+      Warp: Humans<br>
+      Weft: Machines<br>
+      Units: Shipped
+    </div>
+    <div class="foot-cell">
+      <span class="k">Signals</span>
+      <div class="foot-social">
+        <a href="#" aria-label="X (Twitter)"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="#" aria-label="GitHub"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.34.95.1-.74.4-1.25.72-1.53-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.35.77 1.05.77 2.12v3.14c0 .3.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg></a>
+        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.72C24 .77 23.2 0 22.22 0z"/></svg></a>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Optiflow Studio</span>
+    <span>Built by humans × machines</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<script>
+(() => {
+  'use strict';
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- barcode weave canvas (Son Daven landscape) ---------- */
+  const canvas = document.getElementById('weave');
+  const hero = document.querySelector('.hero');
+  if (canvas && !reduced) {
+    const ctx = canvas.getContext('2d');
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    let W = 0, H = 0, raf = null, visible = true, t = 0;
+    const mouse = { x: -9999 };
+
+    function noise(x, tt) {
+      return (
+        Math.sin(x * 0.012 + tt) * 0.45 +
+        Math.sin(x * 0.031 - tt * 0.6) * 0.3 +
+        Math.sin(x * 0.007 + tt * 0.35) * 0.25
+      );
+    }
+
+    function resize() {
+      W = hero.offsetWidth;
+      H = hero.offsetHeight;
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      canvas.style.width = W + 'px';
+      canvas.style.height = H + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function frame() {
+      raf = null;
+      if (!visible) return;
+      t += 0.0035;
+      ctx.clearRect(0, 0, W, H);
+      const bw = 4, gap = 3, step = bw + gap;
+      const base = H * 0.30;
+      ctx.fillStyle = '#2A2521';
+      for (let x = 0; x < W + step; x += step) {
+        let h = base + noise(x, t) * H * 0.16;
+        const d = Math.abs(x - mouse.x);
+        if (d < 140) h += (1 - d / 140) * 46;
+        // occasional dropped stitch (woven irregularity)
+        if (((x / step) | 0) % 17 === 0) h *= 0.55;
+        ctx.fillRect(x, H - h, bw, h);
+        // floating "warp thread" ticks above the ridge
+        if (((x / step) | 0) % 9 === 0) {
+          ctx.fillRect(x, H - h - 26, bw, 12);
+        }
+      }
+      raf = requestAnimationFrame(frame);
+    }
+    function kick() { if (!raf && visible) raf = requestAnimationFrame(frame); }
+
+    hero.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX - canvas.getBoundingClientRect().left;
+    }, { passive: true });
+    hero.addEventListener('mouseleave', () => { mouse.x = -9999; });
+    new IntersectionObserver((en) => { visible = en[0].isIntersecting; kick(); }).observe(hero);
+    let rt;
+    addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(resize, 200); });
+    resize();
+    kick();
+  } else if (canvas) {
+    // static ridge for reduced motion
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width = hero.offsetWidth;
+    const H = canvas.height = hero.offsetHeight;
+    ctx.fillStyle = '#2A2521';
+    for (let x = 0; x < W; x += 7) {
+      const h = H * 0.3 + Math.sin(x * 0.012) * H * 0.14;
+      ctx.fillRect(x, H - h, 4, h);
+    }
+  }
+
+  /* ---------- hero title: alternate the two lines ---------- */
+  const heroTitle = document.getElementById('heroTitle');
+  const TITLES = ['Crazy enough', 'to build', 'perfect things.'];
+  let ti = 0;
+
+  /* ---------- decode (Codapress scramble) ---------- */
+  const CHARS = '▮▯|/\\=+*#10';
+  function decode(el, done) {
+    const orig = el.dataset.orig ?? (el.dataset.orig = el.textContent);
+    if (reduced) { el.textContent = orig; done && done(); return; }
+    const len = orig.length;
+    const dur = 420 + len * 22;
+    const start = performance.now();
+    (function step(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const solved = Math.floor(p * len);
+      let out = '';
+      for (let i = 0; i < len; i++) {
+        out += i < solved || orig[i] === ' ' ? orig[i] : CHARS[(Math.random() * CHARS.length) | 0];
+      }
+      el.textContent = out;
+      if (p < 1) requestAnimationFrame(step);
+      else { el.textContent = orig; done && done(); }
+    })(start);
+  }
+
+  function cycleTitle() {
+    heroTitle.dataset.orig = TITLES[ti % TITLES.length];
+    ti++;
+    decode(heroTitle, () => setTimeout(cycleTitle, 2600));
+  }
+  if (heroTitle) {
+    if (reduced) heroTitle.textContent = 'Crazy enough';
+    else cycleTitle();
+  }
+
+  const decodeIO = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) { decodeIO.unobserve(e.target); decode(e.target); }
+    }
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-decode]').forEach((el) => {
+    // preserve <br> structure: only decode simple-text elements
+    if (el.children.length === 0) decodeIO.observe(el);
+  });
+
+  /* ---------- reveals ---------- */
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    }
+  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+  document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+
+  /* ---------- counters ---------- */
+  const cio = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      cio.unobserve(e.target);
+      const el = e.target, target = parseInt(el.dataset.count, 10);
+      if (reduced) { el.textContent = target; continue; }
+      const start = performance.now();
+      (function step(now) {
+        const p = Math.min((now - start) / 1200, 1);
+        el.textContent = Math.round((1 - Math.pow(1 - p, 4)) * target);
+        if (p < 1) requestAnimationFrame(step);
+      })(start);
+    }
+  }, { threshold: 0.6 });
+  document.querySelectorAll('[data-count]').forEach((el) => cio.observe(el));
+
+  /* ---------- barcode plates for work cards ---------- */
+  document.querySelectorAll('.bars').forEach((svg) => {
+    const seed = parseInt(svg.dataset.seed, 10) || 1;
+    const ns = 'http://www.w3.org/2000/svg';
+    let s = seed;
+    const rnd = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+    for (let x = 4; x < 316; x += 7) {
+      const h = 30 + Math.abs(Math.sin(x * 0.02 * seed)) * 120 + rnd() * 40;
+      const r = document.createElementNS(ns, 'rect');
+      r.setAttribute('x', x);
+      r.setAttribute('y', 196 - h);
+      r.setAttribute('width', 4);
+      r.setAttribute('height', h);
+      svg.appendChild(r);
+    }
+  });
+
+  /* ---------- pill nav show/hide ---------- */
+  const pill = document.getElementById('pillNav');
+  addEventListener('scroll', () => {
+    pill.classList.toggle('show', scrollY > 120);
+  }, { passive: true });
+
+  /* ---------- mobile menu ---------- */
+  const burger = document.getElementById('burger');
+  const menu = document.getElementById('mobileMenu');
+  function setMenu(open) {
+    document.body.classList.toggle('menu-open', open);
+    burger.setAttribute('aria-expanded', String(open));
+    menu.setAttribute('aria-hidden', String(!open));
+  }
+  burger.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
+  menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+  addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && document.body.classList.contains('menu-open')) setMenu(false);
+  });
+})();
+</script>
+</body>
+</html>
