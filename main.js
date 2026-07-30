@@ -87,35 +87,27 @@
     });
   }
 
-  /* ---------- Hero canvas: matrix word-rain ---------- */
+  /* ---------- Hero canvas: signal network (calm, business-grade) ---------- */
   const canvas = document.getElementById('field');
   if (canvas && !reduced) {
     const ctx = canvas.getContext('2d');
     const hero = document.querySelector('.hero');
     const dpr = Math.min(devicePixelRatio || 1, 2);
     let W = 0, H = 0;
-    let cols = [];
+    let nodes = [];
     const mouse = { x: -9999, y: -9999 };
+    const LINK_DIST = 150;
+    const NODE_COLORS = ['rgba(0, 240, 255, 0.9)', 'rgba(139, 92, 255, 0.9)'];
 
-    const WORDS = ['OPTIFLOW', 'SHIP', 'AGENTS', 'PROOF', 'REAL', 'BUILD', 'EVALS', 'RAG', '01', 'AI'];
-    const CELL = 18;
-    const RAIN_COLORS = [
-      'rgba(0, 240, 255, 0.85)',
-      'rgba(0, 240, 255, 0.55)',
-      'rgba(139, 92, 255, 0.80)',
-      'rgba(139, 92, 255, 0.50)',
-      'rgba(255, 46, 151, 0.55)'
-    ];
-
-    function spawnCol(c, x) {
-      c.x = x;
-      c.y = -CELL * (2 + Math.random() * 26);
-      c.speed = 0.5 + Math.random() * 1.6;
-      c.word = WORDS[(Math.random() * WORDS.length) | 0];
-      c.ci = 0;
-      c.acc = Math.random();
-      c.color = RAIN_COLORS[(Math.random() * RAIN_COLORS.length) | 0];
-      return c;
+    function makeNode() {
+      return {
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.18,
+        vy: (Math.random() - 0.5) * 0.18,
+        r: 1.1 + Math.random() * 1.3,
+        c: NODE_COLORS[(Math.random() * NODE_COLORS.length) | 0]
+      };
     }
 
     function resize() {
@@ -128,45 +120,66 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.fillStyle = '#030409';
       ctx.fillRect(0, 0, W, H);
-      cols = [];
-      for (let x = 0; x < W; x += CELL) cols.push(spawnCol({}, x));
+      const count = Math.min(110, Math.max(36, Math.round((W * H) / 16000)));
+      nodes = Array.from({ length: count }, makeNode);
     }
 
-    let t = 0;
     function frame() {
-      t += 0.008;
-
       ctx.globalCompositeOperation = 'source-over';
-      ctx.fillStyle = 'rgba(3, 4, 9, 0.05)';
+      ctx.fillStyle = '#030409';
       ctx.fillRect(0, 0, W, H);
 
-      /* --- matrix word-rain (additive, with neon bloom) --- */
+      for (const n of nodes) {
+        n.x += n.vx; n.y += n.vy;
+        if (n.x < 0 || n.x > W) n.vx *= -1;
+        if (n.y < 0 || n.y > H) n.vy *= -1;
+        n.x = Math.min(W, Math.max(0, n.x));
+        n.y = Math.min(H, Math.max(0, n.y));
+      }
+
+      /* --- faint connective lines --- */
+      ctx.lineWidth = 1;
+      for (let i = 0; i < nodes.length; i++) {
+        const a = nodes[i];
+        for (let j = i + 1; j < nodes.length; j++) {
+          const b = nodes[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 > LINK_DIST * LINK_DIST) continue;
+          const alpha = (1 - Math.sqrt(d2) / LINK_DIST) * 0.16;
+          ctx.strokeStyle = `rgba(0, 240, 255, ${alpha.toFixed(3)})`;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+        if (mouse.x > 0) {
+          const dx = a.x - mouse.x, dy = a.y - mouse.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < LINK_DIST * LINK_DIST * 2.4) {
+            const alpha = (1 - Math.sqrt(d2) / (LINK_DIST * 1.55)) * 0.4;
+            if (alpha > 0) {
+              ctx.strokeStyle = `rgba(139, 92, 255, ${alpha.toFixed(3)})`;
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(mouse.x, mouse.y);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      /* --- nodes, soft glow --- */
       ctx.globalCompositeOperation = 'lighter';
-      ctx.font = '600 14px "JetBrains Mono", monospace';
-      ctx.textBaseline = 'top';
-      for (const c of cols) {
-        let sp = c.speed;
-        if (mouse.x > 0 && Math.abs(c.x - mouse.x) < 70) sp += 1.4;
-        c.acc += sp * 0.22;
-        if (c.acc < 1) continue;
-        c.acc = 0;
-        c.y += CELL;
-        if (c.y > H + CELL * 4) { spawnCol(c, c.x); continue; }
-        if (c.y < 0) continue;
-        const prev = c.word[c.ci % c.word.length];
-        c.ci++;
-        const head = c.word[c.ci % c.word.length];
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = c.color;
-        ctx.fillText(prev, c.x, c.y - CELL);
-        ctx.shadowBlur = 14;
-        ctx.shadowColor = c.color;
-        ctx.fillStyle = 'rgba(235, 250, 255, 0.95)';
-        ctx.fillText(head, c.x, c.y);
-        ctx.fillText(head, c.x, c.y);
+      for (const n of nodes) {
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = n.c;
+        ctx.fillStyle = n.c;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fill();
       }
       ctx.shadowBlur = 0;
-
     }
 
     hero.addEventListener('mousemove', (e) => {
