@@ -20,10 +20,11 @@ Zero dependencies. Pure HTML + CSS + vanilla JS. Fonts from Google Fonts
 
 ## Design variants (`variants/`)
 
-Fourteen full design directions over the same content, for partner demos —
-`variants/index.html` is the gallery hub. Loom was retired in favor of
-Optiflow.studio (below), a black-cut adaptation of the Son Daven choreography
-with our own copy and generative HUD art instead of stock photos.
+Thirteen full design directions over the same content, for partner demos —
+`variants/index.html` is the gallery hub. Loom and the Son Daven 1:1 clone
+were retired in favor of Optiflow.studio (below), a black-cut adaptation of
+that choreography with our own copy and generative HUD art instead of a
+reproduction of another company's site and photos.
 
 **Dark series:**
 1. **Neural Core** (`../index.html`) — flagship: 3D wireframe sphere, cyan × violet, FUI HUD
@@ -39,21 +40,17 @@ with our own copy and generative HUD art instead of stock photos.
 9. **Duality** (`duality.html`) — minimal luxe with a light/dark theme toggle
 
 **Reference cuts:**
-10. **Son Daven** (`sondaven.html`) — faithful recreation of
-    [sondaven.com](https://sondaven.com/): dithered sheep preloader + woven
-    “SON DAVEN” wordmark, video-to-card hero shrink, barcode mountain
-    transitions, prologue, location map + drag slider, pinned chapter parade,
-    apartment switcher, '26–'29 timeline, finance scene, blago developer card,
-    gallery, invest CTA, blog, FAQ. Real Ukrainian copy + CDN renders from the
-    reference, GSAP ScrollTrigger + Lenis via CDN
-11. **Optiflow.studio** (`optiflow.html`) — the Son Daven choreography retold as
-    our own story: black-on-ivory, generative HUD art (glow, scanlines, corner
-    brackets) instead of photos, shimmering gradient wordmark
-12. **Riso Press** (`riso.html`) — developer risograph (bone × charcoal, dither
+10. **Optiflow.studio** (`optiflow.html`) — sondaven.com's scroll-cinema
+    choreography (dithered sheep preloader, woven wordmark, barcode mountain
+    transitions, pinned chapter parade, apartment switcher, timeline, finance
+    scene, gallery, invest CTA, blog, FAQ) retold as our own story:
+    black-on-ivory, generative HUD art (glow, scanlines, corner brackets)
+    instead of photos, shimmering gradient wordmark
+11. **Riso Press** (`riso.html`) — developer risograph (bone × charcoal, dither
     textures; inspired by contentarchitecture.dev)
-13. **Convergence** (`convergence.html`) — editorial frame-grid (serif × mono,
+12. **Convergence** (`convergence.html`) — editorial frame-grid (serif × mono,
     signal orange; inspired by vibecon.ai)
-14. **Tiny Theater** (`theater.html`) — emotional white-space theater (floating
+13. **Tiny Theater** (`theater.html`) — emotional white-space theater (floating
     chips, one statement at a time; inspired by tinywins.com)
 
 Each variant is a single self-contained HTML file.
