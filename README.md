@@ -3,8 +3,9 @@
 Dark, kinetic, futuristic landing page for Optiflow: an AI studio building
 products that solve real problems.
 
-**Live:** https://smzerehpoush.github.io/optiflow.studio/
-**Design lab (partner demos):** https://smzerehpoush.github.io/optiflow.studio/variants/
+**Live:** https://optiflow.studio (custom domain via GitHub Pages;
+https://smzerehpoush.github.io/optiflow.studio/ also resolves to the same
+site while DNS propagates)
 
 ## Stack
 
@@ -17,43 +18,6 @@ Zero dependencies. Pure HTML + CSS + vanilla JS. Fonts from Google Fonts
   text effects, scroll reveals, manifesto scrub, counters, magnetic buttons,
   card tilt/spotlight, terminal typing, glitch, HUD (progress/rail/readouts),
   nav behavior, mobile menu
-
-## Design variants (`variants/`)
-
-Thirteen full design directions over the same content, for partner demos —
-`variants/index.html` is the gallery hub. Loom and the Son Daven 1:1 clone
-were retired in favor of Optiflow.studio (below), a black-cut adaptation of
-that choreography with our own copy and generative HUD art instead of a
-reproduction of another company's site and photos.
-
-**Dark series:**
-1. **Neural Core** (`../index.html`) — flagship: 3D wireframe sphere, cyan × violet, FUI HUD
-2. **Aether Glass** (`aether.html`) — prismatic glassmorphism, luxury-future
-3. **Command Deck** (`command.html`) — mission-control terminal FUI
-4. **Acid Monolith** (`monolith.html`) — neo-brutalist type walls, acid accent
-
-**Light series:**
-5. **Paper Lab** (`paper.html`) — editorial serif on paper, Klein blue, journal annotations
-6. **Solar Flare** (`solar.html`) — daylight futurism, sunrise gradient blobs
-7. **Blueprint** (`blueprint.html`) — engineering drawing, grid paper, dimension lines
-8. **Chrome Pulse** (`chrome.html`) — Y2K liquid metal, silver chrome, holo foil
-9. **Duality** (`duality.html`) — minimal luxe with a light/dark theme toggle
-
-**Reference cuts:**
-10. **Optiflow.studio** (`optiflow.html`) — sondaven.com's scroll-cinema
-    choreography (dithered sheep preloader, woven wordmark, barcode mountain
-    transitions, pinned chapter parade, apartment switcher, timeline, finance
-    scene, gallery, invest CTA, blog, FAQ) retold as our own story:
-    black-on-ivory, generative HUD art (glow, scanlines, corner brackets)
-    instead of photos, shimmering gradient wordmark
-11. **Riso Press** (`riso.html`) — developer risograph (bone × charcoal, dither
-    textures; inspired by contentarchitecture.dev)
-12. **Convergence** (`convergence.html`) — editorial frame-grid (serif × mono,
-    signal orange; inspired by vibecon.ai)
-13. **Tiny Theater** (`theater.html`) — emotional white-space theater (floating
-    chips, one statement at a time; inspired by tinywins.com)
-
-Each variant is a single self-contained HTML file.
 
 ## Run locally
 
