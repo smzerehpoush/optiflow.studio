@@ -3,9 +3,8 @@
 Dark, kinetic, futuristic landing page for Optiflow: an AI studio building
 products that solve real problems.
 
-**Live:** https://optiflow.studio (custom domain via GitHub Pages;
-https://smzerehpoush.github.io/optiflow.studio/ also resolves to the same
-site while DNS propagates)
+**Live:** https://optiflow.studio — self-hosted (Caddy reverse proxy on the
+same VPS as other projects), behind ArvanCloud CDN.
 
 ## Stack
 
@@ -30,13 +29,24 @@ python3 -m http.server 4173
 
 ## Deploy
 
-It's a static site: drop the three files on any host (Vercel, Netlify,
-Cloudflare Pages, GitHub Pages, an S3 bucket…).
+It's a static site — drop `index.html`, `style.css`, `main.js` on any host.
+
+For the current production server:
+
+```bash
+cp .env.deploy.example .env.deploy   # once, then fill in your host
+./deploy.sh                          # rsyncs the three files and verifies HTTP 200
+```
+
+`.env.deploy` is gitignored on purpose — real hosts/paths never get committed
+to this (public) repo. `deploy.sh` reads `DEPLOY_HOST` (required),
+`DEPLOY_PATH` (default `/srv/optiflow-studio/`), and `SITE_URL` (default
+`https://optiflow.studio/`) from it.
 
 ## Notes
 
-- The three case studies in `#work` are **sample placeholders** — swap in
-  real projects.
+- Only one real case study (`Padelyar`) exists in `#work` so far — the
+  second card is an honest "your project here" CTA, not a placeholder.
 - Social links in the footer are `href="#"` stubs.
 - Contact email is `hello@optiflow.studio` (hero CTA + contact section).
 - `prefers-reduced-motion` is respected: canvas, glitch, marquee and scroll
