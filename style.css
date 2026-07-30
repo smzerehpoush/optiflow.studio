@@ -970,6 +970,12 @@ body.menu-open .mobile-menu { opacity: 1; visibility: visible; }
     linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px),
     linear-gradient(140deg, #24071A, #3A0D28 55%, #16040F);
 }
+.thumb-gold {
+  background:
+    linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px),
+    linear-gradient(140deg, #2A1D04, #3A2906 55%, #170F02);
+}
 .orb {
   position: absolute;
   width: 46%;
@@ -983,6 +989,7 @@ body.menu-open .mobile-menu { opacity: 1; visibility: visible; }
 .thumb-cyan .orb { background: radial-gradient(circle at 35% 35%, rgba(0,240,255,0.85), rgba(0,240,255,0.05) 68%); }
 .thumb-violet .orb { background: radial-gradient(circle at 35% 35%, rgba(139,92,255,0.85), rgba(139,92,255,0.05) 68%); }
 .thumb-magenta .orb { background: radial-gradient(circle at 35% 35%, rgba(255,46,151,0.8), rgba(255,46,151,0.05) 68%); }
+.thumb-gold .orb { background: radial-gradient(circle at 35% 35%, rgba(255,184,0,0.85), rgba(255,184,0,0.05) 68%); }
 .work-card:hover .orb { transform: translate(-50%, -50%) scale(1.22); }
 
 .work-meta {
