@@ -21,7 +21,7 @@
   --magenta: #FF2E97;
   --line: rgba(255, 255, 255, 0.08);
   --grad: linear-gradient(92deg, var(--cyan), var(--violet));
-  --font-d: 'Unbounded', 'Space Grotesk', sans-serif;
+  --font-d: 'Orbitron', 'Space Grotesk', sans-serif;
   --font-g: 'Space Grotesk', sans-serif;
   --font-b: 'Inter', sans-serif;
   --font-m: 'JetBrains Mono', monospace;
@@ -697,7 +697,7 @@ body.menu-open .mobile-menu { opacity: 1; visibility: visible; }
     var(--bg);
 }
 .manifesto-text {
-  font-family: var(--font-d);
+  font-family: var(--font-g);
   font-weight: 500;
   font-size: clamp(1.15rem, 2.6vw, 2.1rem);
   line-height: 1.7;

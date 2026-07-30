@@ -1,29 +1,30 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LOOM — Курортний дизайн-готель у Яремче · Optiflow design lab</title>
-<meta name="description" content="LOOM — курортний дизайн-готель у Карпатах. Демонстраційний варіант дизайну від Optiflow Studio (навчальна реконструкція у стилі sondaven.com).">
-<meta name="theme-color" content="#292420">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23292420'/%3E%3Cg fill='%23A89474'%3E%3Crect x='12' y='16' width='5' height='32'/%3E%3Crect x='21' y='24' width='5' height='24'/%3E%3Crect x='30' y='12' width='5' height='36'/%3E%3Crect x='39' y='28' width='5' height='20'/%3E%3Crect x='48' y='20' width='5' height='28'/%3E%3C/g%3E%3C/svg%3E">
+<title>Optiflow — AI Product Studio</title>
+<meta name="description" content="Optiflow is an AI product studio. We hunt down real problems everyone complains about and nobody fixes — then ship the products that make them disappear. Son Daven-style design cut.">
+<meta name="theme-color" content="#08080A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2308080A'/%3E%3Cg fill='%23E9E4D9'%3E%3Crect x='12' y='16' width='5' height='32'/%3E%3Crect x='21' y='24' width='5' height='24'/%3E%3Crect x='30' y='12' width='5' height='36'/%3E%3Crect x='39' y='28' width='5' height='20'/%3E%3Crect x='48' y='20' width='5' height='28'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Prata&family=Jura:wght@400;500;600;700&family=Archivo+Black&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   LOOM — reference-cut variant (Son Daven-style choreography)
-   Palette: sand #A89474 · card sand #B3A181 · umber #292420
+   OPTIFLOW.STUDIO — Son Daven choreography, black-cut identity
+   Palette: ivory #E9E4D9 · dim ivory #D6D0C2 · near-black #08080A
    ============================================================ */
 :root{
-  --sand:#A89474;
-  --sand-2:#B3A181;
-  --sand-3:#8F7E62;
-  --umber:#292420;
-  --umber-2:#211D19;
-  --ink:#1C1815;
-  --l-on-dark:rgba(168,148,116,.28);
-  --l-on-sand:rgba(41,36,32,.32);
+  --sand:#E9E4D9;
+  --sand-2:#D6D0C2;
+  --sand-3:#6E6A62;
+  --umber:#08080A;
+  --umber-2:#000000;
+  --panel:#1A1613;
+  --ink:#050505;
+  --l-on-dark:rgba(233,228,217,.18);
+  --l-on-sand:rgba(5,5,5,.32);
   --ease:cubic-bezier(.19,1,.22,1);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -49,6 +50,16 @@ img{max-width:100%;display:block}
 .serif{font-family:'Prata',serif;font-weight:400;letter-spacing:.01em}
 .lbl{font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase}
 .mono{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;line-height:1.75}
+
+/* shimmer wordmark */
+.shimmer{
+  background:linear-gradient(100deg,var(--sand) 0%,#7C5CFF 22%,#00E5FF 45%,var(--sand) 68%,#7C5CFF 88%,var(--sand) 100%);
+  background-size:250% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shimmer 9s linear infinite;
+  filter:drop-shadow(0 0 46px rgba(0,229,255,.22));
+}
+@keyframes shimmer{to{background-position:-250% 0}}
 
 /* scrollbar */
 ::-webkit-scrollbar{width:5px}
@@ -83,21 +94,22 @@ img{max-width:100%;display:block}
 #nav .n-link:hover{opacity:1;text-decoration:underline;text-underline-offset:4px}
 #nav .n-logo{
   position:absolute;left:50%;top:14px;transform:translateX(-50%);
-  height:26px;width:190px;opacity:0;transition:opacity .4s;
+  font-family:'Archivo Black',sans-serif;font-size:19px;text-transform:lowercase;letter-spacing:.01em;
+  opacity:0;transition:opacity .4s;
 }
 #nav.scrolled .n-logo{opacity:1}
 #nav .n-right{margin-left:auto;display:flex;align-items:center;gap:22px}
 #nav .n-cta{
   font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
   padding:11px 20px;border-radius:99px;
-  background:rgba(168,148,116,.14);
-  border:1px solid rgba(168,148,116,0);
+  background:rgba(233,228,217,.14);
+  border:1px solid rgba(233,228,217,0);
   backdrop-filter:blur(6px);
   transition:background .3s,color .3s;
 }
 #nav .n-cta:hover{background:var(--sand);color:var(--umber)}
 #nav.on-sand{color:var(--umber)}
-#nav.on-sand .n-cta{background:rgba(41,36,32,.12)}
+#nav.on-sand .n-cta{background:rgba(8,8,10,.12)}
 #nav.on-sand .n-cta:hover{background:var(--umber);color:var(--sand)}
 
 /* menu overlay */
@@ -123,15 +135,19 @@ img{max-width:100%;display:block}
 #pre .p-bottom{position:relative}
 #pre .p-cols{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px}
 #pre .p-cols .r{text-align:right}
-#pre canvas.wordmark{width:100%;height:190px;display:block}
+#pre .wordmark{
+  width:100%;display:block;text-align:center;
+  font-family:'Archivo Black',sans-serif;text-transform:lowercase;font-weight:400;
+  font-size:clamp(46px,10vw,130px);line-height:1;
+}
 #pre.done{transition:opacity .8s .1s,visibility .8s .1s;opacity:0;visibility:hidden}
 
 /* ============ HERO ============ */
-#hero{position:relative;height:100vh;overflow:hidden;background:var(--sand)}
+#hero{position:relative;height:100vh;overflow:hidden;background:var(--panel)}
 #hero .h-media{position:absolute;inset:0;overflow:hidden;display:block}
 #hero .h-media img{
   width:100%;height:100%;object-fit:cover;
-  filter:sepia(.35) saturate(.75) contrast(1.02) brightness(.82);
+  filter:contrast(1.02) brightness(.82);
   transform:scale(1.08);
   animation:kenburns 26s linear infinite alternate;
 }
@@ -139,7 +155,11 @@ img{max-width:100%;display:block}
 #hero .h-media::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 30%,transparent 40%,rgba(20,16,12,.55))}
 #hero .h-ui{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:0 4vw 24vh}
 #hero .h-tag{margin-bottom:18px}
-#hero .h-word{width:min(1180px,92vw)}
+#hero .h-word{
+  width:min(1180px,92vw);text-align:center;
+  font-family:'Archivo Black',sans-serif;text-transform:lowercase;font-weight:400;
+  font-size:clamp(58px,13vw,196px);line-height:.95;
+}
 #hero .h-meta{
   width:min(1180px,92vw);display:flex;justify-content:space-between;
   margin-top:26px;gap:20px;
@@ -149,7 +169,7 @@ img{max-width:100%;display:block}
 #hero .h-meta .r{text-align:right}
 #hero .h-ring{
   position:absolute;right:6vw;bottom:7vh;width:118px;height:118px;border-radius:50%;
-  border:1px solid rgba(168,148,116,.75);display:grid;place-items:center;text-align:center;
+  border:1px solid rgba(233,228,217,.75);display:grid;place-items:center;text-align:center;
   font-size:9.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
   transition:background .3s,color .3s;
 }
@@ -174,21 +194,21 @@ img{max-width:100%;display:block}
   background:var(--sand);color:var(--umber);transition:background .3s,color .3s,border-color .3s;
 }
 .pill:hover{background:transparent;color:var(--sand);border-color:var(--sand)}
-.pill.ghost{background:transparent;color:var(--sand);border-color:rgba(168,148,116,.5)}
+.pill.ghost{background:transparent;color:var(--sand);border-color:rgba(233,228,217,.5)}
 .pill.ghost:hover{background:var(--sand);color:var(--umber)}
-.pill.dark{background:var(--umber);color:var(--sand)}
-.pill.dark:hover{background:transparent;color:var(--umber);border-color:var(--umber)}
+.pill.dark{background:var(--sand);color:var(--umber)}
+.pill.dark:hover{background:transparent;color:var(--sand);border-color:var(--sand)}
 
 /* ============ ABOUT ============ */
 #about{position:relative;background:var(--umber);padding:10vh 6vw 0;overflow:hidden}
 #about .a-word{max-width:640px;margin-left:auto;margin-right:8vw}
-#about .a-word .big{font-family:'Prata',serif;font-size:clamp(56px,8.5vw,128px);line-height:.95;text-transform:uppercase}
+#about .a-word .big{font-family:'Prata',serif;font-size:clamp(40px,6.5vw,96px);line-height:.95;text-transform:uppercase}
 #about .a-word .by{margin-top:22px;display:flex;align-items:center;gap:10px}
 #about .a-grid{display:grid;grid-template-columns:1fr 1fr;gap:6vw;max-width:1080px;margin:16vh auto 0}
 #about h3.serif{font-size:clamp(34px,4.2vw,58px);text-transform:uppercase;line-height:1.05}
 #about .rule{width:44px;height:0;border-top:2px solid var(--sand);margin:20px 0 26px}
 #about .a-facade{margin:14vh -6vw 0;position:relative}
-#about .a-facade img{width:100%;height:110vh;object-fit:cover;filter:sepia(.4) saturate(.6) brightness(.88) contrast(1.02)}
+#about .a-facade img{width:100%;height:110vh;object-fit:cover;filter:brightness(.88) contrast(1.02)}
 #about .a-facade::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,var(--umber) 0%,transparent 30%),linear-gradient(0deg,var(--umber) 0%,transparent 26%)}
 #about .a-video{position:absolute;top:6vh;right:10vw;width:min(300px,60vw);z-index:3;text-align:left}
 #about .a-video .frame{
@@ -196,7 +216,7 @@ img{max-width:100%;display:block}
   background:var(--ink);
 }
 #about .a-video .scr{position:relative;aspect-ratio:16/10.4;overflow:hidden;display:grid;place-items:center}
-#about .a-video .scr img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:sepia(.4) saturate(.5) brightness(.55)}
+#about .a-video .scr img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.85)}
 #about .a-video .play{position:relative;width:0;height:0;border-left:14px solid #fff;border-top:8px solid transparent;border-bottom:8px solid transparent}
 #about .a-video figcaption{margin-top:10px;font-size:10.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase}
 
@@ -222,7 +242,7 @@ img{max-width:100%;display:block}
 #drag .d-meta{position:absolute;left:6vw;top:14vh;z-index:3;max-width:240px}
 #drag .d-ring{
   position:absolute;left:8vw;top:40vh;width:150px;height:150px;border-radius:50%;
-  border:1px solid rgba(168,148,116,.6);display:grid;place-items:center;text-align:center;
+  border:1px solid rgba(233,228,217,.6);display:grid;place-items:center;text-align:center;
   font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;z-index:3;
   transition:background .3s,color .3s;
 }
@@ -235,14 +255,14 @@ img{max-width:100%;display:block}
 #drag .d-track.grabbing{cursor:grabbing}
 #drag .d-card{flex:0 0 auto;user-select:none}
 #drag .d-card.photo{width:min(340px,72vw)}
-#drag .d-card.photo img{width:100%;height:64vh;object-fit:cover;filter:sepia(.32) saturate(.8) brightness(.92);pointer-events:none}
+#drag .d-card.photo img{width:100%;height:64vh;object-fit:cover;filter:brightness(.92);pointer-events:none}
 #drag .d-card.info{
   width:min(560px,86vw);height:64vh;background:var(--sand-2);color:var(--umber);
   display:flex;flex-direction:column;justify-content:space-between;align-items:center;
   padding:6vh 4vw 5vh;text-align:center;
 }
 #drag .d-card.info .circ{
-  width:230px;height:230px;border-radius:50%;border:1px solid rgba(41,36,32,.7);
+  width:230px;height:230px;border-radius:50%;border:1px solid rgba(8,8,10,.7);
   display:grid;place-items:center;
 }
 #drag .d-card.info .circ .n{font-family:'Prata',serif;font-size:56px;line-height:1}
@@ -252,15 +272,15 @@ img{max-width:100%;display:block}
 #drag .d-count{display:flex;align-items:center;gap:12px;font-size:13px;font-weight:700}
 #drag .d-count .sep{width:1px;height:16px;background:var(--sand-3)}
 .arr{
-  width:46px;height:46px;border-radius:50%;border:1px solid rgba(168,148,116,.55);
+  width:46px;height:46px;border-radius:50%;border:1px solid rgba(233,228,217,.55);
   display:grid;place-items:center;transition:background .3s,color .3s;font-size:16px;
 }
 .arr:hover{background:var(--sand);color:var(--umber)}
 #drag .d-hint{margin:10vh auto 6vh;width:min(480px,80vw);text-align:center;position:relative}
 #drag .d-hint .path{display:flex;align-items:center;justify-content:space-between;margin-top:18px}
-#drag .d-hint .dot-line{flex:1;border-bottom:2px dotted rgba(168,148,116,.55);margin:0 14px;transform:translateY(6px) rotate(3deg)}
+#drag .d-hint .dot-line{flex:1;border-bottom:2px dotted rgba(233,228,217,.55);margin:0 14px;transform:translateY(6px) rotate(3deg)}
 #drag .d-hint .ico{
-  width:56px;height:56px;border-radius:50%;border:1px solid rgba(168,148,116,.6);
+  width:56px;height:56px;border-radius:50%;border:1px solid rgba(233,228,217,.6);
   display:grid;place-items:center;font-size:18px;
 }
 #drag .d-hint .ico.ghosty{border-style:dashed;opacity:.6}
@@ -273,16 +293,16 @@ img{max-width:100%;display:block}
 #wipe canvas{position:absolute;inset:0;width:100%;height:100%}
 
 /* ============ UNIQUE (card parade) ============ */
-#unique{position:relative;background:var(--sand)}
+#unique{position:relative;background:var(--panel)}
 #unique .u-stage{position:sticky;top:0;height:100vh;overflow:hidden}
 #unique .u-head{
   position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;
-  color:var(--umber);text-align:center;padding:0 6vw;
+  color:var(--sand);text-align:center;padding:0 6vw;
 }
 #unique .u-head h2{font-family:'Prata',serif;font-size:clamp(34px,5vw,72px);line-height:1.08;text-transform:uppercase;margin-top:18px}
 #unique .u-card{position:absolute;left:50%;top:50%;width:min(460px,80vw);will-change:transform}
 #unique .u-card .im{position:relative}
-#unique .u-card img{width:100%;height:min(600px,72vh);object-fit:cover;filter:sepia(.25) saturate(.85) brightness(.95)}
+#unique .u-card img{width:100%;height:min(600px,72vh);object-fit:cover;filter:brightness(.95)}
 #unique .u-card .cap{
   position:absolute;left:14px;bottom:14px;color:#F2EADB;
   font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
@@ -295,11 +315,11 @@ img{max-width:100%;display:block}
 }
 
 /* ============ APARTMENTS ============ */
-#apts{background:var(--sand-2);color:var(--umber);padding:14vh 6vw 10vh}
+#apts{background:var(--panel);color:var(--sand);padding:14vh 6vw 10vh}
 #apts .ap-intro{max-width:760px;font-size:15px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;line-height:2}
 #apts .ap-grid{display:grid;grid-template-columns:.55fr 1.05fr 1.1fr;gap:0;margin-top:10vh;position:relative}
 #apts .col{padding:0 3vw}
-#apts .col+.col{border-left:1px solid var(--l-on-sand)}
+#apts .col+.col{border-left:1px solid var(--l-on-dark)}
 #apts .t-list{list-style:none;margin-top:34px}
 #apts .t-list li{margin-bottom:14px}
 #apts .t-list button{
@@ -315,7 +335,7 @@ img{max-width:100%;display:block}
 #apts .chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:7vh;max-width:460px}
 #apts .chip{
   font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-  border:1px solid rgba(41,36,32,.65);border-radius:99px;padding:8px 14px;
+  border:1px solid rgba(233,228,217,.35);border-radius:99px;padding:8px 14px;
 }
 #apts .chip.solid{background:var(--umber);color:var(--sand-2)}
 #apts .ap-desc{margin-top:5vh;max-width:470px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;line-height:1.9}
@@ -324,17 +344,15 @@ img{max-width:100%;display:block}
 #apts .ap-act .vid .pl{width:46px;height:46px;border-radius:50%;background:var(--umber);display:grid;place-items:center}
 #apts .ap-act .vid .pl::before{content:"";border-left:10px solid var(--sand-2);border-top:6px solid transparent;border-bottom:6px solid transparent;margin-left:3px}
 #apts .ap-photo{position:relative;overflow:hidden;min-height:78vh}
-#apts .ap-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:sepia(.28) saturate(.85) brightness(.97);transition:opacity .5s}
+#apts .ap-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.97);transition:opacity .5s}
 #apts .ap-nav{display:flex;justify-content:flex-end;align-items:center;gap:22px;margin-top:26px}
-#apts .ap-nav .arr{border-color:rgba(41,36,32,.6)}
-#apts .ap-nav .arr:hover{background:var(--umber);color:var(--sand-2)}
 #apts .ap-nav .cnt{display:flex;gap:12px;align-items:center;font-weight:700}
-#apts .ap-nav .cnt .sep{width:1px;height:16px;background:rgba(41,36,32,.5)}
+#apts .ap-nav .cnt .sep{width:1px;height:16px;background:rgba(233,228,217,.35)}
 
 /* ============ TIMELINE ============ */
-#timeline{position:relative;background:var(--sand-2);overflow:hidden}
+#timeline{position:relative;background:var(--panel);overflow:hidden}
 #timeline .pano{height:120vh;position:relative;overflow:hidden}
-#timeline .pano img{width:100%;height:100%;object-fit:cover;filter:sepia(.3) saturate(.75) brightness(.94)}
+#timeline .pano img{width:100%;height:100%;object-fit:cover;filter:brightness(.94)}
 #timeline .t-card{
   position:absolute;left:50%;top:34%;transform:translateX(-50%);
   width:min(500px,88vw);background:var(--umber);color:var(--sand);
@@ -351,7 +369,7 @@ img{max-width:100%;display:block}
 #timeline .bars-btm{display:block;width:100%;margin-top:-1px}
 
 /* ============ MARQUEE ============ */
-#marq{background:var(--umber);overflow:hidden;padding:5vh 0 6vh;border-bottom:1px solid rgba(168,148,116,.12)}
+#marq{background:var(--umber);overflow:hidden;padding:5vh 0 6vh;border-bottom:1px solid rgba(233,228,217,.12)}
 #marq .rail{display:flex;white-space:nowrap;width:max-content;animation:marq 26s linear infinite}
 #marq .rail span{font-family:'Prata',serif;font-size:clamp(30px,4.4vw,58px);text-transform:uppercase;padding-right:38px}
 #marq .rail span i{font-style:normal;font-size:.5em;vertical-align:middle;padding-left:38px}
@@ -368,7 +386,7 @@ img{max-width:100%;display:block}
 #fin .stat .v{font-size:20px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-top:6px}
 #fin .f-cols{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:10vw;margin-top:4vh}
 #fin .f-col h4{font-size:14px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;margin-bottom:8px}
-#fin .f-row{border-top:1px solid rgba(168,148,116,.35);padding:16px 2px;display:flex;justify-content:space-between;gap:24px;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;line-height:1.8}
+#fin .f-row{border-top:1px solid rgba(233,228,217,.35);padding:16px 2px;display:flex;justify-content:space-between;gap:24px;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;line-height:1.8}
 #fin .f-row.stack{flex-direction:column;gap:6px}
 #fin .f-cta{position:relative;display:flex;justify-content:flex-end;margin-top:7vh}
 
@@ -384,23 +402,23 @@ img{max-width:100%;display:block}
 #dev .d-card .spark{margin:30px 0 0;justify-content:center;width:100%}
 #dev .d-card .logo{font-family:'Archivo Black',sans-serif;font-size:52px;letter-spacing:-.02em;text-transform:lowercase;margin:56px 0 64px}
 #dev .d-card .logo sup{font-size:14px;vertical-align:super}
-#dev .d-card .d-foot{border-top:1px solid rgba(41,36,32,.7);padding-top:8px;margin-top:8px;display:flex;justify-content:space-between;font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;border-bottom:3px double rgba(41,36,32,.7);padding-bottom:8px}
-#stats{background:var(--umber-2);border-top:1px solid rgba(168,148,116,.12);padding:16vh 6vw 20vh}
+#dev .d-card .d-foot{border-top:1px solid rgba(8,8,10,.7);padding-top:8px;margin-top:8px;display:flex;justify-content:space-between;font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;border-bottom:3px double rgba(8,8,10,.7);padding-bottom:8px}
+#stats{background:var(--umber-2);border-top:1px solid rgba(233,228,217,.12);padding:16vh 6vw 20vh}
 #stats .s-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4vw;max-width:1240px;margin:0 auto}
 #stats .s-cell{text-align:center}
 #stats .s-num{font-family:'Prata',serif;font-size:clamp(64px,7.5vw,120px);line-height:1}
 #stats .s-cap{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;margin-top:22px;line-height:1.9;opacity:.9}
 
 /* ============ GALLERY ============ */
-#gallery{position:relative;background:var(--sand);color:var(--umber);padding:16vh 0 0}
+#gallery{position:relative;background:var(--panel);color:var(--sand);padding:16vh 0 0}
 #gallery .g-head{padding:0 6vw;display:flex;justify-content:space-between;align-items:flex-end}
 #gallery .g-head h2{font-family:'Prata',serif;font-size:clamp(34px,4.6vw,64px);text-transform:uppercase;line-height:1}
 #gallery .g-stage{position:relative;margin-top:6vh;height:100vh;overflow:hidden}
-#gallery .g-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:sepia(.3) saturate(.8) brightness(.95);opacity:0;transition:opacity .6s}
+#gallery .g-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.95);opacity:0;transition:opacity .6s}
 #gallery .g-stage img.act{opacity:1}
 #gallery .g-ring{
   position:absolute;left:26%;bottom:10vh;width:150px;height:150px;border-radius:50%;z-index:5;
-  border:1px solid rgba(41,36,32,.7);background:var(--sand-2);
+  border:1px solid rgba(8,8,10,.7);background:var(--sand-2);
   display:grid;place-items:center;text-align:center;color:var(--umber);
   font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
   transition:background .3s;
@@ -415,18 +433,22 @@ img{max-width:100%;display:block}
 /* ============ INVEST CTA ============ */
 #invest{position:relative;min-height:130vh;overflow:hidden;display:flex;justify-content:center}
 #invest .bg{position:absolute;inset:0;overflow:hidden}
-#invest .bg img{width:100%;height:100%;object-fit:cover;filter:sepia(.3) saturate(.8) brightness(.95)}
+#invest .bg img{width:100%;height:100%;object-fit:cover;filter:brightness(.95)}
 #invest .i-card{
   position:relative;z-index:2;width:min(470px,92vw);
-  background:var(--sand-2);color:var(--umber);
+  background:var(--panel);color:var(--sand);
   display:flex;flex-direction:column;align-items:center;text-align:center;
   padding:22vh 34px 30px;
 }
 #invest h2{font-family:'Prata',serif;font-size:clamp(30px,3.6vw,44px);line-height:1.2;text-transform:uppercase}
 #invest .pill{margin-top:28px}
 #invest .i-contacts{width:100%;margin-top:auto;padding-top:16vh}
-#invest .i-row{display:flex;justify-content:space-between;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border-bottom:2px solid rgba(41,36,32,.75);padding-bottom:10px}
-#invest canvas.i-word{width:100%;margin-top:26px}
+#invest .i-row{display:flex;justify-content:space-between;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border-bottom:2px solid rgba(233,228,217,.4);padding-bottom:10px}
+#invest .i-word{
+  width:100%;margin-top:26px;text-align:center;
+  font-family:'Archivo Black',sans-serif;text-transform:lowercase;font-weight:400;
+  font-size:clamp(38px,8.6vw,116px);line-height:1;
+}
 
 /* ============ BLOG ============ */
 #blog{position:relative;background:var(--umber);padding:14vh 6vw 0;overflow:hidden}
@@ -434,9 +456,9 @@ img{max-width:100%;display:block}
 #blog .b-head h2{font-family:'Prata',serif;font-size:clamp(34px,4.6vw,64px);text-transform:uppercase;line-height:1.05}
 #blog .b-meta{text-align:right}
 #blog .chips{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
-#blog .chip{font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border:1px solid rgba(168,148,116,.5);border-radius:99px;padding:7px 14px}
+#blog .chip{font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border:1px solid rgba(233,228,217,.5);border-radius:99px;padding:7px 14px}
 #blog .b-grid{display:grid;grid-template-columns:1fr 1fr;gap:6vw;max-width:1100px;margin:10vh auto 0}
-#blog .b-card img{width:100%;height:230px;object-fit:cover;filter:sepia(.35) saturate(.7) brightness(.85)}
+#blog .b-card img{width:100%;height:230px;object-fit:cover;filter:brightness(.85)}
 #blog .b-card .tr{width:110px;border-top:1px solid var(--sand);margin:26px 0 18px}
 #blog .b-card h3{font-family:'Prata',serif;font-size:clamp(24px,2.6vw,40px);line-height:1.12;text-transform:uppercase;max-width:400px}
 #blog .b-card .dash{width:18px;border-top:1px solid var(--sand);margin:20px 0 14px;opacity:.7}
@@ -454,8 +476,8 @@ img{max-width:100%;display:block}
 }
 #faq .f-letters .L{font-family:'Prata',serif;font-size:clamp(80px,10vw,150px);line-height:.9}
 #faq .f-letters .cap{font-size:10.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;line-height:1.9;padding-bottom:14px}
-#faq .qa{max-width:980px;margin:0 auto;border-bottom:1px solid rgba(168,148,116,.3)}
-#faq .q-item{border-top:1px solid rgba(168,148,116,.3)}
+#faq .qa{max-width:980px;margin:0 auto;border-bottom:1px solid rgba(233,228,217,.3)}
+#faq .q-item{border-top:1px solid rgba(233,228,217,.3)}
 #faq .q-btn{
   width:100%;display:grid;grid-template-columns:80px 1fr 40px;align-items:center;gap:20px;
   padding:26px 2px;text-align:left;
@@ -474,7 +496,7 @@ footer .f-col .v{font-size:11.5px;font-weight:700;letter-spacing:.18em;text-tran
 footer .f-col.r{text-align:right}
 footer .socials{display:flex;gap:12px;margin-top:26px}
 footer .socials a{
-  width:40px;height:40px;border-radius:50%;border:1px solid rgba(168,148,116,.5);
+  width:40px;height:40px;border-radius:50%;border:1px solid rgba(233,228,217,.5);
   display:grid;place-items:center;font-size:11px;font-weight:700;
 }
 footer .socials a:hover{background:var(--sand);color:var(--umber)}
@@ -492,6 +514,93 @@ footer .f-strip .left{display:flex;align-items:center;gap:18px}
 .rv{opacity:0;transform:translateY(34px)}
 .rv.in{opacity:1;transform:none;transition:opacity 1s var(--ease),transform 1s var(--ease)}
 
+/* ============ PRELOADER % ============ */
+#pre .p-pct{
+  position:absolute;right:24px;top:22px;text-align:right;
+  font-family:'Prata',serif;font-size:clamp(42px,6vw,72px);line-height:1;
+}
+#pre .p-pct small{display:block;font-family:'Jura',sans-serif;font-size:11px;font-weight:700;letter-spacing:.22em;margin-top:8px;opacity:.75}
+
+/* ============ FLOATING CTA ============ */
+#floatCta{
+  position:fixed;right:22px;bottom:22px;z-index:80;
+  opacity:0;pointer-events:none;transform:translateY(12px);
+  transition:opacity .45s,transform .45s var(--ease);
+}
+#floatCta.show{opacity:1;pointer-events:auto;transform:none}
+
+/* ============ LEAD MODAL ============ */
+#lead{
+  position:fixed;inset:0;z-index:700;background:rgba(28,24,21,.72);
+  display:grid;place-items:center;padding:24px;
+  opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s;
+  backdrop-filter:blur(6px);
+}
+#lead.open{opacity:1;visibility:visible}
+#lead[hidden],#capDetail[hidden]{display:none!important}
+#lead:not([hidden]),#capDetail:not([hidden]){display:grid}
+#lead .sheet{
+  width:min(460px,100%);background:var(--panel);color:var(--sand);
+  padding:34px 30px 28px;position:relative;
+}
+#lead .x{
+  position:absolute;right:16px;top:14px;width:36px;height:36px;border-radius:50%;
+  border:1px solid rgba(233,228,217,.4);font-size:18px;line-height:1;
+}
+#lead .x:hover{background:var(--sand);color:var(--umber)}
+#lead h3{font-family:'Prata',serif;font-size:clamp(26px,3.4vw,36px);text-transform:uppercase;line-height:1.15;margin-bottom:10px}
+#lead .sub{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;line-height:1.8;opacity:.8;margin-bottom:26px}
+#lead label{display:block;font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin:0 0 8px}
+#lead input{
+  width:100%;background:transparent;border:0;border-bottom:1.5px solid rgba(233,228,217,.4);
+  padding:10px 2px 12px;margin-bottom:22px;font:inherit;letter-spacing:.12em;color:var(--sand);
+}
+#lead input:focus{outline:none;border-bottom-color:var(--sand)}
+#lead .hint{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.65;margin:18px 0 0;line-height:1.7}
+#lead .ok,#lead .err{display:none;margin-top:18px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;line-height:1.7}
+#lead.sent .fields,#lead.sent .sub{display:none}
+#lead.sent .ok{display:block}
+
+/* ============ CAPABILITY DETAIL ============ */
+#capDetail{
+  position:fixed;inset:0;z-index:650;background:rgba(28,24,21,.78);
+  display:grid;place-items:center;padding:24px;
+  opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s;
+  backdrop-filter:blur(5px);
+}
+#capDetail.open{opacity:1;visibility:visible}
+#capDetail .sheet{
+  width:min(520px,100%);background:var(--panel);color:var(--sand);
+  padding:0;overflow:hidden;position:relative;
+}
+#capDetail .sheet img{width:100%;height:240px;object-fit:cover;filter:brightness(.95)}
+#capDetail .body{padding:28px 28px 30px}
+#capDetail h3{font-family:'Prata',serif;font-size:clamp(28px,3.6vw,40px);text-transform:uppercase;line-height:1.1;margin-bottom:14px}
+#capDetail p{font-size:12px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;line-height:1.9}
+#capDetail .x{
+  position:absolute;right:14px;top:14px;width:40px;height:40px;border-radius:50%;
+  border:1px solid rgba(242,234,219,.75);color:#F2EADB;background:rgba(28,24,21,.35);font-size:18px;
+}
+#unique .u-card{cursor:pointer}
+
+/* ============ BUILD LOG ============ */
+#blog .b-log{max-width:1100px;margin:8vh auto 0;border-top:1px solid rgba(233,228,217,.28)}
+#blog .b-log a{
+  display:flex;justify-content:space-between;gap:24px;align-items:baseline;
+  padding:18px 2px;border-bottom:1px solid rgba(233,228,217,.28);
+  font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+}
+#blog .b-log a:hover{opacity:.75}
+#blog .b-log .d{opacity:.55;white-space:nowrap;font-size:11px}
+
+/* ============ DAY / NIGHT ============ */
+#summer .dn{display:flex;gap:18px;margin-bottom:34px}
+#summer .dn button{
+  font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;opacity:.4;
+  border-bottom:1px solid transparent;padding-bottom:4px;transition:opacity .3s;
+}
+#summer .dn button.on{opacity:1;border-bottom-color:var(--sand)}
+
 /* ============ RESPONSIVE ============ */
 @media (max-width:900px){
   #hero .h-meta{flex-direction:column;align-items:center;text-align:center;gap:8px}
@@ -500,7 +609,7 @@ footer .f-strip .left{display:flex;align-items:center;gap:18px}
   #location .l-lower{grid-template-columns:1fr}
   #location .l-infra{margin-right:0}
   #apts .ap-grid{grid-template-columns:1fr}
-  #apts .col+.col{border-left:0;border-top:1px solid var(--l-on-sand);margin-top:6vh;padding-top:6vh}
+  #apts .col+.col{border-left:0;border-top:1px solid var(--l-on-dark);margin-top:6vh;padding-top:6vh}
   #fin .f-top{grid-template-columns:1fr}
   #fin .f-stats{justify-self:start}
   #fin .f-cols{grid-template-columns:1fr;gap:8vh}
@@ -533,39 +642,40 @@ footer .f-strip .left{display:flex;align-items:center;gap:18px}
 <div id="pre" aria-hidden="true">
   <div class="p-top">
     <canvas id="preGlyph" width="64" height="46"></canvas>
-    <div class="lbl">Інвестиційний проєкт</div>
+    <div class="lbl">AI product studio</div>
   </div>
+  <div class="p-pct"><span id="prePct">0</span>%<small>loaded</small></div>
   <div class="p-sheep"><canvas id="sheep" width="420" height="300"></canvas></div>
   <div class="p-bottom">
     <div class="p-cols">
-      <div class="lbl">Курортний<br>дизайн — готель</div>
-      <div class="lbl r">Завантаження сайту<br>Please wait</div>
+      <div class="lbl">Crazy enough<br>to build perfect</div>
+      <div class="lbl r">Loading site<br>Please wait</div>
     </div>
-    <canvas class="wordmark" id="preWord" height="190"></canvas>
+    <div class="wordmark shimmer">optiflow</div>
   </div>
 </div>
 
 <!-- ============ NAV ============ -->
 <header id="nav">
-  <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
-  <button class="n-link" id="menuBtn">Меню</button>
-  <a class="n-link" href="#gallery">Аеротур</a>
-  <canvas class="n-logo" id="navWord" height="52" aria-hidden="true"></canvas>
+  <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  <button class="n-link" id="menuBtn">Menu</button>
+  <a class="n-link" href="#gallery">Showreel</a>
+  <span class="n-logo" aria-hidden="true">optiflow</span>
   <div class="n-right">
     <a class="n-link" href="#hero">EN</a>
-    <a class="n-cta" href="#invest">Дізнатися більше</a>
+    <a class="n-cta" href="#invest">Learn more</a>
   </div>
 </header>
 
-<nav id="menu" aria-label="Основне меню">
-  <a href="#about">Про нас</a>
-  <a href="#location">Локація</a>
-  <a href="#unique">Унікальність</a>
-  <a href="#apts">Апартаменти</a>
-  <a href="#fin">Інвесторам</a>
+<nav id="menu" aria-label="Primary menu">
+  <a href="#about">About</a>
+  <a href="#location">Territory</a>
+  <a href="#unique">Capabilities</a>
+  <a href="#apts">Products</a>
+  <a href="#fin">Engage</a>
   <a href="#faq">FAQ</a>
   <div class="m-meta">
-    <span class="lbl">Яремче · Карпати</span>
+    <span class="lbl">Humans × Machines</span>
     <span class="lbl">hello@optiflow.studio</span>
   </div>
 </nav>
@@ -575,18 +685,18 @@ footer .f-strip .left{display:flex;align-items:center;gap:18px}
 <!-- ============ HERO ============ -->
 <section id="hero">
   <div class="h-media" id="heroMedia">
-    <img src="https://picsum.photos/seed/loomhero/1800/1100" alt="Внутрішній двір готелю LOOM — вечірнє світло між дерев'яними фасадами">
+    <img id="heroImg" alt="Optiflow signal field">
   </div>
   <div class="h-ui" id="heroUi">
-    <div class="h-tag lbl">Інвестиційний проєкт</div>
-    <canvas class="h-word" id="heroWord" height="240"></canvas>
+    <div class="h-tag lbl">Real problems only</div>
+    <h1 class="h-word shimmer" id="heroWord">Optiflow</h1>
     <div class="h-meta">
-      <div class="l">Development<br><span style="opacity:.8">𐊍</span> by Optiflow</div>
-      <div class="c">Курортний<br>дизайн — готель</div>
-      <div class="r">Yaremche<br>Ivano-Frankivsk</div>
+      <div class="l">Studio<br><span style="opacity:.8">𐊍</span> by humans × machines</div>
+      <div class="c">AI product<br>studio</div>
+      <div class="r">Est. 2026<br>Ship, not pitch</div>
     </div>
   </div>
-  <a class="h-ring" href="#invest">Інвестувати<br>у LOOM</a>
+  <a class="h-ring" href="#invest">Start a<br>project</a>
   <div class="h-mountain" id="heroMountain"><canvas id="mountainHero" height="260"></canvas></div>
 </section>
 
@@ -594,88 +704,60 @@ footer .f-strip .left{display:flex;align-items:center;gap:18px}
 <section id="prologue">
   <canvas class="bars-top" id="barsTop" height="240" aria-hidden="true"></canvas>
   <div class="p-core">
-    <div class="spark lbl rv" style="justify-content:center"><i>✦✦✦</i>&nbsp;&nbsp;Пролог&nbsp;&nbsp;<i>✦✦✦</i></div>
-    <p class="quote rv">«Тут, де вітер читає горам давні легенди, а смерекові ліси пам'ятають кожен світанок, прокидається тиха сила Карпат — вона повертає людину до її витоків і перетворює сон на яву»</p>
-    <div class="p-cta rv"><a class="pill ghost" href="#invest">Консультація</a></div>
+    <div class="spark lbl rv" style="justify-content:center"><i>✦✦✦</i>&nbsp;&nbsp;Manifesto&nbsp;&nbsp;<i>✦✦✦</i></div>
+    <p class="quote rv">«Everyone has an AI strategy — a deck, a roadmap, a committee. We have a habit: we ship. Real problems get solved by people crazy enough to promise perfect, and stubborn enough to deliver it.»</p>
+    <div class="p-cta rv"><button class="pill ghost lead-open" type="button">Book a call</button></div>
   </div>
 </section>
 
 <!-- ============ ABOUT ============ -->
 <section id="about">
   <div class="a-word rv">
-    <div class="big serif">Loom</div>
-    <div class="by lbl"><span style="opacity:.8">𐊍</span> by Optiflow</div>
+    <div class="big serif">Optiflow</div>
+    <div class="by lbl"><span style="opacity:.8">𐊍</span> AI product studio</div>
   </div>
   <div class="a-grid">
     <div class="rv">
-      <h3 class="serif">Про нас</h3>
+      <h3 class="serif">About us</h3>
       <div class="rule"></div>
-      <p class="mono">LOOM — це курортний дизайн-готель у серці Яремче, де сучасна архітектура зустрічається з гуцульською спадщиною, а продумана інвестиційна модель перетворює відпочинок на актив. Традиція тут не музей: вона живе в камені, дереві та світлі.</p>
-      <a class="pill ghost" style="margin-top:34px" href="#unique">Дізнатися більше</a>
+      <p class="mono">Optiflow is an AI product studio. We hunt the problems everyone complains about and nobody fixes — then ship the product that makes them disappear.</p>
+      <a class="pill ghost" style="margin-top:34px" href="#unique">Learn more</a>
     </div>
     <div class="rv">
-      <h3 class="serif">Концепт</h3>
+      <h3 class="serif">Concept</h3>
       <div class="rule"></div>
-      <p class="mono">Архітектура комплексу продовжує лінію хребтів: камінь тримає силу гір, дерево віддає їхнє тепло. Тераси розгортають панораму, від якої завмирає подих, а давні ремесла вплітаються в сучасний побут — так народжується відпочинок, наповнений змістом та енергією природи.</p>
+      <p class="mono">No strategy theater. We engineer LLM-native apps, autonomous agents, and interfaces people feel — then stay for production traffic and the unglamorous work that makes it reliable.</p>
     </div>
   </div>
   <div class="a-facade">
-    <img src="https://picsum.photos/seed/loomfacade/1800/1400" alt="Каскадні тераси фасаду готелю на тлі темного неба">
+    <img id="aFacadeImg" alt="Optiflow studio field">
     <figure class="a-video rv">
       <div class="frame">
         <div class="scr">
-          <img src="https://picsum.photos/seed/loomteaser/640/420" alt="">
+          <img id="aVideoImg" alt="">
           <span class="play" aria-hidden="true"></span>
         </div>
       </div>
-      <figcaption>Зітканий із снів</figcaption>
+      <figcaption>See you in production</figcaption>
     </figure>
   </div>
 </section>
 
-<!-- ============ LOCATION ============ -->
+<!-- ============ LOCATION / TERRITORY ============ -->
 <section id="location">
   <div class="l-display">
-    <div class="row1 rv">Локація</div>
-    <div class="row2 rv"><span class="de">де</span> <span>Гори</span></div>
-    <div class="row3 rv">тчуть тишу</div>
+    <div class="row1 rv">Territory</div>
+    <div class="row2 rv"><span class="de">where</span> <span>Signal</span></div>
+    <div class="row3 rv">lives</div>
   </div>
   <div class="l-lower">
     <div class="l-map rv">
-      <svg viewBox="0 0 640 520" fill="none" aria-label="Мапа околиць Яремче">
-        <g stroke="rgba(168,148,116,.22)" stroke-width="1.4">
-          <path d="M40 480 C 140 380, 120 300, 220 250 S 420 190, 470 90 S 600 40, 636 20"/>
-          <path d="M0 300 C 120 290, 210 330, 320 300 S 520 260, 640 300"/>
-          <path d="M200 520 C 240 430, 330 420, 380 340 S 430 220, 520 190"/>
-        </g>
-        <g stroke="rgba(168,148,116,.12)" stroke-width="22" stroke-linecap="round">
-          <path d="M60 470 C 150 390, 140 310, 230 260"/>
-        </g>
-        <g font-family="Jura" font-size="11" letter-spacing="2" fill="#A89474" font-weight="600">
-          <circle cx="105" cy="128" r="4" stroke="#A89474" fill="none"/>
-          <text x="125" y="122">ПАРК «КАРПАТИ В</text><text x="125" y="136">МІНІАТЮРІ»</text>
-          <text x="125" y="152" opacity=".6">3 КМ</text>
-          <circle cx="258" cy="242" r="4" stroke="#A89474" fill="none"/>
-          <text x="230" y="226">ВОДОСПАД ПРОБІЙ</text>
-          <circle cx="180" cy="300" r="4" stroke="#A89474" fill="none"/>
-          <text x="120" y="286">ПАРК ЛЕГЕНД</text><text x="120" y="314">«ҐЕДЗЬО»</text>
-          <circle cx="330" cy="308" r="4" stroke="#A89474" fill="none"/>
-          <text x="348" y="304">ГУЦУЛЬСЬКИЙ</text><text x="348" y="318">СУВЕНІРНИЙ РИНОК</text>
-          <circle cx="360" cy="366" r="4" stroke="#A89474" fill="none"/>
-          <text x="378" y="362">ПАМ'ЯТНИК АРХІТЕКТУРИ,</text><text x="378" y="376">РЕСТОРАН «ГУЦУЛЬЩИНА»</text>
-          <circle cx="560" cy="446" r="4" stroke="#A89474" fill="none"/>
-          <text x="452" y="442">СКЕЛІ ДОВБУША</text>
-          <text x="452" y="458" opacity=".6">1200 М</text>
-        </g>
-        <g font-family="Archivo Black" font-size="34" fill="#A89474">
-          <text x="196" y="382" style="letter-spacing:2px">LM</text>
-        </g>
-      </svg>
+      <img id="lMapImg" alt="Optiflow signal territory" style="width:100%;aspect-ratio:4/3;display:block">
     </div>
     <div class="l-copy">
-      <p class="mono rv">LOOM стоїть біля підніжжя Карпатських гір, у самому серці Яремче — містечка, де гуцульська автентика живе поруч із дикою природою.</p>
-      <div class="rv"><a class="pill ghost" href="#invest">Консультація</a></div>
-      <div class="l-infra rv"><span class="lbl">Інфраструктура</span></div>
+      <p class="mono rv">Remote-first, globally wired, always close to the pain. We show up where the problem is loudest and the slides are quietest.</p>
+      <div class="rv"><button class="pill ghost lead-open" type="button">Book a call</button></div>
+      <div class="l-infra rv"><span class="lbl">Signal stack</span></div>
     </div>
   </div>
 </section>
@@ -683,45 +765,61 @@ footer .f-strip .left{display:flex;align-items:center;gap:18px}
 <!-- drag cards -->
 <section id="drag">
   <div class="d-meta">
-    <div class="lbl" style="opacity:.6">Локація</div>
-    <p class="mono" style="margin-top:10px">вул. Свободи, 12,<br>Яремче, Івано-<br>Франківська область</p>
+    <div class="lbl" style="opacity:.6">Studio</div>
+    <p class="mono" style="margin-top:10px">hello@optiflow.studio<br>Est. 2026<br>Humans × Machines</p>
   </div>
-  <a class="d-ring" href="#invest">Інвестувати<br>у LOOM</a>
+  <a class="d-ring" href="#invest">Start a<br>project</a>
   <div class="d-track" id="dragTrack">
-    <div class="d-card photo"><img draggable="false" src="https://picsum.photos/seed/loomfall/700/1000" alt="Гірська річка з порогами восени"></div>
+    <div class="d-card photo"><img draggable="false" id="dragImg0" alt="Idea to prototype"></div>
     <div class="d-card info">
-      <div class="circ"><div><span class="n">31</span> <span class="u">хв.</span></div></div>
-      <div class="to">Пішки до<br>Парк «Карпати в мініатюрі»</div>
+      <div class="circ"><div><span class="n">14</span> <span class="u">d</span></div></div>
+      <div class="to">Idea to<br>first prototype</div>
     </div>
-    <div class="d-card photo"><img draggable="false" src="https://picsum.photos/seed/loomwood/700/1000" alt="Смерековий ліс у тумані"></div>
+    <div class="d-card photo"><img draggable="false" id="dragImg1" alt="Builds reaching production"></div>
     <div class="d-card info">
-      <div class="circ"><div><span class="n">12</span> <span class="u">хв.</span></div></div>
-      <div class="to">Пішки до<br>Водоспад Пробій</div>
+      <div class="circ"><div><span class="n">100</span> <span class="u">%</span></div></div>
+      <div class="to">Builds that<br>reach production</div>
     </div>
-    <div class="d-card photo"><img draggable="false" src="https://picsum.photos/seed/loomrocks/700/1000" alt="Скелі серед лісу"></div>
+    <div class="d-card photo"><img draggable="false" id="dragImg2" alt="Agents on duty"></div>
     <div class="d-card info">
-      <div class="circ"><div><span class="n">18</span> <span class="u">хв.</span></div></div>
-      <div class="to">Автом до<br>Скелі Довбуша</div>
+      <div class="circ"><div><span class="n">24</span> <span class="u">/7</span></div></div>
+      <div class="to">Agents<br>on duty</div>
+    </div>
+    <div class="d-card photo"><img draggable="false" id="dragImg3" alt="Zero slideware"></div>
+    <div class="d-card info">
+      <div class="circ"><div><span class="n">0</span> <span class="u">decks</span></div></div>
+      <div class="to">Slideware<br>produced</div>
+    </div>
+    <div class="d-card photo"><img draggable="false" id="dragImg4" alt="The polish that ships"></div>
+    <div class="d-card info">
+      <div class="circ"><div><span class="n">4</span> <span class="u">%</span></div></div>
+      <div class="to">The polish users<br>actually remember</div>
     </div>
   </div>
   <div class="d-nav">
-    <div class="d-count"><span id="dragCur">1</span><span class="sep"></span><span>6</span></div>
-    <button class="arr" id="dragPrev" aria-label="Назад">‹</button>
-    <button class="arr" id="dragNext" aria-label="Далі">›</button>
+    <div class="d-count"><span id="dragCur">1</span><span class="sep"></span><span>10</span></div>
+    <button class="arr" id="dragPrev" aria-label="Previous">‹</button>
+    <button class="arr" id="dragNext" aria-label="Next">›</button>
   </div>
   <div class="d-hint">
-    <div class="lbl">Утримуйте та<br>переміщайте</div>
+    <div class="lbl">Hold and<br>drag</div>
     <div class="path">
       <span class="ico">☀</span>
       <span class="dot-line"></span>
-      <span class="ico ghosty">❄</span>
+      <span class="ico ghosty">☾</span>
     </div>
   </div>
 </section>
 
 <section id="summer">
-  <p class="quote rv">Улітку довкола розгортається мапа пригод: хайкінг стежками хребтів, рафтинг гірськими річками, етнофестивалі та гастрономічні мандрівки.</p>
-  <div class="rv"><a class="pill ghost" href="#unique">Дізнатися більше</a></div>
+  <div class="dn rv" role="tablist" aria-label="Day or night">
+    <button type="button" class="on" data-mode="day" aria-selected="true">Day</button>
+    <button type="button" data-mode="night" aria-selected="false">Night</button>
+  </div>
+  <p class="quote rv" id="seasonQuote">Day mode: hunt the pain, prototype in the open, ship before the committee names the workstream.</p>
+  <div class="rv"><a class="pill ghost" href="#unique">Learn more</a></div>
+  <p class="quote rv" style="margin-top:10vh;font-size:clamp(22px,3vw,36px)">35× leverage: one sharp product beats a quarter of slideware — and keeps compounding after launch.</p>
+  <div class="rv" style="margin-top:34px"><button class="pill ghost lead-open" type="button">Book a call</button></div>
 </section>
 
 <!-- ============ DITHER WIPE ============ -->
@@ -731,50 +829,49 @@ footer .f-strip .left{display:flex;align-items:center;gap:18px}
 <section id="unique">
   <div class="u-stage" id="uStage">
     <div class="u-head">
-      <div class="spark lbl"><i>✦✦✦</i>&nbsp;&nbsp;Унікальність&nbsp;&nbsp;<i>✦✦✦</i></div>
-      <h2>Чим манить<br>LOOM?</h2>
+      <div class="spark lbl"><i>✦✦✦</i>&nbsp;&nbsp;Capabilities&nbsp;&nbsp;<i>✦✦✦</i></div>
+      <h2>What we're<br>dangerous at</h2>
     </div>
-    <!-- cards injected by JS -->
   </div>
   <div id="uTrack" style="height:520vh"></div>
 </section>
 
-<!-- ============ APARTMENTS ============ -->
+<!-- ============ PRODUCTS (was apartments) ============ -->
 <section id="apts">
-  <p class="ap-intro rv">Для усамітнення, для двох або для всієї родини: панорамні апартаменти з просторими терасами для відпочинку серед Карпат</p>
+  <p class="ap-intro rv">Selected builds for operators, founders, and teams who need the problem gone — not another roadmap</p>
   <div class="ap-grid">
     <div class="col">
-      <div class="lbl" style="opacity:.6">Типи</div>
+      <div class="lbl" style="opacity:.6">Types</div>
       <ul class="t-list" id="tList"></ul>
     </div>
     <div class="col">
-      <div class="m2"><span class="from">від</span><span class="num" id="apM2">37 м<sup>2</sup></span></div>
+      <div class="m2"><span class="from">from</span><span class="num" id="apM2">14 d</span></div>
       <div class="chips" id="apChips"></div>
       <p class="ap-desc" id="apDesc"></p>
       <div class="ap-act">
-        <a class="pill dark" href="#invest">Дізнатись ціну</a>
-        <a class="vid" href="#gallery"><span class="pl"></span>Дивитися<br>відео</a>
+        <a class="pill dark" href="#invest">Get a quote</a>
+        <a class="vid" href="#gallery"><span class="pl"></span>Watch<br>showreel</a>
       </div>
     </div>
-    <div class="col ap-photo"><img id="apImg" src="https://picsum.photos/seed/loomapt1/900/1200" alt="Інтер'єр апартаментів"></div>
+    <div class="col ap-photo"><img id="apImg" alt="Optiflow product surface"></div>
   </div>
   <div class="ap-nav">
     <div class="cnt"><span id="apCur">1</span><span class="sep"></span><span id="apTotal">6</span></div>
-    <button class="arr" id="apPrev" aria-label="Попередній тип">‹</button>
-    <button class="arr" id="apNext" aria-label="Наступний тип">›</button>
+    <button class="arr" id="apPrev" aria-label="Previous type">‹</button>
+    <button class="arr" id="apNext" aria-label="Next type">›</button>
   </div>
 </section>
 
 <!-- ============ TIMELINE ============ -->
 <section id="timeline">
   <div class="pano">
-    <img id="panoImg" src="https://picsum.photos/seed/loompano/2000/1200" alt="Панорама комплексу серед лісу">
+    <img id="panoImg" alt="From pain to product — Optiflow process panorama">
     <div class="t-card rv">
-      <div class="t-years"><span>‘26</span><span class="dash"></span><span>‘29</span></div>
+      <div class="t-years"><span>‘01</span><span class="dash"></span><span>‘04</span></div>
       <div class="t-rows">
-        <div class="t-row"><span>Старт будівництва</span><span>1 кв. ‘26 року</span></div>
-        <div class="t-row"><span>Завершення 1-ї секції</span><span>1 кв. ‘29 року</span></div>
-        <div class="t-row"><span>Завершення 2-ї секції</span><span>1 кв. ‘29 року</span></div>
+        <div class="t-row"><span>Find the pain</span><span>Week 1</span></div>
+        <div class="t-row"><span>Prototype in days</span><span>Week 2</span></div>
+        <div class="t-row"><span>Ship to production</span><span>Week 3–6</span></div>
       </div>
     </div>
   </div>
@@ -786,83 +883,84 @@ footer .f-strip .left{display:flex;align-items:center;gap:18px}
   <div class="rail" id="marqRail"></div>
 </section>
 
-<!-- ============ FINANCE ============ -->
+<!-- ============ ENGAGE (was finance) ============ -->
 <section id="fin">
   <canvas class="f-mountain" id="finMountain"></canvas>
   <div class="f-top">
     <div class="f-start rv">
-      <div class="lbl">Старт виплат дивідендів</div>
-      <h3>І квартал<br>‘29 року</h3>
+      <div class="lbl">First working build</div>
+      <h3>Within<br>two weeks</h3>
     </div>
     <div class="f-stats">
-      <div class="stat rv"><div class="k">Прогнозована дохідність</div><div class="v">8% – 10% на рік</div></div>
-      <div class="stat rv"><div class="k">Капіталізація — зростання вартості активу після введення об'єкта в експлуатацію</div><div class="v">20% – 30%</div></div>
-      <div class="stat rv"><div class="k">Розтермінування</div><div class="v">до 2 років</div></div>
-      <div class="stat rv"><div class="k">Перший внесок</div><div class="v">від 30%</div></div>
+      <div class="stat rv"><div class="k">Typical engagement</div><div class="v">6 – 12 weeks</div></div>
+      <div class="stat rv"><div class="k">Outcome — a product in production, not a pilot that dies in a folder</div><div class="v">Shipped</div></div>
+      <div class="stat rv"><div class="k">Payment models</div><div class="v">Fixed · Retainer</div></div>
+      <div class="stat rv"><div class="k">Kickoff</div><div class="v">from week one</div></div>
     </div>
   </div>
   <div class="f-cols">
     <div class="f-col rv">
-      <h4>Наші прогнози</h4>
-      <div class="f-row"><span>Орієнтовний термін окупності</span><span>≈10 – 12 років</span></div>
-      <div class="f-row"><span>Середньорічне завантаження</span><span>≈65%</span></div>
+      <h4>Our forecasts</h4>
+      <div class="f-row"><span>Idea → first prototype</span><span>≈14 days</span></div>
+      <div class="f-row"><span>Builds that reach production</span><span>≈100%</span></div>
     </div>
     <div class="f-col rv">
-      <h4>Додаткові переваги</h4>
-      <div class="f-row stack"><span>Безкоштовне проживання 30 днів на рік</span></div>
-      <div class="f-row stack"><span>Комплекс працює цілий рік, забезпечуючи стабільне завантаження та дохідність</span></div>
-      <div class="f-row stack"><span>Власна керуюча компанія LM Management: професійне управління вашими апартаментами без зайвого клопоту</span></div>
+      <h4>Extra advantages</h4>
+      <div class="f-row stack"><span>Agents on duty 24/7 after ship</span></div>
+      <div class="f-row stack"><span>We stay for production traffic — the part most studios wave goodbye to</span></div>
+      <div class="f-row stack"><span>Zero slideware. Proof over promises. Perfect or nothing.</span></div>
     </div>
   </div>
-  <div class="f-cta rv"><a class="pill" href="#invest">Стати інвестором</a></div>
+  <div class="f-cta rv"><a class="pill" href="#invest">Become a partner</a></div>
 </section>
 
-<!-- ============ DEVELOPER ============ -->
+<!-- ============ STUDIO ============ -->
 <section id="dev">
   <canvas class="bars-hang" id="barsDev" height="130" aria-hidden="true"></canvas>
-  <div class="spark lbl rv" style="justify-content:center"><i>✦✦✦</i>&nbsp;&nbsp;Девелопер&nbsp;&nbsp;<i>✦✦✦</i></div>
-  <h2 class="rv">Легенда від Optiflow, що оживає в самому серці Карпат</h2>
+  <div class="spark lbl rv" style="justify-content:center"><i>✦✦✦</i>&nbsp;&nbsp;Studio&nbsp;&nbsp;<i>✦✦✦</i></div>
+  <h2 class="rv">A legend from Optiflow, built where real problems live</h2>
   <div class="d-card rv">
-    <p class="txt">Urban tech developer, для якого нерухомість — більше ніж квадратні метри: це сервіси, інфраструктура й турбота про людей, що разом формують нову якість життя.</p>
+    <p class="txt">An AI product studio building the future of work — agents, craft, and care for the humans stuck with the pain.</p>
     <div class="spark"><i style="margin:0 auto">✦✦✦</i></div>
     <div class="logo">optiflow<sup>®</sup></div>
-    <div class="d-foot"><span>Urban tech</span><span>Developer</span></div>
+    <div class="d-foot"><span>AI product</span><span>Studio</span></div>
   </div>
 </section>
 
 <section id="stats">
   <div class="s-grid">
-    <div class="s-cell rv"><div class="s-num">20+</div><div class="s-cap">років досвіду на ринку нерухомості</div></div>
-    <div class="s-cell rv"><div class="s-num">2</div><div class="s-cap">місце серед девелоперів України за галузевими рейтингами</div></div>
-    <div class="s-cell rv"><div class="s-num">37</div><div class="s-cap">реалізованих проєктів</div></div>
-    <div class="s-cell rv"><div class="s-num">7</div><div class="s-cap">міжнародних нагород International Property Awards у Лондоні</div></div>
+    <div class="s-cell rv"><div class="s-num">14d</div><div class="s-cap">idea → first prototype</div></div>
+    <div class="s-cell rv"><div class="s-num">100%</div><div class="s-cap">of builds reach production</div></div>
+    <div class="s-cell rv"><div class="s-num">24/7</div><div class="s-cap">agents on duty</div></div>
+    <div class="s-cell rv"><div class="s-num">0</div><div class="s-cap">slide decks produced</div></div>
   </div>
 </section>
 
 <!-- ============ GALLERY ============ -->
 <section id="gallery">
   <div class="g-head">
-    <h2 class="rv">Галерея<br>LOOM</h2>
+    <h2 class="rv">Gallery<br>optiflow</h2>
   </div>
   <div class="g-stage" id="gStage">
-    <a class="g-ring" href="#invest">Інвестувати<br>у LOOM</a>
+    <a class="g-ring" href="#invest">Start a<br>project</a>
     <div class="g-nav">
       <div class="cnt"><span id="gCur">1</span><span class="sep"></span><span id="gTotal">6</span></div>
-      <button class="arr" id="gPrev" aria-label="Попередній кадр">‹</button>
-      <button class="arr" id="gNext" aria-label="Наступний кадр">›</button>
+      <button class="arr" id="gPrev" aria-label="Previous frame">‹</button>
+      <button class="arr" id="gNext" aria-label="Next frame">›</button>
     </div>
   </div>
 </section>
 
-<!-- ============ INVEST ============ -->
+<!-- ============ INVEST / CONTACT ============ -->
 <section id="invest">
-  <div class="bg"><img src="https://picsum.photos/seed/loominvest/2000/1300" alt="Корпуси готелю серед сосен"></div>
+  <div class="bg"><img id="investBgImg" alt="Optiflow contact atmosphere"></div>
   <div class="i-card">
-    <h2 class="rv">Стань частиною легенди</h2>
-    <div class="rv"><a class="pill dark" href="mailto:hello@optiflow.studio">Інвестувати</a></div>
+    <h2 class="rv">Become part of the legend</h2>
+    <div class="rv"><a class="pill dark" href="mailto:hello@optiflow.studio">Start a project</a></div>
+    <p class="mono rv" style="margin-top:28px;max-width:34ch;opacity:.85">We exist to give you back time — profit you can feel, not just measure. See you in production.</p>
     <div class="i-contacts rv">
-      <div class="i-row"><span>+380 63 000 00 00</span><span>hello@optiflow.studio</span></div>
-      <canvas class="i-word" id="investWord" height="150"></canvas>
+      <div class="i-row"><span>Est. 2026</span><span>hello@optiflow.studio</span></div>
+      <div class="i-word shimmer">optiflow</div>
     </div>
   </div>
 </section>
@@ -870,30 +968,36 @@ footer .f-strip .left{display:flex;align-items:center;gap:18px}
 <!-- ============ BLOG ============ -->
 <section id="blog">
   <div class="b-head">
-    <h2 class="rv">Блог<br>актуальні оновлення</h2>
+    <h2 class="rv">Notes<br>live updates</h2>
     <div class="b-meta rv">
-      <div class="lbl" style="opacity:.6">Останнє оновлення:</div>
-      <div class="chips"><span class="chip">Новини</span><span class="chip">Хід будівництва</span></div>
+      <div class="lbl" style="opacity:.6">Latest update:</div>
+      <div class="chips"><span class="chip">News</span><span class="chip">Build log</span></div>
       <div class="lbl" style="margin-top:12px">21/4/2026</div>
     </div>
   </div>
   <div class="b-grid">
     <article class="b-card rv">
-      <img src="https://picsum.photos/seed/loomriver/800/500" alt="Річка та дерев'яний міст у Яремче">
+      <img id="blogImg0" alt="Field notes">
       <div class="tr"></div>
-      <h3>Туристичний та інвестиційний потенціал Яремче</h3>
+      <h3>Real problems beat AI theater</h3>
       <div class="dash"></div>
-      <p>Чому саме тут виростає новий центр прибуткової курортної нерухомості?</p>
+      <p>What we build — and what we refuse to pitch.</p>
     </article>
     <article class="b-card rv">
-      <img src="https://picsum.photos/seed/loompress/800/500" alt="Рендер комплексу LOOM">
+      <img id="blogImg1" alt="Studio build">
       <div class="tr"></div>
-      <h3>Преса про LOOM</h3>
+      <h3>Dispatch, shipped in 14 days</h3>
       <div class="dash"></div>
-      <p>Провідний девелопер Прикарпаття будує свій перший апарт-готель.</p>
+      <p>Ops floor chaos to a queue of done — no committee.</p>
     </article>
   </div>
-  <div class="b-all rv"><a href="#blog">Дивитися всі</a></div>
+  <div class="b-log rv">
+    <a href="#blog"><span>Optiflow: June build report</span><span class="d">4/7/2026</span></a>
+    <a href="#blog"><span>Dispatch shipped to production</span><span class="d">2/6/2026</span></a>
+    <a href="#blog"><span>Nightshift autonomy hits 68%</span><span class="d">11/5/2026</span></a>
+    <a href="#blog"><span>Ledgerlens clears 12K docs / day</span><span class="d">7/4/2026</span></a>
+  </div>
+  <div class="b-all rv"><a href="#blog">See all</a></div>
   <canvas class="treeline" id="treeline" height="320" aria-hidden="true"></canvas>
 </section>
 
@@ -901,9 +1005,9 @@ footer .f-strip .left{display:flex;align-items:center;gap:18px}
 <section id="faq">
   <div class="f-letters rv">
     <span class="L">F</span>
-    <span class="cap">Відповіді на<br>ключові запитання</span>
+    <span class="cap">Answers to<br>the hard questions</span>
     <span class="L">A</span>
-    <span class="cap">Усе, що варто<br>знати</span>
+    <span class="cap">Everything you<br>should know</span>
     <span class="L">Q</span>
   </div>
   <div class="qa" id="qaList"></div>
@@ -913,30 +1017,66 @@ footer .f-strip .left{display:flex;align-items:center;gap:18px}
 <footer>
   <div class="f-grid">
     <div class="f-col">
-      <div class="k">Локація</div>
-      <div class="v">вул. Свободи, 12,<br>Яремче, Івано-<br>Франківська область</div>
+      <div class="k">Studio</div>
+      <div class="v">Remote-first<br>Humans × Machines<br>Est. 2026</div>
       <div class="socials">
         <a href="#" aria-label="Instagram">IG</a>
-        <a href="#" aria-label="Facebook">FB</a>
-        <a href="#" aria-label="YouTube">YT</a>
+        <a href="#" aria-label="X">X</a>
+        <a href="#" aria-label="GitHub">GH</a>
       </div>
     </div>
     <div class="f-col r">
-      <div class="k">Відділи продажів</div>
-      <div class="v">Івано-Франківськ<br>вул. Незалежності, 37</div>
-      <div class="k" style="margin-top:26px">Яремче</div>
-      <div class="v">вул. Свободи, 12</div>
+      <div class="k">Contact</div>
+      <div class="v">hello@optiflow.studio</div>
+      <div class="k" style="margin-top:26px">Work with us</div>
+      <div class="v">Bring the impossible brief<br>We'll bring the crazy</div>
     </div>
   </div>
   <div class="f-big">
-    <a href="tel:+380630000000">+380 63 000 00 00</a>
+    <a href="mailto:hello@optiflow.studio">Let's get crazy</a>
     <a href="mailto:hello@optiflow.studio">hello@optiflow.studio</a>
   </div>
   <div class="f-strip">
-    <div class="left"><canvas id="stripGlyph" width="60" height="14"></canvas><span>© 2026 LOOM · Optiflow design lab. Демонстраційний макет</span></div>
-    <a href="../index.html">Політика конфіденційності</a>
+    <div class="left"><canvas id="stripGlyph" width="60" height="14"></canvas><span>© 2026 Optiflow Studio. All rights reserved</span></div>
+    <a href="../index.html">Privacy policy</a>
   </div>
 </footer>
+
+
+<!-- floating consult -->
+<a id="floatCta" class="pill lead-open" href="#invest">Consultation</a>
+
+<!-- capability detail -->
+<div id="capDetail" role="dialog" aria-modal="true" aria-labelledby="capTitle" hidden>
+  <div class="sheet">
+    <button class="x" type="button" aria-label="Close" data-close="capDetail">×</button>
+    <img id="capImg" alt="">
+    <div class="body">
+      <h3 id="capTitle"></h3>
+      <p id="capBody"></p>
+      <button class="pill dark lead-open" type="button" style="margin-top:28px">Start a project</button>
+    </div>
+  </div>
+</div>
+
+<!-- lead form -->
+<div id="lead" role="dialog" aria-modal="true" aria-labelledby="leadTitle" hidden>
+  <div class="sheet">
+    <button class="x" type="button" aria-label="Close" data-close="lead">×</button>
+    <h3 id="leadTitle">We'll bring the details</h3>
+    <p class="sub">Tell us the impossible brief. We reply with next steps — not a deck.</p>
+    <form class="fields" id="leadForm">
+      <label for="leadName">Name</label>
+      <input id="leadName" name="name" autocomplete="name" required placeholder="[xx]">
+      <label for="leadPhone">Phone / email</label>
+      <input id="leadPhone" name="contact" autocomplete="email" required placeholder="[xx]">
+      <button class="pill dark" type="submit" style="width:100%">Send request</button>
+      <p class="hint">By sending, you agree to our privacy policy.</p>
+    </form>
+    <p class="ok">Thank you.<br>We'll be in touch shortly.</p>
+    <p class="err">Something went wrong. Email hello@optiflow.studio instead.</p>
+  </div>
+</div>
 
 </main>
 
@@ -945,43 +1085,60 @@ footer .f-strip .left{display:flex;align-items:center;gap:18px}
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.15/dist/lenis.min.js"></script>
 <script>
 /* ============================================================
-   LOOM — scroll choreography & procedural dither art
+   OPTIFLOW — scroll choreography & procedural dither art
    ============================================================ */
-const SAND='#A89474', SAND2='#B3A181', UMBER='#292420', UMBER2='#211D19';
+const SAND='#E9E4D9', SAND2='#D6D0C2', UMBER='#08080A', UMBER2='#000000';
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const rng=(seed=>()=> (seed=(seed*16807)%2147483647)/2147483647)(1987);
 
-/* ---------- woven wordmark ---------- */
-function weave(canvas,text,{fg=SAND,pad=6,jitter=.5,seed=7}={}){
-  const dpr=Math.min(devicePixelRatio||1,2);
-  const w=canvas.clientWidth||canvas.parentElement.clientWidth||900;
-  const h=+canvas.getAttribute('height')||190;
-  canvas.width=w*dpr;canvas.height=h*dpr;
-  canvas.style.height=h+'px';
-  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
-  const off=document.createElement('canvas');
-  off.width=w;off.height=h;
-  const o=off.getContext('2d');
-  let fs=h*.92;
-  o.font=`900 ${fs}px "Archivo Black",sans-serif`;
-  let tw=o.measureText(text).width;
-  if(tw>w-pad*2){fs*=(w-pad*2)/tw;o.font=`900 ${fs}px "Archivo Black",sans-serif`}
-  o.fillStyle=fg;o.textBaseline='middle';o.textAlign='center';
-  o.fillText(text,w/2,h/2+fs*.06);
-  const r=(s=>()=> (s=(s*16807)%2147483647)/2147483647)(seed*99991+7);
-  const strip=Math.max(3,Math.round(w/220));
-  ctx.clearRect(0,0,w,h);
-  for(let x=0;x<w;x+=strip){
-    const n=Math.sin(x*.09+seed)*Math.cos(x*.023)+(r()-.5)*1.6;
-    const dy=n*h*.09*jitter;
-    const stretch=1+(r()-.5)*.18*jitter;
-    ctx.drawImage(off,x,0,strip,h, x,dy+h*(1-stretch)/2,strip,h*stretch);
-    if(r()<.16*jitter){
-      ctx.globalAlpha=.55;
-      ctx.drawImage(off,x,0,strip,h, x,dy+(r()>.5?-.16:.16)*h,strip,h);
-      ctx.globalAlpha=1;
-    }
+/* ---------- generative HUD art (instant, zero network weight) ---------- */
+function artSVG(seed){
+  const r=(s=>()=> (s=(s*16807)%2147483647)/2147483647)(seed*7919+13);
+  const pal=[['#00E5FF','#7C5CFF'],['#7C5CFF','#00E5FF'],['#00E5FF','#E9E4D9'],['#7C5CFF','#E9E4D9']];
+  const [c1,c2]=pal[((seed%pal.length)+pal.length)%pal.length];
+  const cx1=(20+r()*60).toFixed(0),cy1=(15+r()*50).toFixed(0);
+  const cx2=(20+r()*60).toFixed(0),cy2=(30+r()*55).toFixed(0);
+  const rot=(r()*360)|0;
+  let lines='';
+  for(let i=0;i<5;i++){
+    const x1=r()*400,y1=r()*300,x2=x1+(r()-.5)*280,y2=y1+(r()-.5)*240;
+    lines+=`<line x1="${x1.toFixed(0)}" y1="${y1.toFixed(0)}" x2="${x2.toFixed(0)}" y2="${y2.toFixed(0)}" stroke="${i%2?c1:c2}" stroke-opacity="${(.16+r()*.22).toFixed(2)}" stroke-width="1" filter="url(#glow${seed})"/>`;
   }
+  let nodes='';
+  for(let i=0;i<6;i++){
+    const nx=(r()*400).toFixed(0),ny=(r()*300).toFixed(0),nr=(1+r()*1.6).toFixed(1);
+    nodes+=`<circle cx="${nx}" cy="${ny}" r="${nr}" fill="${i%2?c1:c2}" filter="url(#glow${seed})"/>`;
+  }
+  const ringR=(34+r()*44).toFixed(0),ringX=(r()*400).toFixed(0),ringY=(r()*300).toFixed(0);
+  const crossX=(r()*400).toFixed(0),crossY=(r()*300).toFixed(0),crossS=10+r()*6;
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+<defs>
+<radialGradient id="g1" cx="${cx1}%" cy="${cy1}%" r="75%"><stop offset="0%" stop-color="${c1}" stop-opacity=".55"/><stop offset="100%" stop-color="${c1}" stop-opacity="0"/></radialGradient>
+<radialGradient id="g2" cx="${cx2}%" cy="${cy2}%" r="65%"><stop offset="0%" stop-color="${c2}" stop-opacity=".45"/><stop offset="100%" stop-color="${c2}" stop-opacity="0"/></radialGradient>
+<pattern id="d${seed}" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(${rot})"><circle cx="2" cy="2" r="1" fill="#E9E4D9" fill-opacity=".14"/></pattern>
+<pattern id="scan${seed}" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1" fill="#000" fill-opacity=".14"/></pattern>
+<filter id="glow${seed}" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="2.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="400" height="300" fill="#0B0A0E"/>
+<rect width="400" height="300" fill="url(#d${seed})"/>
+<rect width="400" height="300" fill="url(#g1)"/>
+<rect width="400" height="300" fill="url(#g2)"/>
+${lines}
+${nodes}
+<circle cx="${ringX}" cy="${ringY}" r="${ringR}" fill="none" stroke="${c1}" stroke-opacity=".35" stroke-width="1" filter="url(#glow${seed})"/>
+<circle cx="${ringX}" cy="${ringY}" r="${(ringR*.6).toFixed(0)}" fill="none" stroke="${c2}" stroke-opacity=".2" stroke-width="1"/>
+<g stroke="${c1}" stroke-opacity=".55" stroke-width="1.2" filter="url(#glow${seed})">
+<line x1="${crossX-crossS}" y1="${crossY}" x2="${crossX-crossS/2.4}" y2="${crossY}"/>
+<line x1="${crossX+crossS/2.4}" y1="${crossY}" x2="${crossX+crossS}" y2="${crossY}"/>
+<line x1="${crossX}" y1="${crossY-crossS}" x2="${crossX}" y2="${crossY-crossS/2.4}"/>
+<line x1="${crossX}" y1="${crossY+crossS/2.4}" x2="${crossX}" y2="${crossY+crossS}"/>
+</g>
+<g stroke="#E9E4D9" stroke-opacity=".4" stroke-width="1.4" fill="none">
+<path d="M10 26V10H26"/><path d="M390 26V10H374"/><path d="M10 274V290H26"/><path d="M390 274V290H374"/>
+</g>
+<rect width="400" height="300" fill="url(#scan${seed})"/>
+</svg>`;
+  return 'data:image/svg+xml,'+encodeURIComponent(svg);
 }
 
 /* ---------- barcode ridge (mountain of vertical bars) ---------- */
@@ -1129,20 +1286,19 @@ function init(){
   const pg=document.getElementById('preGlyph').getContext('2d');
   pg.fillStyle=SAND;
   [[2,8,10,30],[14,16,10,22],[26,4,10,34],[38,20,10,18],[50,12,10,26]].forEach(b=>pg.fillRect(b[0],b[1],b[2],b[3]));
-  weave(document.getElementById('preWord'),'LOOM',{jitter:1});
-  let preT=0,preOn=true;
+  let preT=0,preOn=true,prePct=0;
+  const prePctEl=document.getElementById('prePct');
   (function preLoop(){
     if(!preOn)return;
     preT+=.016;
+    prePct=Math.min(100, prePct + (prePct<70?.9:prePct<92?.45:.18));
+    if(prePctEl) prePctEl.textContent=String(prePct|0);
     sheep(preT);
-    if(((preT*60)|0)%6===0)weave(document.getElementById('preWord'),'LOOM',{jitter:1,seed:3+((preT*2)|0)});
     eqDraw(eq,preT);
     requestAnimationFrame(preLoop);
   })();
 
   /* hero & static art */
-  weave(document.getElementById('heroWord'),'LOOM',{jitter:.55,seed:11});
-  weave(document.getElementById('navWord'),'LOOM',{jitter:.5,seed:11});
   ridge(document.getElementById('mountainHero'),{fg:UMBER,dir:1,seed:9,base:.4});
   ridge(document.getElementById('barsTop'),{fg:SAND,dir:-1,seed:14,base:.5,density:.65});
   ridge(document.getElementById('barsBtm'),{fg:UMBER,dir:1,seed:21,base:.35});
@@ -1150,26 +1306,31 @@ function init(){
   treeline(document.getElementById('treeline'));
   peak(document.getElementById('finMountain'),Math.min(innerWidth*.62,900),Math.min(innerHeight*1.05,860));
   eqDraw(stripGlyph,1);
-  weave(document.getElementById('investWord'),'LOOM',{fg:UMBER,jitter:1.1,seed:29});
+
+  /* generative art — instant, no network fetch, nothing to wait on */
+  const setArt=(id,seed)=>{const el=document.getElementById(id);if(el)el.src=artSVG(seed)};
+  setArt('heroImg',1);setArt('aFacadeImg',2);setArt('aVideoImg',3);setArt('lMapImg',4);
+  setArt('dragImg0',5);setArt('dragImg1',6);setArt('dragImg2',7);setArt('dragImg3',8);setArt('dragImg4',9);
+  setArt('panoImg',10);setArt('investBgImg',11);setArt('blogImg0',12);setArt('blogImg1',13);
 
   /* marquee */
   document.getElementById('marqRail').innerHTML=
-    Array(2).fill('<span>Фінансові показники<i>✦</i></span>'.repeat(4)).join('');
+    Array(2).fill('<span>Shipped, not pitched<i>✦</i></span>'.repeat(4)).join('');
 
   /* apartments */
   const APTS=[
-    {t:'Studio',m2:'37',img:'loomapt1',chips:['2+1 гостей','панорамна вітальня','кухня-студія','вид на ліс, гори','літня тераса','кухонний блок','дизайнерський ремонт','вартість від 171 150 грн/м²'],
-     d:'Стильний апартамент-студія з просторою панорамною вітальнею та інтегрованою кухонною зоною. Вбудована техніка, санвузол із преміальною сантехнікою, кондиціонування, міні-гардеробна, сейф, міні-бар, Android TV та швидкісний Wi-Fi.'},
-    {t:'Deluxe',m2:'45',img:'loomapt2',chips:['2+2 гостей','окрема спальня','панорамні вікна','вид на гори','тераса 12 м²','преміальне оздоблення','вартість від 183 400 грн/м²'],
-     d:'Апартамент з окремою спальнею та вітальнею, де панорамне скління відкриває схили просто з ліжка. Повна комплектація для життя і оренди з першого дня.'},
-    {t:'Superior',m2:'54',img:'loomapt3',chips:['3+1 гостей','дві кімнати','гардеробна','кутове скління','тераса 16 м²','вартість від 189 900 грн/м²'],
-     d:'Кутовий апартамент із подвійною орієнтацією вікон: світло супроводжує день від сходу до заходу. Простір спланований під довгі сімейні заїзди.'},
-    {t:'Suite',m2:'68',img:'loomapt4',chips:['4 гостей','майстер-спальня','ванна з вікном','їдальня','тераса 20 м²','вартість від 197 300 грн/м²'],
-     d:'Люкс із майстер-спальнею та ванною біля вікна, що дивиться в ліс. Формат для тих, хто приїздить у гори жити, а не ночувати.'},
-    {t:'Family',m2:'82',img:'loomapt5',chips:['4+2 гостей','дві спальні','дитяча зона','дві ванни','тераса 24 м²','вартість від 204 800 грн/м²'],
-     d:'Сімейний апартамент з двома спальнями й окремою дитячою зоною. Плануванням керує проста ідея: кожному — свій куточок тиші.'},
-    {t:'Penthouse',m2:'120',img:'loomapt6',chips:['6 гостей','панорамний дах','камін','сауна','тераса 40 м²','вартість — за запитом'],
-     d:'Пентхаус під самим небом Карпат: приватна тераса на даху, камін і сауна. Один погляд із тераси вартий усієї дороги.'},
+    {t:'Dispatch',m2:'14',unit:'d',seed:20,chips:['LLM Agents','Ops Copilot','−74% dispatch time','Production-ready','Queue of done','Evals included'],
+     d:'An ops copilot that turns logistics chaos into a queue of done. Built for night shifts and humans who deserve sleep.'},
+    {t:'Ledgerlens',m2:'12K',unit:'/d',seed:21,chips:['Doc Intelligence','Finance','12K docs / day','Never bored','RAG + evals','Audit trail'],
+     d:'Financial document intelligence that reads faster than an army of analysts — and never gets bored.'},
+    {t:'Nightshift',m2:'68',unit:'%',seed:22,chips:['Support Autopilot','SaaS','68% resolved alone','Founder sleep mode','Ticket triage','Follow-up agents'],
+     d:'A support autopilot that resolves tickets while founders sleep. Customers never noticed — that is the point.'},
+    {t:'Agents',m2:'24',unit:'/7',seed:23,chips:['Workflows','Ops','Triage','Dispatch','Follow-up','Autonomous'],
+     d:'Workflows that run themselves at 3 a.m. — triage, dispatch, follow-up — while your team sleeps.'},
+    {t:'Interfaces',m2:'4',unit:'%',seed:24,chips:['UI/UX','Motion','Brand','Conversion','Felt, not filled','Polish'],
+     d:'Interfaces people actually feel. We obsess over the last 4% of polish — the part users remember and pay for.'},
+    {t:'Custom',m2:'0',unit:'→1',seed:25,chips:['Impossible briefs welcome','Weeks not quarters','Ship or nothing','Partner mode','Humans × Machines'],
+     d:'The best briefs start with "this is probably impossible, but…". Idea to product before your competitors finish their kickoff.'},
   ];
   const tList=document.getElementById('tList');
   APTS.forEach((a,i)=>{
@@ -1181,12 +1342,12 @@ function init(){
   function setApt(i){
     apI=(i+APTS.length)%APTS.length;
     const a=APTS[apI];
-    document.getElementById('apM2').innerHTML=a.m2+' м<sup>2</sup>';
+    document.getElementById('apM2').innerHTML=a.m2+'<sup>'+(a.unit||'')+'</sup>';
     document.getElementById('apChips').innerHTML=a.chips.map((c,j)=>`<span class="chip${j===0?' solid':''}">${c}</span>`).join('');
     document.getElementById('apDesc').textContent=a.d;
     const img=document.getElementById('apImg');
     img.style.opacity=0;
-    setTimeout(()=>{img.src=`https://picsum.photos/seed/${a.img}/900/1200`;img.onload=()=>img.style.opacity=1},260);
+    setTimeout(()=>{img.src=artSVG(a.seed);img.style.opacity=1},260);
     document.getElementById('apCur').textContent=apI+1;
     [...tList.children].forEach((li,j)=>li.classList.toggle('act',j===apI));
   }
@@ -1196,30 +1357,33 @@ function init(){
 
   /* unique cards */
   const CHAPTERS=[
-    ['Wellness & SPA','loomspa'],
-    ['Кулінарія','loomfood'],
-    ['Йога на полонині…','loomyoga'],
-    ['Business & coworking hub','loomwork'],
-    ['Дитячий простір','loomkids'],
-    ['Культура, що тче легенди','loomfire'],
-    ['Дитячий культурний табір','loomcamp'],
-    ['Крамниця «Дарунок»','loomshop'],
+    ['AI Product Engineering',30],
+    ['0 → 1 in Weeks',31],
+    ['Agentic Automation',32],
+    ['Design That Converts',33],
+    ['Data & Model Ops',34],
+    ['Growth Engineering',35],
+    ['Production Partnership',36],
+    ['Something Weirder',37],
   ];
   const uStage=document.getElementById('uStage');
   const uCards=CHAPTERS.map(([cap,seed])=>{
     const d=document.createElement('div');d.className='u-card';
-    d.innerHTML=`<div class="im"><img src="https://picsum.photos/seed/${seed}/700/1000" alt="${cap}">
+    d.innerHTML=`<div class="im"><img src="${artSVG(seed)}" alt="${cap}">
       <span class="cap">${cap}</span><span class="plus">+</span></div>`;
-    uStage.appendChild(d);return d;
+    uStage.appendChild(d);
+    d.addEventListener('click',()=>openCap(cap,seed));
+    return d;
   });
 
   /* gallery */
   const gStage=document.getElementById('gStage');
-  const G=6,gImgs=[];
+  const GALLERY=[40,41,42,43,44,45];
+  const G=GALLERY.length,gImgs=[];
   for(let i=0;i<G;i++){
     const im=document.createElement('img');
-    im.src=`https://picsum.photos/seed/loomgal${i}/1900/1100`;
-    im.alt='Кадр галереї LOOM';
+    im.src=artSVG(GALLERY[i]);
+    im.alt='Optiflow gallery frame';
     if(!i)im.className='act';
     gStage.insertBefore(im,gStage.firstChild);
     gImgs.push(im);
@@ -1232,15 +1396,15 @@ function init(){
 
   /* FAQ */
   const FAQS=[
-    ['Від чого залежить дохід?','Дохід залежить від реального завантаження, однак фінмодель побудована на консервативному сценарії — 237 днів на рік. Маркетинг і бронювання бере на себе власна керуюча компанія.'],
-    ['Чи можу я жити в своєму апартаменті?','Так — до 30 днів на рік безкоштовно. Решту часу апартамент працює як готельний номер і генерує дохід.'],
-    ['Що, якщо я захочу продати апартамент?','Продати можна в будь-який момент. Курортна нерухомість у Яремче додає у вартості прогнозовано щороку, тож перепродаж може бути вигідним уже на етапі будівництва.'],
-    ['Чому інвесторам виплачують дивіденди від квадратного метра?','Це прозора система: більша площа апартаменту — вища частка доходу.'],
-    ['Чи є гарантії, що будівництво буде завершене?','Будівництво поетапне, з затвердженим графіком, ліцензіями та відкритою документацією. За плечима девелопера — десятки реалізованих об\'єктів.'],
-    ['Чому не купити просто квартиру в Яремче і самому здавати?','Це інший сегмент. Апарт-готель дає професійний сервіс, міжнародні системи бронювання, маркетинг і стабільну заповнюваність — самостійна оренда рідко перевищує 20–30% завантаження.'],
-    ['Хто управляє готелем?','Професійна керуюча компанія з досвідом у готельному бізнесі. Саме це відрізняє інвестицію від «квартири під оренду».'],
-    ['Як виплачуються дивіденди?','Щорічно, пропорційно площі вашого апартаменту. Перші виплати — з 1 кв. 2029 року.'],
-    ['Чи можна купити апартамент у розстрочку?','Так, передбачені різні схеми оплати: 100%, 50/50 та 30/70 з поетапним фінансуванням.'],
+    ['What kind of problems do you take?','The ones everyone complains about and nobody fixes. Loud operational pain, broken workflows, AI theater that never ships. If it needs a committee more than a build, we are probably the wrong studio.'],
+    ['How fast can we see something real?','A working prototype is typically in your hands within fourteen days. Ugly is fine. Real is mandatory.'],
+    ['Do you only build AI products?','We build products where intelligence earns its keep — agents, RAG, automation, interfaces. If a simpler tool solves it, we will say so and still help you ship.'],
+    ['Will you stay after launch?','Yes. Production traffic is where most agencies wave goodbye. We move in — measure, refine, automate.'],
+    ['How do engagements work?','Fixed scopes for clear outcomes, retainers for ongoing sharpening. Kickoff in week one. No decks required to start.'],
+    ['Why not hire an in-house team?','You can. Many partners do later. We compress the 0→1 risk: idea to production before the hire cycle finishes.'],
+    ['Who owns the IP?','You do. We build it into your stack, with your data boundaries, under your brand.'],
+    ['What does “perfect” mean here?','Not polish theater — reliable under load, felt by users, and stubborn enough to keep getting sharper after day one.'],
+    ['How do we start?','Email hello@optiflow.studio with the impossible brief. We will bring the crazy.'],
   ];
   const qa=document.getElementById('qaList');
   FAQS.forEach(([q,a],i)=>{
@@ -1255,6 +1419,60 @@ function init(){
     });
     qa.appendChild(item);
   });
+
+
+  /* day / night */
+  const seasonQuote=document.getElementById('seasonQuote');
+  const SEASON={
+    day:'Day mode: hunt the pain, prototype in the open, ship before the committee names the workstream.',
+    night:'Night mode: agents keep running — triage, dispatch, follow-up — while your team sleeps.'
+  };
+  document.querySelectorAll('#summer .dn button').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('#summer .dn button').forEach(b=>{b.classList.toggle('on',b===btn);b.setAttribute('aria-selected',b===btn?'true':'false')});
+      if(seasonQuote) seasonQuote.textContent=SEASON[btn.dataset.mode]||SEASON.day;
+    });
+  });
+
+  /* capability detail + lead modal */
+  const CAP_COPY={
+    'AI Product Engineering':'LLM-native applications, autonomous agents, retrieval systems. Built to survive production traffic, not just the demo call.',
+    '0 → 1 in Weeks':'Idea to working product before your competitors finish their kickoff meeting. Ugly is fine. Real is mandatory.',
+    'Agentic Automation':'Workflows that run themselves at 3 a.m. — triage, dispatch, follow-up — while your team sleeps.',
+    'Design That Converts':'Interfaces people actually feel. We obsess over the last 4% of polish because that is what users remember — and pay for.',
+    'Data & Model Ops':'Pipelines, fine-tuning, evals. The unglamorous machinery that makes the magic reliable.',
+    'Growth Engineering':'Ship. Measure. Sharpen. Repeat until the graph does the thing graphs are supposed to do.',
+    'Production Partnership':'We stay after launch — production traffic, real users, real stakes. Perfect is a habit, not a launch state.',
+    'Something Weirder':'The best briefs start with “this is probably impossible, but…”. Try us.'
+  };
+  const capDetail=document.getElementById('capDetail');
+  const lead=document.getElementById('lead');
+  const openCap=(title,seed)=>{
+    document.getElementById('capTitle').textContent=title;
+    document.getElementById('capBody').textContent=CAP_COPY[title]||'Real problems in. Shipped products out.';
+    const img=document.getElementById('capImg');img.src=artSVG(seed);img.alt=title;
+    capDetail.hidden=false;requestAnimationFrame(()=>capDetail.classList.add('open'));
+    document.body.classList.add('locked');
+  };
+  const openLead=()=>{
+    lead.classList.remove('sent');
+    lead.hidden=false;requestAnimationFrame(()=>lead.classList.add('open'));
+    document.body.classList.add('locked');
+  };
+  const closeOverlay=(id)=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    el.classList.remove('open');
+    setTimeout(()=>{
+      el.hidden=true;
+      if(!document.querySelector('#menu.open,#lead.open,#capDetail.open')) document.body.classList.remove('locked');
+    },380);
+  };
+  document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeOverlay(b.dataset.close)));
+  [lead,capDetail].forEach(el=>el&&el.addEventListener('click',e=>{if(e.target===el)closeOverlay(el.id)}));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeOverlay('lead');closeOverlay('capDetail')}});
+  document.querySelectorAll('.lead-open').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();openLead()}));
+  document.getElementById('leadForm')?.addEventListener('submit',e=>{e.preventDefault();lead.classList.add('sent')});
 
   /* menu */
   const menu=document.getElementById('menu');
@@ -1282,6 +1500,15 @@ function init(){
 
   /* ---------- scroll engine ---------- */
   gsap.registerPlugin(ScrollTrigger);
+  const floatCta=document.getElementById('floatCta');
+  ScrollTrigger.create({
+    start:0,end:'max',
+    onUpdate(self){
+      if(!floatCta)return;
+      const y=self.scroll();
+      floatCta.classList.toggle('show', y>innerHeight*.9 && !lead?.classList.contains('open') && !capDetail?.classList.contains('open'));
+    }
+  });
   if(!reduced){
     const lenis=new Lenis({lerp:.1,smoothWheel:true});
     lenis.on('scroll',ScrollTrigger.update);
@@ -1358,31 +1585,30 @@ function init(){
   });
 
   /* ambient loops */
-  gsap.ticker.add(t=>{
-    if(!preOn)eqDraw(eq,t);
-    if(!reduced&&((t*10)|0)%40===0&&Math.random()<.05){
-      weave(document.getElementById('heroWord'),'LOOM',{jitter:.55,seed:11+((t)|0)%17});
-    }
-  });
+  gsap.ticker.add(t=>{if(!preOn)eqDraw(eq,t)});
 
   /* preloader exit */
   const finish=()=>{
+    if(prePctEl) prePctEl.textContent='100';
     pre.classList.add('done');
     preOn=false;
     document.body.classList.remove('locked');
     setTimeout(()=>pre.remove(),1200);
     ScrollTrigger.refresh();
   };
-  setTimeout(finish,reduced?400:3400);
+  setTimeout(finish,reduced?300:1600);
 
+  let resizeT;
   addEventListener('resize',()=>{
-    weave(document.getElementById('heroWord'),'LOOM',{jitter:.55,seed:11});
-    weave(document.getElementById('navWord'),'LOOM',{jitter:.5,seed:11});
-    ridge(document.getElementById('mountainHero'),{fg:UMBER,dir:1,seed:9,base:.4});
-    ridge(document.getElementById('barsTop'),{fg:SAND,dir:-1,seed:14,base:.5,density:.65});
-    ridge(document.getElementById('barsBtm'),{fg:UMBER,dir:1,seed:21,base:.35});
-    ridge(document.getElementById('barsDev'),{fg:SAND,dir:-1,seed:33,base:.6,density:.4});
-    treeline(document.getElementById('treeline'));
+    clearTimeout(resizeT);
+    resizeT=setTimeout(()=>{
+      ridge(document.getElementById('mountainHero'),{fg:UMBER,dir:1,seed:9,base:.4});
+      ridge(document.getElementById('barsTop'),{fg:SAND,dir:-1,seed:14,base:.5,density:.65});
+      ridge(document.getElementById('barsBtm'),{fg:UMBER,dir:1,seed:21,base:.35});
+      ridge(document.getElementById('barsDev'),{fg:SAND,dir:-1,seed:33,base:.6,density:.4});
+      treeline(document.getElementById('treeline'));
+      ScrollTrigger.refresh();
+    },200);
   });
 }
 </script>

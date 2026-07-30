@@ -87,7 +87,7 @@
     });
   }
 
-  /* ---------- Neural-core canvas: matrix word-rain + 3D core ---------- */
+  /* ---------- Hero canvas: matrix word-rain ---------- */
   const canvas = document.getElementById('field');
   if (canvas && !reduced) {
     const ctx = canvas.getContext('2d');
@@ -106,25 +106,6 @@
       'rgba(139, 92, 255, 0.50)',
       'rgba(255, 46, 151, 0.55)'
     ];
-
-    /* 3D core: points on a fibonacci sphere + nearest-neighbor links */
-    const CORE_N = 300;
-    const corePts = [];
-    const GA = Math.PI * (3 - Math.sqrt(5));
-    for (let i = 0; i < CORE_N; i++) {
-      const y = 1 - (i / (CORE_N - 1)) * 2;
-      const r = Math.sqrt(Math.max(0, 1 - y * y));
-      corePts.push({ x: Math.cos(GA * i) * r, y, z: Math.sin(GA * i) * r });
-    }
-    const links = [];
-    for (let i = 0; i < CORE_N && links.length < 900; i++) {
-      for (let j = i + 1; j < CORE_N; j++) {
-        const a = corePts[i], b = corePts[j];
-        if (a.x * b.x + a.y * b.y + a.z * b.z > 0.955) links.push([i, j]);
-      }
-    }
-    const proj = new Array(CORE_N);
-    let rotY = 0, rotX = 0.12, targetRX = 0.12;
 
     function spawnCol(c, x) {
       c.x = x;
@@ -159,7 +140,7 @@
       ctx.fillStyle = 'rgba(3, 4, 9, 0.05)';
       ctx.fillRect(0, 0, W, H);
 
-      /* --- matrix word-rain (additive) --- */
+      /* --- matrix word-rain (additive, with neon bloom) --- */
       ctx.globalCompositeOperation = 'lighter';
       ctx.font = '600 14px "JetBrains Mono", monospace';
       ctx.textBaseline = 'top';
@@ -175,66 +156,16 @@
         const prev = c.word[c.ci % c.word.length];
         c.ci++;
         const head = c.word[c.ci % c.word.length];
+        ctx.shadowBlur = 0;
         ctx.fillStyle = c.color;
         ctx.fillText(prev, c.x, c.y - CELL);
-        ctx.fillStyle = 'rgba(235, 250, 255, 0.9)';
+        ctx.shadowBlur = 14;
+        ctx.shadowColor = c.color;
+        ctx.fillStyle = 'rgba(235, 250, 255, 0.95)';
+        ctx.fillText(head, c.x, c.y);
         ctx.fillText(head, c.x, c.y);
       }
-
-      /* --- 3D neural core --- */
-      const narrow = W < 760;
-      const R = Math.min(W, H) * (narrow ? 0.24 : 0.30);
-      const cx = narrow ? W * 0.5 : W * 0.73;
-      const cy = narrow ? H * 0.30 : H * 0.44;
-      const pulse = 1 + 0.035 * Math.sin(t * 2.4);
-
-      rotY += 0.0022 + (mouse.x > 0 ? (mouse.x / W - 0.5) * 0.004 : 0);
-      targetRX = mouse.y > 0 ? (mouse.y / H - 0.5) * 0.9 : 0.12;
-      rotX += (targetRX - rotX) * 0.04;
-
-      const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
-      const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
-      const f = 2.4;
-
-      for (let i = 0; i < CORE_N; i++) {
-        const p = corePts[i];
-        const x1 = p.x * cosY + p.z * sinY;
-        const z1 = -p.x * sinY + p.z * cosY;
-        const y2 = p.y * cosX - z1 * sinX;
-        const z2 = p.y * sinX + z1 * cosX;
-        const s = f / (f - z2);
-        proj[i] = {
-          x: cx + x1 * R * pulse * s,
-          y: cy + y2 * R * pulse * s,
-          s,
-          d: (z2 + 1) / 2
-        };
-      }
-
-      ctx.lineWidth = 0.6;
-      for (let i = 0; i < links.length; i++) {
-        const a = proj[links[i][0]], b = proj[links[i][1]];
-        const alpha = 0.04 + 0.11 * ((a.d + b.d) / 2);
-        ctx.strokeStyle = (i % 3 === 0)
-          ? `rgba(139, 92, 255, ${alpha})`
-          : `rgba(0, 240, 255, ${alpha})`;
-        ctx.beginPath();
-        ctx.moveTo(a.x, a.y);
-        ctx.lineTo(b.x, b.y);
-        ctx.stroke();
-      }
-
-      for (let i = 0; i < CORE_N; i++) {
-        const q = proj[i];
-        ctx.fillStyle = `rgba(0, 240, 255, ${0.05 + 0.05 * q.d})`;
-        ctx.beginPath();
-        ctx.arc(q.x, q.y, 5 * q.s, 0, 6.2832);
-        ctx.fill();
-        ctx.fillStyle = `rgba(230, 250, 255, ${0.25 + 0.55 * q.d})`;
-        ctx.beginPath();
-        ctx.arc(q.x, q.y, 1.3 * q.s, 0, 6.2832);
-        ctx.fill();
-      }
+      ctx.shadowBlur = 0;
 
     }
 
