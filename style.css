@@ -906,7 +906,7 @@ body.menu-open .mobile-menu { opacity: 1; visibility: visible; }
 /* ---------- Work ---------- */
 .work-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 20px;
 }
 .work-card {
@@ -923,6 +923,13 @@ body.menu-open .mobile-menu { opacity: 1; visibility: visible; }
 .work-card:hover {
   border-color: rgba(255, 255, 255, 0.22);
 }
+.work-card.card-cta {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.07), rgba(139, 92, 255, 0.1)), var(--card);
+}
+.work-card.card-cta h3 { margin-top: 4px; }
 .work-thumb {
   position: relative;
   aspect-ratio: 16 / 10;
